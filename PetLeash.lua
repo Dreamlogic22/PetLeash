@@ -7,12 +7,12 @@ _G.PetLeash = LibStub("AceAddon-3.0"):NewAddon(addon, addon_name, "AceConsole-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("PetLeash")
 local LibPetJournal = LibStub("LibPetJournal-2.0")
 
-local assert, C_PetJournal, error, fastrandom, format, getmetatable,
-    hooksecurefunc, ipairs, InCombatLockdown, IsInInstance, next, pairs,
-    setmetatable, strfind, tinsert, type, wipe
-    = assert, C_PetJournal, error, fastrandom, format, getmetatable,
-    hooksecurefunc, ipairs, InCombatLockdown, IsInInstance, next, pairs,
-    setmetatable, strfind, tinsert, type, wipe
+local assert, C_PetJournal, fastrandom, getmetatable,
+    hooksecurefunc, InCombatLockdown, IsInInstance, next, pairs,
+    setmetatable, strfind, tinsert, wipe
+    = assert, C_PetJournal, fastrandom, getmetatable,
+    hooksecurefunc, InCombatLockdown, IsInInstance, next, pairs,
+    setmetatable, strfind, tinsert, wipe
 local math_huge = math.huge
 
 --
@@ -89,14 +89,14 @@ local default_ignore_override = {
 function addon:OnInitialize()
     self.setCache = {}
 
-    self.db = LibStub("AceDB-3.0"):New("PetLeash3DB", defaults, true)   
+    self.db = LibStub("AceDB-3.0"):New("PetLeash3DB", defaults, true)
 
     self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChange")
     self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChange")
     self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChange")
 
     hooksecurefunc(C_PetJournal, "SetPetLoadOutInfo", function(...) self:OnSetPetLoadOut(...) end)
-    
+
     LibPetJournal.RegisterCallback(self, "PetsUpdated")
 end
 
@@ -105,7 +105,7 @@ function addon:OnEnable()
 end
 
 function addon:OnProfileChange()
-    self:ReloadSets()    
+    self:ReloadSets()
     self.Ready:UpdateChecks(self.db.profile)
 end
 
@@ -132,10 +132,10 @@ function addon:EnableSummoning(v)
 
     if((not oldv) ~= (not v)) then
         self.db.profile.enable = v
-        
+
         -- TODO: is there a better way to trigger config update?
         LibStub("AceConfigRegistry-3.0"):NotifyChange("PetLeash")
-        
+
         -- XXX Use :Enable/:Disable instead
         self:SendMessage("PetLeash-EnableState", v)
     end
@@ -150,8 +150,8 @@ function addon:DumpDebugState()
         self:Printf("Enabled")
     else
         self:Printf("Disabled")
-    end    
-    
+    end
+
     for name, module in self:IterateModules() do
         local f = module["DumpDebugState"]
         if f then
@@ -170,7 +170,7 @@ function addon:InInstanceOrRaid()
     return t == "party" or t == "raid"
 end
 
-function addon:OnSetPetLoadOut(slotid, petid)
+function addon:OnSetPetLoadOut(slotid)
     if self.db.profile.overrideSetLoadout and slotid == 1 then
         self:ResummonPet()
     end
@@ -249,7 +249,7 @@ local SetMT = {
 
     UpdateValue = function(self)
         local alltrue = true
-        for tr in pairs(self.triggers) do 
+        for tr in pairs(self.triggers) do
             if not tr.value then
                 alltrue = false
                 break
@@ -340,7 +340,7 @@ function addon:GetSetByName(name)
     if not mt or not mt.isPetsMT then
         setmetatable(set.settings.pets, {
             isPetsMT = true,
-            __index = function(self, key)
+            __index = function(_, key)
                 local speciesID = C_PetJournal.GetPetInfoByPetID(key)
                 if speciesID and default_ignore_override[speciesID] then
                     return 0
@@ -352,7 +352,7 @@ function addon:GetSetByName(name)
 
     self.setCache[name] = set
     set:Refresh()
-    
+
     return set
 end
 
@@ -374,7 +374,7 @@ function addon:UpdateCurrentSet()
     end
 end
 
-function addon:NotifySetStateChanged(set)  
+function addon:NotifySetStateChanged(set)
     local oldCurrent = self.currentSet
     local higherPrio = not oldCurrent or set:GetPriority() >= oldCurrent:GetPriority()
 
@@ -412,7 +412,7 @@ function addon:BuildSetWeights(input, output)
     output.total = 0
     for _, petID in LibPetJournal:IteratePetIDs() do
         local value = input.pets[petID]
-        local isSummonable = C_PetJournal.PetIsSummonable(petID) and not C_PetJournal.PetNeedsFanfare(petID)
+        local isSummonable = C_PetJournal.PetIsSummonable(petID)
         if value and value > 0 and isSummonable then
             tinsert(output, value)
             output.total = output.total + value

@@ -1,14 +1,14 @@
 
-local addon_name, addon = ...
+local _, addon = ...
 
 local L = LibStub("AceLocale-3.0"):GetLocale("PetLeash")
 
 local error, format, FillLocalizedClassList, GetSubZoneText, GetZoneText, ipairs,
     IsInGroup, IsResting, loadstring, pairs, pcall, print, SecureCmdOptionParse,
-    setmetatable, tinsert, tonumber, tostring, type, UnitClass, wipe
-    = error, format, FillLocalizedClassList, GetSubZoneText, GetZoneText, ipairs,
+    setmetatable, tinsert, type, UnitClass, wipe
+    = error, format, LocalizedClassList, GetSubZoneText, GetZoneText, ipairs,
     IsInGroup, IsResting, loadstring, pairs, pcall, print, SecureCmdOptionParse,
-    setmetatable, tinsert, tonumber, tostring, type, UnitClass, wipe
+    setmetatable, tinsert, type, UnitClass, wipe
 
 local AceEvent = LibStub("AceEvent-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
@@ -100,7 +100,7 @@ function addon:RegisterTrigger(name, obj)
     }
 
     return self.triggers[name]
-end    
+end
 
 function addon:IterateTriggers()
     return pairs(self.triggers)
@@ -138,7 +138,7 @@ function addon:RebuildSetTriggers(set)
     else
         self:FreeSetTriggers(set)
     end
-    
+
     if not set.invalid and set.settings.trigger then
         buildTriggers(set, set.triggers, set.settings.trigger)
     end
@@ -178,7 +178,7 @@ addon:RegisterTrigger("AND", {
         return self:Update(self:Check())
     end,
     Check = function(self)
-        for tr in pairs(self.subTriggers) do 
+        for tr in pairs(self.subTriggers) do
             if not tr.value then
                 return false
             end
@@ -211,7 +211,7 @@ addon:RegisterTrigger("OR", {
         return self:Update(self:Check())
     end,
     Check = function(self)
-        for tr in pairs(self.subTriggers) do 
+        for tr in pairs(self.subTriggers) do
             if tr.value then
                 return true
             end
@@ -283,10 +283,10 @@ addon:RegisterTrigger("specialLocation", {
         new.loc = "city"
     end,
     _Values = { city = L["City"], battleground = BATTLEGROUND, instance = L["Instance"] },
-    FillOptions = function(self, parent, settings) 
+    FillOptions = function(self, parent, settings)
         parent:AddChild(self:MakeOption("loc", "select", settings,
                                         "name", TYPE,
-                                        "values", self._Values))   
+                                        "values", self._Values))
     end,
     Check = function(self)
         if self.settings.loc == "city" then
@@ -357,7 +357,7 @@ addon:RegisterTrigger("macro", {
     end,
     OnInitialize = function(self)
         -- XXX Basically how SecureStateDriver does it
-        self:ScheduleRepeatingTimer(function() 
+        self:ScheduleRepeatingTimer(function()
             self:CheckUpdate()
         end, 0.2)
     end

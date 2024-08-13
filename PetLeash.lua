@@ -1,8 +1,6 @@
-
 local addon_name, addon = ...
 
-local _G = _G
-_G.PetLeash = LibStub("AceAddon-3.0"):NewAddon(addon, addon_name, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+PetLeash = LibStub("AceAddon-3.0"):NewAddon(addon, addon_name, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("PetLeash")
 local LibPetJournal = LibStub("LibPetJournal-2.0")
@@ -19,11 +17,11 @@ local math_huge = math.huge
 -- Binding globals
 --
 
-_G.BINDING_HEADER_PETLEASH = addon_name
-_G.BINDING_NAME_PETLEASH_SUMMON = L["Summon Another Pet"]
-_G.BINDING_NAME_PETLEASH_DESUMMON = L["Dismiss Pet"]
-_G.BINDING_NAME_PETLEASH_TOGGLE = L["Toggle Non-Combat Pet"]
-_G.BINDING_NAME_PETLEASH_CONFIG = L["Open Configuration"]
+BINDING_HEADER_PETLEASH = addon_name
+BINDING_NAME_PETLEASH_SUMMON = L["Summon Another Pet"]
+BINDING_NAME_PETLEASH_DESUMMON = L["Dismiss Pet"]
+BINDING_NAME_PETLEASH_TOGGLE = L["Toggle Non-Combat Pet"]
+BINDING_NAME_PETLEASH_CONFIG = L["Open Configuration"]
 
 --
 -- Default DB
@@ -484,7 +482,7 @@ function addon:SummonPet()
     C_PetJournal.SummonPetByGUID(petid)
 
     self.SwitchTimer:Start()
-    
+
     return true
 end
 

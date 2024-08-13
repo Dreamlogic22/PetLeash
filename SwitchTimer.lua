@@ -1,5 +1,5 @@
 
-local addon_name, addon = ...
+local _, addon = ...
 
 local module = addon:NewModule("SwitchTimer", "AceEvent-3.0", "AceTimer-3.0")
 addon.SwitchTimer = module

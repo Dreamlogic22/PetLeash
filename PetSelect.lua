@@ -58,16 +58,16 @@ do
         end
     end
 
-    local function Menu_Click(frame, self, value)
+    local function Menu_Click(_, self, value)
         self:SetValue(value)
         self:Fire("OnValueChanged", value)
     end
 
-    local function Menu_Initialize(frame, menuLevel, menuList)
+    local function Menu_Initialize(frame, menuLevel)
         local self = frame.obj
         if self and self.values then
             for _, item in ipairs(self.values) do
-                local v, short, long = unpack(item)
+                local v, _, long = unpack(item)
 
                 local info = UIDropDownMenu_CreateInfo()
                 info.text = long
@@ -75,14 +75,14 @@ do
                 info.func = Menu_Click
                 info.arg1 = self
                 info.arg2 = v
-                UIDropDownMenu_AddButton(info, menuLevel) 
+                UIDropDownMenu_AddButton(info, menuLevel)
             end
         end
 
         local info = UIDropDownMenu_CreateInfo()
         info.text = CANCEL
         info.notCheckable = true
-        UIDropDownMenu_AddButton(info, menuLevel) 
+        UIDropDownMenu_AddButton(info, menuLevel)
     end
 
     local methods = {
@@ -95,7 +95,7 @@ do
             self:SetValue()
         end,
 
-        OnRelease = function(self)
+        OnRelease = function()
 
         end,
 
@@ -126,7 +126,7 @@ do
             self.trueValue = 1
             if values then
                 for _, item in ipairs(values) do
-                    local v, short, long = unpack(item)
+                    local v, short = unpack(item)
                     if short == false then
                         self.falseValue = v
                     elseif short == true then
@@ -230,24 +230,23 @@ end
 --
 --
 
-do 
+do
     local Type, Version = "PetLeash_PetSelectItem", 1
     local AceGUI = LibStub("AceGUI-3.0")
-    local LibPetJournal = LibStub("LibPetJournal-2.0")
 
     local function frame_OnEnter(frame)
         local petID = frame.widget.petID
         if petID ~= nil then
             local _, customName, level, _, _, _, _, name, _, petType = C_PetJournal.GetPetInfoByPetID(petID)
             local _, _, _, _, quality = C_PetJournal.GetPetStats(petID)
-            local name = customName or name
+            local petName = customName or name
 
             GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT")
             GameTooltip:AddLine(format("|cff%02x%02x%02x%s|r",
                                         ITEM_QUALITY_COLORS[quality-1].r*255,
                                         ITEM_QUALITY_COLORS[quality-1].g*255,
                                         ITEM_QUALITY_COLORS[quality-1].b*255,
-                                        name))
+                                        petName))
             GameTooltip:AddLine(format(TOOLTIP_WILDBATTLEPET_LEVEL_CLASS, level, PET_TYPE_SUFFIX[petType]))
             GameTooltip:Show()
         end
@@ -265,16 +264,16 @@ do
         GameTooltip:Show()
     end
 
-    local function check_OnLeave(checkBox)
+    local function check_OnLeave()
         GameTooltip:Hide()
     end
 
-    local function check_OnValueChanged(checkBox, event, value)
+    local function check_OnValueChanged(checkBox, _, value)
         local self = checkBox:GetUserData("self")
         self:Fire("OnValueChanged", value)
     end
 
-    local function GetPetTypeTexture(petType) 
+    local function GetPetTypeTexture(petType)
         if PET_TYPE_SUFFIX[petType] then
             return "Interface\\PetBattles\\PetIcon-"..PET_TYPE_SUFFIX[petType]
         else

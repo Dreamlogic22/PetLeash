@@ -13,8 +13,8 @@ local LibPetJournal = LibStub("LibPetJournal-2.0")
 local GetSpellInfo, GetTime, HasFullControl, InCombatLockdown, ipairs, IsFalling,
     IsFlying, IsInInstance, IsResting, IsStealthed, next, pairs, rawset, UnitAura,
     UnitCastingInfo, UnitChannelInfo, UnitIsDeadOrGhost, UnitInVehicle
-    = GetSpellInfo, GetTime, HasFullControl, InCombatLockdown, ipairs, IsFalling,
-    IsFlying, IsInInstance, IsResting, IsStealthed, next, pairs, rawset, UnitAura,
+    = C_Spell.GetSpellInfo, GetTime, HasFullControl, InCombatLockdown, ipairs, IsFalling,
+    IsFlying, IsInInstance, IsResting, IsStealthed, next, pairs, rawset, C_UnitAuras.GetAuraDataByIndex,
     UnitCastingInfo, UnitChannelInfo, UnitIsDeadOrGhost, UnitInVehicle
 local sort, tconcat, tinsert = table.sort, table.concat, table.insert
 

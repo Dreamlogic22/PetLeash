@@ -1,12 +1,16 @@
 
-local addon_name, addon = ...
+local _, addon = ...
 
 local module = addon:NewModule("SpecialItems", "AceEvent-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("PetLeash")
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local AceConfig = LibStub("AceConfig-3.0")
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+
+local GetItemCount = C_Item.GetItemCount
+local IsEquippedItem = C_Item.IsEquippedItem
+local GetItemInfo = C_Item.GetItemInfo
+local GetSpellInfo = C_Spell.GetSpellInfo
+local GetQuestLogTitle = C_QuestLog.GetInfo
 
 local _G = _G
 

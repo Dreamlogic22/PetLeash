@@ -441,8 +441,7 @@ end
 --
 
 function addon:PickPet()
-    local set
-    for name, module in self:IterateModules() do
+    for _, module in self:IterateModules() do
         local f = module["PickPet"]
         if f then
             local id = f(module)

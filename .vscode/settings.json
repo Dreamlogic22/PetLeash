@@ -42,7 +42,6 @@
         "OpacitySliderFrame",
         "ChatFontNormal",
         "NOT_BOUND",
-        "GetCursorPosition",
         "LE_PET_JOURNAL_FILTER_COLLECTED",
         "LE_PET_JOURNAL_FILTER_NOT_COLLECTED",
         "InterfaceOptionsFrame_OpenToCategory",
@@ -69,7 +68,6 @@
         "RAID",
         "CLASS",
         "SPECIALIZATION",
-        "C_AddOns",
         "Settings",
         "PetJournal"
     ],
@@ -85,6 +83,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "~\\.vscode\\extensions\\ketho.wow-api-0.16.6\\Annotations"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.17.4\\Annotations"
     ]
 }

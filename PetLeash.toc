@@ -22,6 +22,8 @@ Libs\LibPetJournal-2.0.lua
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 
+Taintless.xml
+
 ## Locales
 Locales\enUS.lua
 Locales\deDE.lua

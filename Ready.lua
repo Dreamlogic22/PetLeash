@@ -60,7 +60,7 @@ function module:OnInitialize()
 
     self.last_spell_sent = 0
     self.player_auras = {}
-    
+
     self:RegisterEvent("COMPANION_UPDATE")
     self:RegisterEvent("UPDATE_STEALTH")
     self:RegisterEvent("UNIT_AURA")
@@ -108,7 +108,7 @@ function module:OnEnable()
 
     self:PLAYER_ENTERING_WORLD()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
-    
+
     LibPetJournal.RegisterCallback(self, "PetListUpdated")
     self:RegisterMessage("PetLeash-EnableState", "OnAddOnState")
 
@@ -154,7 +154,7 @@ end
 function module:DumpDebugState()
     local ready = {}
     local not_ready = {}
-    
+
     for name,_ in pairs(self.is_true) do
         tinsert(ready, debug_ready_name(self, name))
     end
@@ -171,7 +171,7 @@ function module:DumpDebugState()
 
     sort(ready)
     sort(not_ready)
-    
+
     self:Printf("Ready: %s", tconcat(ready, " "))
     self:Printf("Not Ready: %s", tconcat(not_ready, " "))
     self:Printf("Last: %d %d, sum=%s, cast=%f",
@@ -206,7 +206,7 @@ function module:UpdateChecks(profile)
     self:EnableCheck("looting", true)
     self:EnableCheck("vehicle", true)           -- XXX not tested
     self:EnableCheck("addon_enabled", true)
-    
+
     self:_CheckSummon()
 end
 
@@ -229,7 +229,7 @@ function module:EnableCheck(name, enabled, dismiss)
         else
             self.is_false[name] = true
         end
-        
+
         if dismiss then
             self.dismiss_on[name] = true
         else
@@ -260,7 +260,7 @@ function module:SetReady(name, value)
             return
         end
     end
-    
+
     self.is_irrelevant[name] = not not value
 end
 
@@ -284,7 +284,7 @@ function module:_CheckSummon(wait_timer_finished)
         if addon:CurrentPet() and not self.force then
             return
         end
-        
+
         if wait_timer_finished then
             if self:LastCheck() then
                 if self.force then
@@ -300,7 +300,7 @@ function module:_CheckSummon(wait_timer_finished)
         elseif self.wait_timer then
             return
         end
-        
+
         self.wait_timer_counter = 0
         self.wait_timer = self:ScheduleRepeatingTimer("WaitTimerProgress", 0.5)
     end
@@ -313,7 +313,7 @@ function module:_CheckUn(name)
             addon:DismissPet(false, true)
         end
     end
-    
+
     if self.wait_timer then
         self:CancelTimer(self.wait_timer)
         self.wait_timer = nil
@@ -345,7 +345,7 @@ function module:PetListUpdated()
     self:SetReady("have_pets", LibPetJournal:NumPets())
 end
 
-function module:FrequentCheck()   
+function module:FrequentCheck()
     self:SetReady("flying", not IsFlying())
 
     -- XXX CRZ loses pet but no event fires (5.3 change?)
@@ -380,7 +380,7 @@ function module:COMPANION_UPDATE(event, ctype)
         self:_CheckSummon()
     end
 end
- 
+
 function module:BARBER_SHOP_OPEN()
     self:SetReady("barbar", false)
 end
@@ -426,7 +426,7 @@ function module:UNIT_AURA(event, unit)
     if unit ~= "player" then
         return
     end
-   
+
     -- Store player auras by name so we don't need to know every single spell id
     -- that could refer to a spell (for example, a rework of a spell might result
     -- in a new spell id, spec effects, etc)
@@ -449,7 +449,7 @@ function module:UNIT_AURA(event, unit)
 
     -- sauroked
     self:SetReady("thunderisle_saurok", not PlayerHasAura(136461))
-   
+
     -- eating means we are sitting down
     if PlayerHasAuraInList(FOOD_SPELLS) then
         self:SetReady("sitting", false)

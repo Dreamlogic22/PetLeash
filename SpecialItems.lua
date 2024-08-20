@@ -149,7 +149,7 @@ end
 
 SpecialItems["item:71137"] = function(item)
     item:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    
+
     function item:TimerFinished()
         self.timer = nil
         self:Update(false)
@@ -408,7 +408,7 @@ function SpecialItemMeta:PlayerHasQuest(questID)
     return module.currentQuests[questID]
 end
 
-function SpecialItemMeta:Check()
+function SpecialItemMeta:Check(...)
     print("WARNING: Check not implemented for "..tostring(self.name))
 end
 

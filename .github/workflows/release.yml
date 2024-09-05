@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '**'
+    paths-ignore:
+      - 'assets'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout addon
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: WoW Packager
+        uses: BigWigsMods/packager@master
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

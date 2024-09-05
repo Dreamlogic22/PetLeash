@@ -238,7 +238,7 @@ local options = {
             get = function()
                 return module.db.profile.enable
             end,
-            set = function(info, val)
+            set = function(_, val)
                 module.db.profile.enable = val
                 module:UpdateReadyEnabled()
             end,

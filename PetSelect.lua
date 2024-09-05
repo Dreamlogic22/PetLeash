@@ -149,7 +149,7 @@ do
                 self.short:Hide()
             elseif self.values then
                 for _, item in ipairs(self.values) do
-                    local v, short, long = unpack(item)
+                    local v, short = unpack(item)
                     if v == value then
                         self.short:Show()
                         self.short:SetText(short)

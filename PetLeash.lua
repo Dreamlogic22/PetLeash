@@ -150,7 +150,7 @@ function addon:DumpDebugState()
         self:Printf("Disabled")
     end
 
-    for name, module in self:IterateModules() do
+    for _, module in self:IterateModules() do
         local f = module["DumpDebugState"]
         if f then
             f(module)
@@ -179,7 +179,7 @@ function addon:CurrentPet()
 end
 
 function addon:PetsUpdated()
-    for setName, set in self:IterateSets() do
+    for _, set in self:IterateSets() do
         if set.RefreshSet then
             set:RefreshSet()
         end

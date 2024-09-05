@@ -1,15 +1,47 @@
-
-local addon_name, addon = ...
+local _, addon = ...
 
 local module = addon:NewModule("Options", "AceConsole-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("PetLeash")
 
-local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+local AceConfig = LibStub("AceConfig-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
+
+local error, ipairs, pairs, PlaySound, select,
+    setmetatable, strfind, string, table, tinsert, tostring, tremove,
+    type, wipe
+    = error, ipairs, pairs, PlaySound, select,
+    setmetatable, strfind, string, table, tinsert, tostring, tremove,
+    type, wipe
+
 local LibDBIcon = LibStub("LibDBIcon-1.0")
+
+local InterfaceOptions_AddCategory = function(frame)
+	frame.OnCommit = frame.okay
+	frame.OnDefault = frame.default
+	frame.OnRefresh = frame.refresh
+
+	if frame.parent then
+		local category = Settings.GetCategory(frame.parent)
+		local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name)
+		return subcategory, category
+	else
+		local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name)
+		Settings.RegisterCategory(category)
+		return category
+	end
+end
+
+local InterfaceOptionsFrame_OpenToCategory = function(categoryIDOrFrame)
+    if type(categoryIDOrFrame) == "table" then
+		local categoryID = categoryIDOrFrame.name
+		return Settings.OpenToCategory(categoryID)
+	else
+		return Settings.OpenToCategory(categoryIDOrFrame)
+	end
+end
 
 local W = 8
 local L_WeightValues = {
@@ -60,8 +92,8 @@ local options = {
                             desc = L["Enable Auto-Summon"],
                             order = 10,
                             width = "full",
-                            get = function(info) return addon:IsEnabledSummoning() end,
-                            set = function(info,v) addon:EnableSummoning(v) end,
+                            get = function() return addon:IsEnabledSummoning() end,
+                            set = function(_ ,v) addon:EnableSummoning(v) end,
                         },
                         nearPEWOnly = {
                             type = "toggle",
@@ -277,6 +309,8 @@ function module:OnInitialize()
     AceConfig:RegisterOptionsTable(addon.name, options)
     AceConfig:RegisterOptionsTable(addon.name .. "SlashCmd", options_slashcmd, {"petleash", "pl"})
 
+    -- this runs before the addon list is updated
+    --hooksecurefunc("InterfaceCategoryList_Update", function() self:SetupOptions() end)
     self:SetupOptions()
 end
 
@@ -304,15 +338,7 @@ function module:SetupOptions()
     self.PetSelection:SetLayout("flow")
     self.PetSelection:SetCallback("OnShow", function() self:PetSelection_Fill(self.PetSelection, "$Default") end)
     self.PetSelection:SetCallback("OnHide", function() self:PetSelection_Clear(self.PetSelection) end)
-
-    -- AceConfig:RegisterOptionsTable(L["Pet Selection"], self.PetSelection:GetUserData("options"))
-    AceConfigDialog:AddToBlizOptions(addon.name, L["Pet Selection"], addon.name, "general")
-
-
-    -- local panel = self.PetSelection
-    -- local category = Settings.GetCategory("main")
-    -- local subcategory, layout = Settings.RegisterCanvasLayoutSubcategory(category, panel, panel.name)
-    -- subcategory.ID = panel.name
+    InterfaceOptions_AddCategory(self.PetSelection.frame)
 
     self.PetTriggers = AceGUI:Create("BlizOptionsGroup")
     self.PetTriggers:SetUserData("options", {
@@ -325,8 +351,7 @@ function module:SetupOptions()
     self.PetTriggers:SetLayout("flow")
     self.PetTriggers:SetCallback("OnShow", function() self:PetSelection_Fill(self.PetTriggers) end)
     self.PetTriggers:SetCallback("OnHide", function() self:PetSelection_Clear(self.PetTriggers) end)
-
-    -- Settings.RegisterCanvasLayoutSubcategory(self.PetTriggers.frame, addon_name)
+    InterfaceOptions_AddCategory(self.PetTriggers.frame)
 
     for name, module in addon:IterateModules() do
         local f = module["SetupOptions"]

@@ -3,7 +3,6 @@ package-as: PetLeash
 ignore:
   - .vscode
   - .github
-  - assets
 
 manual-changelog:
   filename: CHANGELOG.md

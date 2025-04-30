@@ -20,6 +20,17 @@ local _G = _G
 
 local SpecialItems = {}
 
+-- Summon Orphan Auras
+SpecialItems["Khaz Algar Orphan Auras"] = function(item)
+    item:RegisterEvent("UNIT_AURA")
+    function item:Check()
+        return C_UnitAuras.GetPlayerAuraBySpellID(1228497) ~= nil -- kobold orphan
+            or C_UnitAuras.GetPlayerAuraBySpellID(1230155) ~= nil -- arathi orphan
+            or C_UnitAuras.GetPlayerAuraBySpellID(1230183) ~= nil -- nerubian orphan
+            or C_UnitAuras.GetPlayerAuraBySpellID(1230185) ~= nil -- goblin orphan
+    end
+end
+
 -- Orcish Orphan Whistle
 SpecialItems["item:18597"] = function(item)
     item:RegisterEvent("BAG_UPDATE")
@@ -340,13 +351,10 @@ end
 function module:UpdateQuestList()
     _G.wipe(self.currentQuests)
     for i = 1, (C_QuestLog:GetNumQuestLogEntries() or 0) do
-        local link = GetQuestLink(i)
-        if link ~= nil then
-            local _,_,qid = strfind(link, "|Hquest:(%d+):(%d+)|")
-            if qid ~= nil then
-                self.currentQuests[tonumber(qid)] = true
-            end
-       end
+        local quest = C_QuestLog.GetInfo(i)
+        if quest then
+            self.currentQuests[tonumber(quest.questID)] = true
+        end
     end
 
     self:HandleEvent("UpdateQuestList")

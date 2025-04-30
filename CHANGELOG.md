@@ -1,3 +1,6 @@
+### April 30, 2025 ###
+* Fix issues with auto-summoning conflicting with new Childrens Week quests in Khaz Algar (Thanks [speedwaystar](https://github.com/speedwaystar)!)
+
 ### April 22, 2025 ###
 * Update TOC for 11.1.5.
 

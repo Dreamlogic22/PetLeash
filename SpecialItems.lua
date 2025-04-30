@@ -195,10 +195,20 @@ end
 SpecialItems["quest:35396"] = function(item)
     item:RegisterQuestEvent()
     function item:Check()
-        return self:PlayerHasQuest(25371) 
+        return self:PlayerHasQuest(25371)
             or self:PlayerHasQuest(35317)
             or self:PlayerHasQuest(35331)
             or self:PlayerHasQuest(34965)
+    end
+end
+
+-- Children's Week: Khaz Algar
+SpecialItems["item:239689"] = function(item)
+    item:RegisterEvent("BAG_UPDATE")
+    function item:Check()
+        function item:Check()
+            return GetItemCount(239689) > 0
+        end
     end
 end
 

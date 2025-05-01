@@ -1,6 +1,6 @@
 ## Interface: 110105
 ## Title: PetLeash
-## Version: 3.2.0
+## Version: 3.2.1
 ## Notes: Walks the Dog
 ## Author: End, River
 ## SavedVariables: PetLeash3DB

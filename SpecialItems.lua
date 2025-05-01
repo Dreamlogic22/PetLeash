@@ -14,40 +14,65 @@ local GetQuestLogTitle = C_QuestLog.GetInfo
 
 local _G = _G
 
+local ORCISH_ORPHAN_WHISTLE = 18597
+local HUMAN_ORPHAN_WHISTLE = 18598
+local BLOOD_ELF_ORPHAN_WHISTLE = 31880
+local DRAENEI_ORPHAN_WHISTLE = 31881
+local WOLVAR_ORPHAN_WHISTLE = 46396
+local ORACLE_ORPHAN_WHISTLE = 46397
+local KUL_TIRAN_ORPHAN_WHISTLE = 164772
+local CASTELESS_ZANDALARI_WHISTLE = 164965
+-- local KOBOLD_ORPHAN_WHISTLE = 239689
+-- local ARATHI_ORPHAN_WHISTLE = 240196
+-- local NERUBIAN_ORPHAN_WHISTLE = 240197
+-- local GOBLIN_ORPHAN_WHISTLE = 240198
+local KOBOLD_ORPHAN_AURA = 1228497
+local ARATHI_ORPHAN_AURA = 1230155
+local NERUBIAN_ORPHAN_AURA = 1230183
+local GOBLIN_ORPHAN_AURA = 1230185
+
 --
 -- Item Entries
 --
 
 local SpecialItems = {}
 
--- Summon Orphan Auras
-SpecialItems["Khaz Algar Orphan Auras"] = function(item)
+-- Children's Week Orphans
+
+-- Khaz Algar Summon Orphan Auras
+-- (because orphan can be out even if whistle is not in bag)
+SpecialItems["Khaz Algar Orphans"] = function(item)
     item:RegisterEvent("UNIT_AURA")
     function item:Check()
-        return C_UnitAuras.GetPlayerAuraBySpellID(1228497) ~= nil -- kobold orphan
-            or C_UnitAuras.GetPlayerAuraBySpellID(1230155) ~= nil -- arathi orphan
-            or C_UnitAuras.GetPlayerAuraBySpellID(1230183) ~= nil -- nerubian orphan
-            or C_UnitAuras.GetPlayerAuraBySpellID(1230185) ~= nil -- goblin orphan
+        return C_UnitAuras.GetPlayerAuraBySpellID(KOBOLD_ORPHAN_AURA) ~= nil
+            or C_UnitAuras.GetPlayerAuraBySpellID(ARATHI_ORPHAN_AURA) ~= nil
+            or C_UnitAuras.GetPlayerAuraBySpellID(NERUBIAN_ORPHAN_AURA) ~= nil
+            or C_UnitAuras.GetPlayerAuraBySpellID(GOBLIN_ORPHAN_AURA) ~= nil
     end
 end
 
--- Orcish Orphan Whistle
-SpecialItems["item:18597"] = function(item)
+-- Legacy Children's Week Orphan whistles
+SpecialItems["Children's Week Orphans"] = function(item)
     item:RegisterEvent("BAG_UPDATE")
     function item:Check()
-        return GetItemCount(18597) > 0
+        return GetItemCount(ORCISH_ORPHAN_WHISTLE) > 0
+        or GetItemCount(HUMAN_ORPHAN_WHISTLE) > 0
+        or GetItemCount(BLOOD_ELF_ORPHAN_WHISTLE) > 0
+        or GetItemCount(DRAENEI_ORPHAN_WHISTLE) > 0
+        or GetItemCount(WOLVAR_ORPHAN_WHISTLE) > 0
+        or GetItemCount(ORACLE_ORPHAN_WHISTLE) > 0
+        or GetItemCount(KUL_TIRAN_ORPHAN_WHISTLE) > 0
+        or GetItemCount(CASTELESS_ZANDALARI_WHISTLE) > 0
+        -- or GetItemCount(KOBOLD_ORPHAN_WHISTLE) > 0
+        -- or GetItemCount(ARATHI_ORPHAN_WHISTLE) > 0
+        -- or GetItemCount(NERUBIAN_ORPHAN_WHISTLE) > 0
+        -- or GetItemCount(GOBLIN_ORPHAN_WHISTLE) > 0
     end
 end
 
--- Human Orphan Whistle
-SpecialItems["item:18598"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(18598) > 0
-    end
-end
+-- Miscellaneous items
 
--- Bloodsail Hat
+-- Bloodsail Hat (summons Blood Parrot)
 SpecialItems["item:12185"] = function(item)
     item:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
     item:RegisterEvent("EQUIPMENT_SWAP_FINISHED")
@@ -69,22 +94,6 @@ SpecialItems["item:31815"] = function(item)
     item:RegisterEvent("BAG_UPDATE")
     function item:Check()
         return GetItemCount(31815) > 0
-    end
-end
-
--- Blood Elf Orphan Whistle
-SpecialItems["item:31880"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(31880) > 0
-    end
-end
-
--- Draenei Orphan Whistle
-SpecialItems["item:31881"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(31881) > 0
     end
 end
 
@@ -123,29 +132,13 @@ SpecialItems["item:46362"] = function(item)
     end
 end
 
--- Wolvar Orphan Whistle
-SpecialItems["item:46396"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(46396) > 0
-    end
-end
-
--- Oracle Orphan Whistle
-SpecialItems["item:46397"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(46397) > 0
-    end
-end
-
--- TODO check me
-SpecialItems["item:46831"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        return GetItemCount(46831) > 0
-    end
-end
+-- Macabre Marionette is now a normal battle pet
+-- SpecialItems["item:46831"] = function(item)
+--     item:RegisterEvent("BAG_UPDATE")
+--     function item:Check()
+--         return GetItemCount(46831) > 0
+--     end
+-- end
 
 -- Winterspring Cub (20day Winterspring Frostsaber quest) 
 SpecialItems["item:68646"] = function(item)
@@ -158,6 +151,7 @@ SpecialItems["item:68646"] = function(item)
     end
 end
 
+-- Brewfest Keg Pony
 SpecialItems["item:71137"] = function(item)
     item:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 
@@ -178,7 +172,7 @@ SpecialItems["item:71137"] = function(item)
     end
 end
 
--- TODO check me
+-- Orphaned Mammoth Calf delivery quest
 SpecialItems["quest:11878"] = function(item)
     item:RegisterQuestEvent()
     function item:Check()
@@ -187,6 +181,7 @@ SpecialItems["quest:11878"] = function(item)
 end
 
 -- TODO check me
+-- Twilight Flight quest
 SpecialItems["quest:26831"] = function(item)
     item:RegisterQuestEvent()
     function item:Check()
@@ -195,6 +190,7 @@ SpecialItems["quest:26831"] = function(item)
 end
 
 -- TODO check me
+-- Subdue Abyssal Seahorse
 SpecialItems["quest:25371"] = function(item)
     item:RegisterQuestEvent()
     function item:Check()
@@ -210,16 +206,6 @@ SpecialItems["quest:35396"] = function(item)
             or self:PlayerHasQuest(35317)
             or self:PlayerHasQuest(35331)
             or self:PlayerHasQuest(34965)
-    end
-end
-
--- Children's Week: Khaz Algar
-SpecialItems["item:239689"] = function(item)
-    item:RegisterEvent("BAG_UPDATE")
-    function item:Check()
-        function item:Check()
-            return GetItemCount(239689) > 0
-        end
     end
 end
 
@@ -392,15 +378,11 @@ function module:AskClientForName(item)
         return (GetSpellInfo(strsub(item,7)))
     elseif strsub(item, 1,6) == "quest:" then
         local questid = strsub(item,7)
-
         for i = 1, (C_QuestLog:GetNumQuestLogEntries() or 0) do
-            local link = GetQuestLink(i)
-            if link ~= nil then
-                local _,_,qid = strfind(link, "|Hquest:(%d+):(%d+)|")
-                if qid == questid then
-                    return (GetQuestLogTitle(i))
-                end
-           end
+            local quest = C_QuestLog.GetInfo(i)
+            if quest and quest.questID == questid then
+                return quest.title
+            end
         end
     end
 end

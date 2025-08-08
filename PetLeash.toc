@@ -1,4 +1,4 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: PetLeash
 ## Version: 3.2.3
 ## Notes: Walks the Dog

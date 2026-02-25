@@ -12,3 +12,5 @@
 Core\Settings.lua
 Core\Init.lua
 Core\Main.lua
+
+Modules\Development\Debug.lua

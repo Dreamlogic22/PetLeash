@@ -3,22 +3,37 @@ local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
 
-local LoadDevelopmentTools
+local LoadModules
 do
-    -- Do this here because EventUtil calls cannot be nested
-    LoadDevelopmentTools = function()
-        if T.IsDebugBuild then
-            EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
-                TherapyDevTools_Monitor(Name)
-            end)
+    ---@type table<number, function>
+    local PendingModules = {}
+
+    ---@param callback function
+    ---@param delay number?
+    function T.RegisterModule(callback, delay)
+        tinsert(PendingModules, function()
+            if delay then
+                C_Timer.After(delay, callback)
+            else
+                callback()
+            end
+        end)
+    end
+
+    LoadModules = function()
+        while #PendingModules > 0 do
+            local module = tremove(PendingModules, 1)
+            pcall(module)
+        end
+
+        if #PendingModules == 0 then
+            T.RegisterModule = nil
         end
     end
 end
 
 local function OnInitialize()
-    T.IsDebugBuild = T.db.isDebugBuild
-
-    LoadDevelopmentTools()
+    LoadModules()
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

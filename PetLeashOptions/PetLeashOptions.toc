@@ -1,0 +1,8 @@
+## Interface: 120001
+## Title: |cff33ff99PetLeash|r Options
+## Version: 4.0.1
+## Author: River
+## Notes: Configuration for PetLeash
+## RequiredDeps: PetLeash
+## LoadOnDemand: 1
+## IconTexture: Interface\AddOns\PetLeash\Media\Logo

@@ -1,0 +1,13 @@
+package-as: PetLeash
+
+move-folders:
+    PetLeash/PetLeash: PetLeash
+    PetLeash/PetLeashOptions: PetLeashOptions
+
+ignore:
+  - .emmy.lua
+  - .github
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown

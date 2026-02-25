@@ -9,13 +9,24 @@ local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
 
+-- Debug only
+do
+    if PetLeashDB and type(PetLeashDB) == "table" then
+        wipe(PetLeashDB)
+    end
+
+    EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
+        TherapyDevTools_Monitor(Name)
+    end)
+end
+
 -- Load database
 do
     local Version = C_AddOns.GetAddOnMetadata(Name, "Version")
 
     ---@param target table
     ---@param defaults table
-    ---@return Settings
+    ---@return table
     local function Merge(target, defaults)
         for k, v in next, defaults do
             if type(v) == "table" then

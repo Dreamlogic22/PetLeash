@@ -37,6 +37,9 @@ function EventUtil.ContinueOnPlayerLogin(callback) end
 ---@param callback function
 function EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...) end
 
+PetJournal = CreateFrame("Frame")
+PetJournalFindBattle = CreateFrame("Button")
+
 ---[Documentation](https://github.com/Gethe/wow-ui-source/blob/d6dffb48b2c0d7a7ab5d37dad2817ccee710e0ef/Interface/AddOns/Blizzard_RestrictedAddOnEnvironment/SecureStateDriver.lua#L8)
 ---@param frame Frame
 ---@param state string

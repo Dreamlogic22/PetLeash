@@ -7,7 +7,7 @@
 ## Notes: Walks the Dog
 ## DefaultState: Enabled
 ## Category: Pet Battles
-## IconTexture: Interface\AddOns\PetLeash\Media\Logo
+## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Core\Settings.lua
 Core\Init.lua

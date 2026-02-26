@@ -5,10 +5,9 @@
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash
 ## LoadOnDemand: 1
-## IconTexture: Interface\AddOns\PetLeash\Media\Logo
-
-Libs\AceGUI-3.0\AceGUI-3.0.xml
-Libs\AceConfig-3.0\AceConfig-3.0.xml
+## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Core\Init.lua
 Core\Main.lua
+
+Widgets\OptionsPanel.lua

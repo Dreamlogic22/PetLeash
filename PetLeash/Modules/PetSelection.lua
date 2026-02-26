@@ -83,7 +83,7 @@ do
 
     ---@param parent Frame
     CreateButton = function(parent)
-        local Button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
+        local Button = CreateFrame("Button", "PetLeashOptionsToggle", parent, "UIPanelButtonTemplate")
         Button:SetSize(140, 22)
         Button:SetPoint("RIGHT", PetJournalFindBattle, "LEFT", -5, 0)
         Button:EnableMouse(true)
@@ -98,10 +98,12 @@ do
         if ElvUI then
             ElvUI[1]:GetModule("Skins"):HandleButton(Button)
         end
+
+        PetLeashOptionsToggle = Button
     end
 end
 
-local AddCheckbox, CreateCheckBox
+local AddCheckboxm, CreateCheckBox
 do
     ---@class PetJournalButton: Button
     ---@field petID number
@@ -112,13 +114,18 @@ do
 
         if not button.PetLeashChecbox then
             button.PetLeashChecbox = CreateCheckBox(button)
+            button:SetSize(24, 24)
+            button:SetPoint("RIGHT", PetJournal, "RIGHT", -15, 0)
+
             button.PetLeashChecbox:SetScript("OnClick", function(self)
                 local id = button.petID
                 if self:GetChecked() then
                     self.CheckedTexture:Show()
+                    PlaySound(857)
                     AddPet(id)
                 else
                     self.CheckedTexture:Hide()
+                    PlaySound(856)
                     RemovePet(id)
                 end
             end)

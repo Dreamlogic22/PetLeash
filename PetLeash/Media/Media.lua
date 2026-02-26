@@ -2,6 +2,10 @@
 local T = select(2, ...)
 
 T.Media = {
+    Fonts = {
+        Bold = [[Interface\AddOns\PetLeash\Media\Fonts\Expressway.ttf]],
+        Normal = [[Interface\AddOns\PetLeash\Media\Fonts\PTSansNarrow.ttf]]
+    },
     Textures = {
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]]
     }

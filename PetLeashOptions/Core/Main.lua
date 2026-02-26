@@ -3,16 +3,14 @@ local Name = ...
 ---@class PetLeashOptions
 local C = select(2, ...)
 
-local AceConfig = LibStub("AceConfig-3.0")
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 do
-	function C.NotifyChange()
-		AceConfigRegistry:NotifyChange(Name)
+	---@return boolean
+	function C.IsEditModeActive()
+		return EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive()
 	end
 
 	function C.Print(...)
-		print(strjoin("", "|cff00b3ff", "Pet Leash|r Options: ", ...))
+		print(strjoin("", "|cff33ff99PetLeash|r Options: ", ...))
 	end
 end
 
@@ -25,8 +23,12 @@ C.Options = {
 }
 
 local function OnInitialize()
-	AceConfig:RegisterOptionsTable(Name, C.Options)
-    LibStub("AceConfigDialog-3.0"):Open(Name)
+	PetLeashOptionsPanel:Show()
+
+	PetLeashOptionsToggle:SetScript("OnClick", function()
+		PlaySound(856)
+		PetLeashOptionsPanel:Toggle()
+	end)
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

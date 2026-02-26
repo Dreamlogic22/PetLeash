@@ -14,10 +14,6 @@ T.Locale = {}
 
 -- Debug only
 do
-    if PetLeashDB and type(PetLeashDB) == "table" then
-        wipe(PetLeashDB)
-    end
-
     EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
         TherapyDevTools_Monitor(Name)
     end)

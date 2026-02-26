@@ -9,40 +9,40 @@
 local T = select(2, ...)
 local Media = T.Media
 
----@param petID number
-local function IsSelected(petID)
-    if not petID or not T.db.pets then
+---@param petId number
+local function IsSelected(petId)
+    if not petId or not T.db.pets then
         return false
     end
 
     for _, id in ipairs(T.db.pets) do
-        if id == petID then return true end
+        if id == petId then return true end
     end
 
     return false
 end
 
----@param petID number
-local function AddPet(petID)
-    if not petID then return end
+---@param petId number
+local function AddPet(petId)
+    if not petId then return end
 
     if not T.db.pets then
         T.db.pets = {}
     end
 
-    if T.db.pets and tContains(T.db.pets, petID) then
+    if T.db.pets and tContains(T.db.pets, petId) then
         return
     end
 
-    table.insert(T.db.pets, petID)
+    table.insert(T.db.pets, petId)
 end
 
----@param petID number
-local function RemovePet(petID)
-    if not petID or not T.db.pets then return end
+---@param petId number
+local function RemovePet(petId)
+    if not petId or not T.db.pets then return end
 
     for i, id in ipairs(T.db.pets) do
-        if id == petID then
+        if id == petId then
             table.remove(T.db.pets, i)
             return
         end

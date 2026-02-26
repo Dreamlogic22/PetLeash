@@ -2,9 +2,11 @@
 local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
+local L = T.Locale
 
 local CanSummon = C_PetJournal.GetPetSummonInfo
 local GetCurrentPet = C_PetJournal.GetSummonedPetGUID
+local GetNumPets = C_PetJournal.GetNumPets
 local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID
 local HasControl = HasFullControl
 local IsMoving = IsPlayerMoving
@@ -38,9 +40,41 @@ do
 end
 
 do
+    local Interval = 60
+    local Throttle = 3
+
+    function T.HasAnyPets()
+        return GetNumPets() > 0 and T.db.pets and #T.db.pets > 0
+    end
+
+    function T.Enable()
+        WatchFrame:SetScript("OnUpdate", function(_, elapsed)
+            Throttle = Throttle - elapsed
+
+            if Throttle < 0 then
+                Throttle = 3
+                T.TrySummon()
+            end
+        end)
+
+        RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
+    end
+
+    ---@param reason string?
+    function T.Disable(reason)
+        UnregisterAttributeDriver(WatchFrame, "state-visibility")
+        WatchFrame:SetScript("OnUpdate", nil)
+
+        if reason then
+            T.Print(reason)
+        end
+    end
+
     function T.GetRandomPet()
-        if not T.db.pets or #T.db.pets == 0 then
-            return nil
+        if not T.HasAnyPets() then
+            T.Disable(L.NO_PETS)
+
+            return
         end
 
         local Candidates = {}
@@ -109,23 +143,10 @@ local function OnInitialize()
         EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnInitialize)
     end
 
-    if not T.db.pets or #T.db.pets == 0 then
-        T.Print("You do not have any pets selected.  Open the Pet Journal and pick some companions using the checkboxes!")
-        WatchFrame:Hide()
-
-        return
+    if T.HasAnyPets() then
+        T.Enable()
     else
-        local throttle = 3
-        WatchFrame:SetScript("OnUpdate", function(_, elapsed)
-            throttle = throttle - elapsed
-
-            if throttle < 0 then
-                throttle = 3
-                T.TrySummon()
-            end
-        end)
-
-        RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
+        T.Disable(L.NO_PETS)
     end
 end
 

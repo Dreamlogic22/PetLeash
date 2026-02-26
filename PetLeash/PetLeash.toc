@@ -11,6 +11,9 @@
 
 Core\Settings.lua
 Core\Init.lua
+
+Locale\enUS.lua
+
 Core\Overrides.lua
 Core\Main.lua
 

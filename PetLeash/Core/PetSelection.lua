@@ -34,6 +34,11 @@ local function AddPet(petId)
         return
     end
 
+    if #T.db.pets == 0 then
+        -- If this is our first pet on a fresh character, enable
+        T.Enable()
+    end
+
     table.insert(T.db.pets, petId)
 end
 
@@ -46,6 +51,10 @@ local function RemovePet(petId)
             table.remove(T.db.pets, i)
             return
         end
+    end
+
+    if not T.db.pets or #T.db.pet == 0 then
+        T.Disable()
     end
 end
 

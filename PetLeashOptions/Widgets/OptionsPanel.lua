@@ -3,9 +3,10 @@ local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
 do
-    local Dialog = CreateFrame("Frame", "PetLeashOptionsPanel", UIParent, "TherapyPanelTemplate")
+    local Dialog = CreateFrame("Frame", "PetLeashOptionsPanel", UIParent)
     Dialog:SetSize(680, 680 * 0.85)
-    Dialog:SetPoint("CENTER")
+    -- Dialog:SetPoint("CENTER")
+    Dialog:SetPoint("TOP", UIParent, "BOTTOM", 0, -64)
     Dialog:SetMovable(true)
     Dialog:SetResizable(true)
     Dialog:Hide()
@@ -31,7 +32,7 @@ do
     Title:SetText("|cff33ff99PetLeash|r Options")
     Title:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -15)
 
-    Dialog:CreateCloseButton()
+    -- Dialog:CreateCloseButton()
 
     local function OnCombatEnd()
         if Dialog.RestoreAfterCombat then
@@ -62,8 +63,6 @@ do
             C.Print(L.OPTIONS_NOT_IN_EDIT_MODE)
             return
         end
-
-        print(self:IsVisible())
 
         self:SetShown(not self:IsVisible())
     end

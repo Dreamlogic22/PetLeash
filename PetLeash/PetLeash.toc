@@ -20,3 +20,5 @@ Media\Media.lua
 
 Modules\Overrides.lua
 Modules\PetSelection.lua
+
+Modules\Sandbox.lua

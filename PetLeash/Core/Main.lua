@@ -45,7 +45,7 @@ do
     local Throttle = 3
 
     function T.HasAnyPets()
-        return GetNumPets() > 0 and T.db.pets and #T.db.pets > 0
+        return T.db.pets and #T.db.pets > 0
     end
 
     function T.Enable()

@@ -1,6 +1,7 @@
 --[[--------------------------------------------------------------------
 
-    Special flags, pets or items that should prevent automatic summoning.
+    Special flags, pets or items that should prevent automatic
+    summoning.
 
 --------------------------------------------------------------------]]
 
@@ -12,7 +13,7 @@ local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 
 ---@type table<string, boolean>
-local Exclusions = {}
+local Exceptions = {}
 
 local ExcludedPets = {
     280,  -- Guild Page (Alliance)
@@ -27,7 +28,7 @@ local ExcludedPets = {
 }
 
 for _, id in ipairs(ExcludedPets) do
-    Exclusions[id] = true
+    Exceptions[id] = true
 end
 
 local function IsExcludedPet(speciesID)
@@ -39,7 +40,7 @@ local function IsExcludedPet(speciesID)
         return mapID == 1970
     end
 
-    return Exclusions[speciesID] or false
+    return Exceptions[speciesID] or false
 end
 
 ---@param petID number?

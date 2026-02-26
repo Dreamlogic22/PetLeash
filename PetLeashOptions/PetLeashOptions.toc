@@ -6,3 +6,7 @@
 ## RequiredDeps: PetLeash
 ## LoadOnDemand: 1
 ## IconTexture: Interface\AddOns\PetLeash\Media\Logo
+
+Core\Init.lua
+
+PetJournal\PetSelection.lua

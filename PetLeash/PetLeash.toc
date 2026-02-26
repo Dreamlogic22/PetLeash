@@ -11,6 +11,10 @@
 
 Core\Settings.lua
 Core\Init.lua
-Core\Filters.lua
 Core\Main.lua
+
+Media\Media.lua
+
+Core\SpecialItems.lua
+Core\Summon.lua
 Core\PetSelection.lua

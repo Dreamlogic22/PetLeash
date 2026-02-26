@@ -4,5 +4,6 @@ local T = select(2, ...)
 ---@class Settings
 T.db = {
     enable = true,
-    pets = {}
+    pets = {},
+    version = 0
 }

@@ -14,9 +14,9 @@ Core\Init.lua
 
 Locale\enUS.lua
 
-Core\Overrides.lua
 Core\Main.lua
 
 Media\Media.lua
 
-Core\PetSelection.lua
+Modules\Overrides.lua
+Modules\PetSelection.lua

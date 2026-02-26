@@ -7,7 +7,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
-local Media = T.Media
+local L, Media = T.Locale, T.Media
 
 ---@param petId number
 local function IsSelected(petId)
@@ -64,14 +64,14 @@ do
         if C_AddOns.IsAddOnLoaded("PetLeashOptions") then return end
 
         if InCombatLockdown() then
-            T.Print("Options will load after combat ends.")
+            T.Print(L.OPTIONS_NOT_IN_COMBAT)
             EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", LoadOptions)
             return
         end
 
         local loaded, reason = C_AddOns.LoadAddOn("PetLeashOptions")
         if not loaded then
-            T.Print("Could not load options. Please make sure you have |cff33ff99Pet Leash|r Options installed and enabled. |cffff7f7fError|r: ", reason or UNKNOWN)
+            T.Print(L.OPTIONS_LOAD_ERROR, reason or UNKNOWN)
             return
         end
     end
@@ -126,7 +126,7 @@ do
             button.PetLeashChecbox:SetScript("OnEnter", function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
                 GameTooltip:AddLine("|cff33ff99PetLeash|r")
-                GameTooltip:AddLine("Add or remove this pet from PetLeash.", 1, 1, 1, true)
+                GameTooltip:AddLine(L.ADD_OR_REMOVE_PET, 1, 1, 1, true)
                 GameTooltip:Show()
             end)
 

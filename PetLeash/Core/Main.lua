@@ -2,6 +2,7 @@
 local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
+
 local L = T.Locale
 
 local CanSummon = C_PetJournal.GetPetSummonInfo

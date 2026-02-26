@@ -103,7 +103,7 @@ do
     end
 end
 
-local AddCheckboxm, CreateCheckBox
+local AddCheckbox, CreateCheckBox
 do
     ---@class PetJournalButton: Button
     ---@field petID number

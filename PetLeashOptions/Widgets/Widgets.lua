@@ -17,6 +17,16 @@ local Perfect = 786 / ScreenWidth
 local UIScale = (ElvUI and ElvUI[1].global.general.UIScale) or GetCVar("uiScale")
 local Mult = Perfect / UIScale
 
+---@param texture Texture
+local function DisablePixelSnap(texture)
+    texture:SetSnapToPixelGrid(false)
+    texture:SetTexelSnappingBias(0)
+end
+
+local function NotEnoughPets()
+    return select(2, GetNumPets()) < 2
+end
+
 ---@param size number
 local function Scale(size)
     if Mult == 1 or size == 0 then
@@ -27,32 +37,21 @@ local function Scale(size)
     end
 end
 
----@param texture Texture
-local function DisablePixelSnap(texture)
-    texture:SetSnapToPixelGrid(false)
-    texture:SetTexelSnappingBias(0)
-end
-
 local CreateCheckBox
 do
-            -- b:SetScript("OnEnable", CheckboxMixin.OnEnable);
-        -- b:SetScript("OnDisable", CheckboxMixin.OnDisable);
+    ---@param self PetLeashCheckBox
+    local function OnEnable(self)
+        self.CheckedTexture:SetDesaturated(false)
+        self.CheckedTexture:SetVertexColor(1, 1, 1)
+        self.Label:SetTextColor(unpack(unpack(Colors.GoldenBrownRgb)))
+    end
 
-    -- function CheckboxMixin:OnEnable()
-    --     self.CheckedTexture:SetDesaturated(false);
-    --     self.CheckedTexture:SetVertexColor(1, 1, 1);
-    --     if self.useWhiteLabel then
-    --         self.Label:SetTextColor(1, 1, 1);
-    --     else
-    --         self.Label:SetTextColor(1, 0.82, 0);
-    --     end
-    -- end
-
-    -- function CheckboxMixin:OnDisable()
-    --     self.CheckedTexture:SetDesaturated(true);
-    --     self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5);
-    --     self.Label:SetTextColor(0.5, 0.5, 0.5);
-    -- end
+    ---@param self PetLeashCheckBox
+    local function OnDisable(self)
+        self.CheckedTexture:SetDesaturated(true)
+        self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
+        self.Label:SetTextColor(0.5, 0.5, 0.5)
+    end
 
     ---@param self PetLeashCheckBox
     local function OnClick(self)
@@ -108,6 +107,7 @@ do
         Button.CheckedTexture:SetPoint("CENTER", Button.Border, "CENTER", 0, 0)
         Button.CheckedTexture:SetSize(16, 16)
         DisablePixelSnap(Button.CheckedTexture)
+
         Button.CheckedTexture:Hide()
 
         Button.Highlight = Button:CreateTexture(nil, "HIGHLIGHT")
@@ -120,6 +120,8 @@ do
         DisablePixelSnap(Button.Highlight)
 
         Button:SetScript("OnClick", OnClick)
+        Button:SetScript("OnDisable", OnDisable)
+        Button:SetScript("OnEnable", OnEnable)
         Button:SetScript("OnEnter", OnEnter)
         Button:SetScript("OnLeave", OnLeave)
 
@@ -243,16 +245,21 @@ do
 
         if self.ValueText then
             self.ValueText:SetText(value)
+
+            if self.Callback then
+                pcall(self.Callback, value)
+            end
         end
     end
 
     ---@param parent Frame
     ---@param label string
     ---@param setting number
+    ---@param callback function
     ---@param min number?
     ---@param max number?
     ---@return PetLeashSlider
-    CreateSlider = function(parent, label, setting, min, max)
+    CreateSlider = function(parent, label, setting, callback, min, max)
         ---@class PetLeashSlider: Frame
         local Frame = CreateFrame("Frame", nil, parent)
         Frame:SetSize(386, 24)
@@ -410,110 +417,124 @@ do
             self.RightText:SetTextColor(0.5, 0.5, 0.5)
         end
 
+        if callback and type(callback) == "function" then
+            Slider.Callback = callback
+        end
+
         return Frame
     end
 end
 
-local Dialog = CreateFrame("Frame", "PetLeashOptionsPanel", UIParent)
-Dialog:SetSize(680, 580)
-Dialog:SetPoint("CENTER")
-Dialog:SetClampedToScreen(true)
-Dialog:SetFrameLevel(500)
-Dialog:SetFrameStrata("DIALOG")
-Dialog:SetMovable(true)
-Dialog:EnableMouse(true)
-Dialog:RegisterForDrag("LeftButton")
+do
+    local Dialog = CreateFrame("Frame", "PetLeashOptionsPanel", UIParent)
+    Dialog:SetSize(680, 580)
+    Dialog:SetPoint("CENTER")
+    Dialog:SetClampedToScreen(true)
+    Dialog:SetFrameLevel(500)
+    Dialog:SetFrameStrata("DIALOG")
+    Dialog:SetMovable(true)
+    Dialog:EnableMouse(true)
+    Dialog:RegisterForDrag("LeftButton")
 
-Dialog:SetScript("OnDragStart", Dialog.StartMoving)
-Dialog:SetScript("OnDragStop", Dialog.StopMovingOrSizing)
+    Dialog:SetScript("OnDragStart", Dialog.StartMoving)
+    Dialog:SetScript("OnDragStop", Dialog.StopMovingOrSizing)
 
-Dialog.Backdrop = CreateFrame("Frame", nil, Dialog, "BackdropTemplate")
-Dialog.Backdrop:SetAllPoints()
-Dialog.Backdrop:SetFrameLevel(Dialog:GetFrameLevel())
-Dialog.Backdrop:SetBackdrop({ bgFile = Media.Textures.Background, edgeFile = Media.Textures.Blank, edgeSize = Scale(1) })
-Dialog.Backdrop:SetBackdropBorderColor(0, 0, 0)
+    Dialog.Backdrop = CreateFrame("Frame", nil, Dialog, "BackdropTemplate")
+    Dialog.Backdrop:SetAllPoints()
+    Dialog.Backdrop:SetFrameLevel(Dialog:GetFrameLevel())
+    Dialog.Backdrop:SetBackdrop({ bgFile = Media.Textures.Background, edgeFile = Media.Textures.Blank, edgeSize = Scale(1) })
+    Dialog.Backdrop:SetBackdropBorderColor(0, 0, 0)
 
-local Title = Dialog:CreateFontString(nil, "OVERLAY")
-Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
-Title:SetText(C.Title)
-Title:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -15)
+    local Title = Dialog:CreateFontString(nil, "OVERLAY")
+    Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
+    Title:SetText(C.Title)
+    Title:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -15)
 
-local Version = Dialog:CreateFontString(nil, "OVERLAY")
-Version:SetFont(Media.Fonts.Bold, 12, "OUTLINE")
-Version:SetTextColor(unpack(Colors.DarkBrownRgb))
-Version:SetText(format(L.VERSION, 4.01))
-Version:SetPoint("BOTTOMRIGHT", Dialog, "BOTTOMRIGHT", -7, 7)
+    local Version = Dialog:CreateFontString(nil, "OVERLAY")
+    Version:SetFont(Media.Fonts.Bold, 12, "OUTLINE")
+    Version:SetTextColor(unpack(Colors.DarkBrownRgb))
+    Version:SetText(format(L.VERSION, 4.01))
+    Version:SetPoint("BOTTOMRIGHT", Dialog, "BOTTOMRIGHT", -7, 7)
 
-Dialog.CloseButton = CreateCloseButton(Dialog)
-Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
+    Dialog.CloseButton = CreateCloseButton(Dialog)
+    Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
-local General = CreateSection(GENERAL, Dialog, 640, 500)
-General:SetPoint("LEFT", Dialog, "LEFT", 20, -10)
+    local General = CreateSection(GENERAL, Dialog, 640, 500)
+    General:SetPoint("LEFT", Dialog, "LEFT", 20, -10)
 
-local Enable = CreateCheckBox(General, ENABLE, T.db.enable, L.OPTIONS_ENABLE_AUTO_SUMMON)
-Enable:SetPoint("TOPLEFT", General, "TOPLEFT", 10, -30)
-Enable:HookScript("OnClick", function(self)
-    C.db.enable = self:GetChecked() -- todo: disable petleash & all controls if not set
-end)
+    local Enable = CreateCheckBox(General, ENABLE, T.db.enable, L.OPTIONS_ENABLE_AUTO_SUMMON)
+    Enable:SetPoint("TOPLEFT", General, "TOPLEFT", 10, -30)
+    Enable:HookScript("OnClick", function(self)
+        local value = self:GetChecked()
+        C.db.enable = value
 
-local AutoSwitch = CreateCheckBox(General, L.OPTIONS_ENABLE_AUTO_SWITCH, T.db.autoSwitch)
-AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
-AutoSwitch:HookScript("OnClick", function(self)
-    local value = self:GetChecked()
-    C.db.autoSwitch = value
+        if value and not NotEnoughPets() then
+            Dialog.AutoSwitch:Enable()
+        else
+            Dialog.AutoSwitch:Disable()
+        end
+    end)
 
-    -- todo: make enable & disable
-    if true then -- not value or select(2, GetNumPets()) < 2 then
-        Dialog.AutoSwitchInterval:Disable()
-    else
-        Dialog.AutoSwitchInterval:Enable()
+    local AutoSwitch = CreateCheckBox(General, L.OPTIONS_ENABLE_AUTO_SWITCH, T.db.autoSwitch)
+    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
+    AutoSwitch:HookScript("OnClick", function(self)
+        local value = self:GetChecked()
+        C.db.autoSwitch = value
+
+        if not value or NotEnoughPets() then
+            Dialog.AutoSwitchInterval:Disable()
+        else
+            Dialog.AutoSwitchInterval:Enable()
+        end
+    end)
+
+    Dialog.AutoSwitch = AutoSwitch
+
+    local AutoSwitchInterval = CreateSlider(General, L.OPTIONS_AUTO_SWITCH_INTERVAL, T.db.switchTimer, T.UpdateInterval, 60, 3600)
+    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
+    AutoSwitchInterval.RightText:SetText(AutoSwitchInterval.Slider:GetValue())
+
+    if not AutoSwitch:GetChecked() or NotEnoughPets() then
+        AutoSwitchInterval:Disable()
     end
-end)
 
-local AutoSwitchInterval = CreateSlider(General, L.OPTIONS_AUTO_SWITCH_INTERVAL, T.db.switchTimer, 60, 3600)
-AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
-AutoSwitchInterval.RightText:SetText(AutoSwitchInterval.Slider:GetValue())
+    Dialog.AutoSwitchInterval = AutoSwitchInterval
 
-if not AutoSwitch:GetChecked() or select(2, GetNumPets()) < 2 then
-    AutoSwitchInterval:Disable()
+    local function OnCombatEnd()
+        if Dialog.RestoreAfterCombat then
+            Dialog.RestoreAfterCombat = nil
+            Dialog:Show()
+        end
+    end
+
+    local function OnCombatStart()
+        if Dialog:IsVisible() then
+            Dialog:Hide()
+        end
+
+        Dialog.RestoreAfterCombat = true
+
+        C.Print(L.OPTIONS_NOT_IN_COMBAT)
+
+        EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnCombatEnd)
+    end
+
+    function Dialog:Toggle()
+        if InCombatLockdown() then
+            OnCombatStart()
+            return
+        end
+
+        if C.IsEditModeActive() then
+            C.Print(L.OPTIONS_NOT_IN_EDIT_MODE)
+            return
+        end
+
+        self:SetShown(not self:IsVisible())
+    end
+
+    EventRegistry:RegisterFrameEventAndCallback("PLAYER_REGEN_DISABLED", OnCombatStart)
+
+    PetLeashOptionsPanel = Dialog
+    tinsert(UISpecialFrames, "PetLeashOptionsPanel")
 end
-
-Dialog.AutoSwitchInterval = AutoSwitchInterval
-
-local function OnCombatEnd()
-    if Dialog.RestoreAfterCombat then
-        Dialog.RestoreAfterCombat = nil
-        Dialog:Show()
-    end
-end
-
-local function OnCombatStart()
-    if Dialog:IsVisible() then
-        Dialog:Hide()
-    end
-
-    Dialog.RestoreAfterCombat = true
-
-    C.Print(L.OPTIONS_NOT_IN_COMBAT)
-
-    EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnCombatEnd)
-end
-
-function Dialog:Toggle()
-    if InCombatLockdown() then
-        OnCombatStart()
-        return
-    end
-
-    if C.IsEditModeActive() then
-        C.Print(L.OPTIONS_NOT_IN_EDIT_MODE)
-        return
-    end
-
-    self:SetShown(not self:IsVisible())
-end
-
-EventRegistry:RegisterFrameEventAndCallback("PLAYER_REGEN_DISABLED", OnCombatStart)
-
-PetLeashOptionsPanel = Dialog
-tinsert(UISpecialFrames, "PetLeashOptionsPanel")

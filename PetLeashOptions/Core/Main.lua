@@ -14,14 +14,6 @@ do
 	end
 end
 
--- C.Options = {
---     childGroups = "tab",
---     name = WrapTextInColorCode("Version: ", "fffcfcfc") .. C.Version,
---     order = 0,
---     type = "group",
---     args = {}
--- }
-
 local function OnInitialize()
 	-- debug
 	C_Timer.After(1, function()

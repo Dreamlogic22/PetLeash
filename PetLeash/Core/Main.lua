@@ -40,16 +40,19 @@ do
 end
 
 do
-    local Interval = 60
+    local Interval = T.db.switchTimer
     local Throttle = 3
+    local TimeSinceSwitch = 0
 
     function T.HasAnyPets()
         return T.db.pets and #T.db.pets > 0
     end
 
     function T.Enable()
+        ---@param elapsed number
         WatchFrame:SetScript("OnUpdate", function(_, elapsed)
             Throttle = Throttle - elapsed
+            TimeSinceSwitch = TimeSinceSwitch + elapsed
 
             if Throttle < 0 then
                 Throttle = 3
@@ -119,8 +122,19 @@ do
             return
         end
 
-        if CurrentPet and T.KeepPet(CurrentPet) then
+        -- Always respect overrides
+        if CurrentPet and T.HasOverride() then
             return
+        end
+
+        if T.db.autoSwitch then
+            if TimeSinceSwitch < Interval then
+                return
+            end
+        else
+            if CurrentPet and T.KeepPet(CurrentPet) then
+                return
+            end
         end
 
         local NewPet = T.GetRandomPet()
@@ -134,7 +148,14 @@ do
 
         if CanSummon(NewPet) then
             SummonPet(NewPet)
+            TimeSinceSwitch = 0
         end
+    end
+
+    ---@param value number
+    function T.UpdateInterval(value)
+        T.db.switchTimer = value or 300
+        Interval = value
     end
 end
 

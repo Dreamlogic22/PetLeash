@@ -10,7 +10,7 @@ do
 	end
 
 	function C.Print(...)
-		print(strjoin("", "|cff33ff99PetLeash|r Options: ", ...))
+		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end
 end
 

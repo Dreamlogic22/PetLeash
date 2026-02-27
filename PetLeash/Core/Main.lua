@@ -7,7 +7,6 @@ local L = T.Locale
 
 local CanSummon = C_PetJournal.GetPetSummonInfo
 local GetCurrentPet = C_PetJournal.GetSummonedPetGUID
-local GetNumPets = C_PetJournal.GetNumPets
 local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID
 local HasControl = HasFullControl
 local IsMoving = IsPlayerMoving
@@ -110,7 +109,7 @@ do
     end
 
     function T.Print(...)
-        print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
+        print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
     end
 
     function T.TrySummon()

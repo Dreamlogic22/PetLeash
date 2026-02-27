@@ -9,8 +9,8 @@ local Name = ...
 ---@class PetLeashOptions
 local C = select(2, ...)
 
-C.Version = C_AddOns.GetAddOnMetadata(Name, "Version")
-C.db = PetLeashDB or {}
+local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 
--- temp
-PetLeashOptions = C
+C.Title = GetAddOnMetadata(Name, "Title")
+C.Version = GetAddOnMetadata(Name, "Version")
+C.db = PetLeashDB or {}

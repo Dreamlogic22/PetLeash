@@ -14,21 +14,26 @@ do
 	end
 end
 
-C.Options = {
-    childGroups = "tab",
-    name = WrapTextInColorCode("Version: ", "fffcfcfc") .. C.Version,
-    order = 0,
-    type = "group",
-    args = {}
-}
+-- C.Options = {
+--     childGroups = "tab",
+--     name = WrapTextInColorCode("Version: ", "fffcfcfc") .. C.Version,
+--     order = 0,
+--     type = "group",
+--     args = {}
+-- }
 
 local function OnInitialize()
-	PetLeashOptionsPanel:Show()
-
-	PetLeashOptionsToggle:SetScript("OnClick", function()
-		PlaySound(856)
-		PetLeashOptionsPanel:Toggle()
+	-- debug
+	C_Timer.After(1, function()
+		PetLeashOptionsPanel:Show()
 	end)
+
+	if PetLeashOptionsToggle then
+		PetLeashOptionsToggle:SetScript("OnClick", function()
+			PlaySound(856)
+			PetLeashOptionsPanel:Toggle()
+		end)
+	end
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

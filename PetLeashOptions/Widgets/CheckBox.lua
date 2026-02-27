@@ -2,6 +2,25 @@
 local C, T = select(2, ...), PetLeash
 local Colors, Media = C.Colors, T.Media
 
+        -- b:SetScript("OnEnable", CheckboxMixin.OnEnable);
+        -- b:SetScript("OnDisable", CheckboxMixin.OnDisable);
+
+    -- function CheckboxMixin:OnEnable()
+    --     self.CheckedTexture:SetDesaturated(false);
+    --     self.CheckedTexture:SetVertexColor(1, 1, 1);
+    --     if self.useWhiteLabel then
+    --         self.Label:SetTextColor(1, 1, 1);
+    --     else
+    --         self.Label:SetTextColor(1, 0.82, 0);
+    --     end
+    -- end
+
+    -- function CheckboxMixin:OnDisable()
+    --     self.CheckedTexture:SetDesaturated(true);
+    --     self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5);
+    --     self.Label:SetTextColor(0.5, 0.5, 0.5);
+    -- end
+
 do
     ---@param self PetLeashCheckBox
     local function OnClick(self)

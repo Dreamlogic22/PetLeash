@@ -85,7 +85,6 @@ do
 
         -- todo: make enable & disable
         if true then -- not value or select(2, GetNumPets()) < 2 then
-            print(1)
             Dialog.AutoSwitchInterval:Disable()
         else
             Dialog.AutoSwitchInterval:Enable()

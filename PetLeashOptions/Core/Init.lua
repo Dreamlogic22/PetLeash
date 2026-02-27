@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash Options 4.01 (February 26, 2026)
+    PetLeash Options 4.01 (February 27, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -11,3 +11,6 @@ local C = select(2, ...)
 
 C.Version = C_AddOns.GetAddOnMetadata(Name, "Version")
 C.db = PetLeashDB or {}
+
+-- temp
+PetLeashOptions = C

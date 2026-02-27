@@ -9,6 +9,8 @@
 local T = select(2, ...)
 local L, Media = T.Locale, T.Media
 
+local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
+
 ---@param petId number
 local function IsSelected(petId)
     if not petId or not T.db.pets then
@@ -35,7 +37,7 @@ local function AddPet(petId)
     end
 
     if #T.db.pets == 0 then
-        -- If this is our first pet on a fresh character, enable
+        -- If this is our first pet on a fresh install, enable
         T.Enable()
     end
 
@@ -107,17 +109,18 @@ local AddCheckbox, CreateCheckBox
 do
     ---@class PetJournalButton: Button
     ---@field petID number
+    ---@field owned boolean
 
     ---@param button PetJournalButton
     AddCheckbox = function(button)
         if not button.petID then return end
 
-        if not button.PetLeashChecbox then
-            button.PetLeashChecbox = CreateCheckBox(button)
+        if not button.PetLeashCheckbox then
+            button.PetLeashCheckbox = CreateCheckBox(button)
             button:SetSize(24, 24)
             button:SetPoint("RIGHT", PetJournal, "RIGHT", -15, 0)
 
-            button.PetLeashChecbox:SetScript("OnClick", function(self)
+            button.PetLeashCheckbox:SetScript("OnClick", function(self)
                 local id = button.petID
                 if self:GetChecked() then
                     self.CheckedTexture:Show()
@@ -130,24 +133,24 @@ do
                 end
             end)
 
-            button.PetLeashChecbox:SetScript("OnEnter", function(self)
+            button.PetLeashCheckbox:SetScript("OnEnter", function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
                 GameTooltip:AddLine("|cff33ff99PetLeash|r")
                 GameTooltip:AddLine(L.ADD_OR_REMOVE_PET, 1, 1, 1, true)
                 GameTooltip:Show()
             end)
 
-            button.PetLeashChecbox:SetScript("OnLeave", function()
+            button.PetLeashCheckbox:SetScript("OnLeave", function()
                 GameTooltip:Hide()
             end)
         end
 
         local IsChecked = IsSelected(button.petID)
-        button.PetLeashChecbox:SetChecked(IsChecked)
+        button.PetLeashCheckbox:SetChecked(IsChecked)
         if IsChecked then
-            button.PetLeashChecbox.CheckedTexture:Show()
+            button.PetLeashCheckbox.CheckedTexture:Show()
         else
-            button.PetLeashChecbox.CheckedTexture:Hide()
+            button.PetLeashCheckbox.CheckedTexture:Hide()
         end
     end
 
@@ -193,6 +196,24 @@ local function OnPetJournalLoad()
 
     hooksecurefunc("PetJournal_InitPetButton", function(button)
         AddCheckbox(button)
+    end)
+
+    -- Hide checkbox for unowned & faction-locked pets
+    hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
+        frame:ForEachFrame(function(button)
+            button.PetLeashCheckbox:SetShown(button.owned)
+
+            if button.petID then
+                local _, error = GetPetSummonInfo(button.petID)
+                local neverUsable = error == Enum.PetJournalError.InvalidFaction
+
+                if neverUsable then
+                    button.PetLeashCheckbox:Hide()
+                else
+                    button.PetLeashCheckbox:Show()
+                end
+            end
+        end)
     end)
 end
 

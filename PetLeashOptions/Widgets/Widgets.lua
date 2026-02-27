@@ -24,7 +24,7 @@ local function DisablePixelSnap(texture)
 end
 
 local function NotEnoughPets()
-    return select(2, GetNumPets()) < 2
+    return #C.db.pets < 2
 end
 
 ---@param size number
@@ -43,7 +43,7 @@ do
     local function OnEnable(self)
         self.CheckedTexture:SetDesaturated(false)
         self.CheckedTexture:SetVertexColor(1, 1, 1)
-        self.Label:SetTextColor(unpack(unpack(Colors.GoldenBrownRgb)))
+        self.Label:SetTextColor(unpack(Colors.GoldenBrownRgb))
     end
 
     ---@param self PetLeashCheckBox
@@ -231,8 +231,15 @@ do
     local ThumbHighlight = { 0, 0.5, 0.25, 0.5 }
     local ThumbNormal = { 0, 0.5, 0, 0.25 }
 
-    local function OnClick()
+    ---@param self PetLeashSliderBackButton | PetLeashSliderForwardButton
+    local function OnClick(self)
         PlaySound(229883)
+
+        if self.Delta then
+            ---@type PetLeashSlider
+            local parent = self:GetParent()
+            parent:SetValueByDelta(self.Delta)
+        end
     end
 
     ---@param self PetLeashSliderTemplate
@@ -256,10 +263,11 @@ do
     ---@param label string
     ---@param setting number
     ---@param callback function
+    ---@param step number
     ---@param min number?
     ---@param max number?
     ---@return PetLeashSlider
-    CreateSlider = function(parent, label, setting, callback, min, max)
+    CreateSlider = function(parent, label, setting, callback, step, min, max)
         ---@class PetLeashSlider: Frame
         local Frame = CreateFrame("Frame", nil, parent)
         Frame:SetSize(386, 24)
@@ -336,6 +344,8 @@ do
         Back.Highlight:SetBlendMode("ADD")
         Back.Highlight:SetVertexColor(0.5, 0.5, 0.5)
 
+        Back.Delta = -step
+
         Back:SetScript("OnClick", OnClick)
 
         Frame.Back = Back
@@ -358,6 +368,8 @@ do
         Forward.Highlight:SetPoint("CENTER", Forward, "CENTER")
         Forward.Highlight:SetBlendMode("ADD")
         Forward.Highlight:SetVertexColor(0.5, 0.5, 0.5)
+
+        Forward.Delta = step
 
         Forward:SetScript("OnClick", OnClick)
 
@@ -385,7 +397,7 @@ do
         Frame.Slider.ValueText = Frame.RightText
 
         Frame.Slider:SetMinMaxValues(min or 0, max or 100)
-        Frame.Slider:SetValueStep(10)
+        Frame.Slider:SetValueStep(step)
         Frame.Slider:SetObeyStepOnDrag(true)
         Frame.Slider:SetValue(setting)
 
@@ -415,6 +427,11 @@ do
 
             self.Label:SetTextColor(0.5, 0.5, 0.5)
             self.RightText:SetTextColor(0.5, 0.5, 0.5)
+        end
+
+        function Frame:SetValueByDelta(delta)
+            local value = self.Slider:GetValue()
+            self.Slider:SetValue(value + delta)
         end
 
         if callback and type(callback) == "function" then
@@ -462,7 +479,7 @@ do
     local General = CreateSection(GENERAL, Dialog, 640, 500)
     General:SetPoint("LEFT", Dialog, "LEFT", 20, -10)
 
-    local Enable = CreateCheckBox(General, ENABLE, T.db.enable, L.OPTIONS_ENABLE_AUTO_SUMMON)
+    local Enable = CreateCheckBox(General, ENABLE, C.db.enable, L.OPTIONS_ENABLE_AUTO_SUMMON)
     Enable:SetPoint("TOPLEFT", General, "TOPLEFT", 10, -30)
     Enable:HookScript("OnClick", function(self)
         local value = self:GetChecked()
@@ -470,12 +487,18 @@ do
 
         if value and not NotEnoughPets() then
             Dialog.AutoSwitch:Enable()
+            Dialog.AutoSwitchInterval:Enable()
+            Dialog.CustomThrottle:Enable()
+            Dialog.CustomThrottleInterval:Disable()
         else
             Dialog.AutoSwitch:Disable()
+            Dialog.AutoSwitchInterval:Disable()
+            Dialog.CustomThrottle:Disable()
+            Dialog.CustomThrottleInterval:Disable()
         end
     end)
 
-    local AutoSwitch = CreateCheckBox(General, L.OPTIONS_ENABLE_AUTO_SWITCH, T.db.autoSwitch)
+    local AutoSwitch = CreateCheckBox(General, L.OPTIONS_ENABLE_AUTO_SWITCH, C.db.autoSwitch)
     AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
     AutoSwitch:HookScript("OnClick", function(self)
         local value = self:GetChecked()
@@ -490,7 +513,7 @@ do
 
     Dialog.AutoSwitch = AutoSwitch
 
-    local AutoSwitchInterval = CreateSlider(General, L.OPTIONS_AUTO_SWITCH_INTERVAL, T.db.switchTimer, T.UpdateInterval, 60, 3600)
+    local AutoSwitchInterval = CreateSlider(General, L.OPTIONS_AUTO_SWITCH_INTERVAL, C.db.switchTimer, T.UpdateInterval, 10, 60, 3600)
     AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
     AutoSwitchInterval.RightText:SetText(AutoSwitchInterval.Slider:GetValue())
 
@@ -499,6 +522,31 @@ do
     end
 
     Dialog.AutoSwitchInterval = AutoSwitchInterval
+
+    local CustomThrottle = CreateCheckBox(General, L.OPTIONS_CUSTOM_THROTTLE, C.db.customThrottle, L.OPTIONS_CUSTOM_THROTTLE_TOOLTIP)
+    CustomThrottle:SetPoint("TOP", AutoSwitch, "BOTTOM", 0, 0)
+    CustomThrottle:HookScript("OnClick", function(self)
+        local value = self:GetChecked()
+        C.db.customThrottle = value
+
+        if not value then
+            Dialog.CustomThrottleInterval:Disable()
+        else
+            Dialog.CustomThrottleInterval:Enable()
+        end
+    end)
+
+    Dialog.CustomThrottle = CustomThrottle
+
+    local CustomThrottleInterval = CreateSlider(General, L.OPTIONS_CUSTOM_THROTTLE, C.db.throttle, T.UpdateThrottle, 1, 3, 60)
+    CustomThrottleInterval:SetPoint("LEFT", CustomThrottle, "RIGHT", 230, 0)
+    CustomThrottleInterval.RightText:SetText(CustomThrottleInterval.Slider:GetValue())
+
+    if not CustomThrottle:GetChecked() then
+        CustomThrottleInterval:Disable()
+    end
+
+    Dialog.CustomThrottleInterval = CustomThrottleInterval
 
     local function OnCombatEnd()
         if Dialog.RestoreAfterCombat then

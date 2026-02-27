@@ -7,5 +7,7 @@ T.db = {
     autoSwitch = false,
     switchTimer = 300,
     pets = {},
+    customThrottle = false,
+    throttle = 3,
     version = 0
 }

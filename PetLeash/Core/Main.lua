@@ -41,7 +41,7 @@ end
 
 do
     local Interval = T.db.switchTimer
-    local Throttle = 3
+    local Throttle = T.db.throttle
     local TimeSinceSwitch = 0
 
     function T.HasAnyPets()
@@ -150,6 +150,12 @@ do
             SummonPet(NewPet)
             TimeSinceSwitch = 0
         end
+    end
+
+    ---@param value number
+    function T.UpdateThrottle(value)
+        T.db.throttle = value or 3
+        Throttle = value
     end
 
     ---@param value number

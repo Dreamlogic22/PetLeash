@@ -10,4 +10,10 @@
 Core\Init.lua
 Core\Main.lua
 
+Widgets\Widgets.xml
+
+Widgets\CheckBox.lua
+Widgets\CloseButton.lua
+Widgets\Slider.lua
+
 Widgets\OptionsPanel.lua

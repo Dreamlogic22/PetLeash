@@ -190,6 +190,47 @@ do
     end
 end
 
+local CreatePetPanel
+do
+    ---@param parent Frame
+    ---@param petId string
+    ---@return PetLeashPetPanel
+    CreatePetPanel = function(parent, petId)
+        ---@class PetLeashPetPanel: Frame, BackdropTemplate
+        local Panel = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        Panel:SetSize(180, 230)
+
+        Panel:SetFrameLevel(parent:GetFrameLevel() + 1)
+        Panel:SetBackdrop({ bgFile = Media.Textures.Blank, edgeFile = Media.Textures.Blank, edgeSize = Scale(1) })
+        Panel:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
+        Panel:SetBackdropBorderColor(unpack(Colors.GoldenBrownRgb))
+
+        local Model = CreateFrame("PlayerModel", nil, Panel)
+        Model:SetSize(160, 180)
+        Model:SetPoint("TOP", Panel, "TOP", 0, -10)
+        Model:SetKeepModelOnHide(true)
+        Model:SetCamera(1)
+        Model:SetCamDistanceScale(0.4)
+        Model:SetFacing(-math.pi / 4)
+
+        local _, customName, _, _, _, displayID, _, name = C_PetJournal.GetPetInfoByPetID(petId)
+
+        if displayID and displayID > 0 then
+            Model:UseModelCenterToTransform(true)
+            Model:SetDisplayInfo(displayID)
+            Model:SetAnimation(0, 1)
+        end
+
+        local Name = Panel:CreateFontString(nil, "OVERLAY")
+        Name:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
+        Name:SetPoint("BOTTOM", Panel, "BOTTOM", 0, 10)
+        Name:SetText(customName or name or UNKNOWN)
+        Name:SetTextColor(unpack(Colors.GoldenBrownRgb))
+
+        return Panel
+    end
+end
+
 local CreateSection
 do
     ---@param title string
@@ -476,8 +517,8 @@ do
     Dialog.CloseButton = CreateCloseButton(Dialog)
     Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
-    local General = CreateSection(GENERAL, Dialog, 640, 500)
-    General:SetPoint("LEFT", Dialog, "LEFT", 20, -10)
+    local General = CreateSection(GENERAL, Dialog, 640, 200)
+    General:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -50)
 
     local Enable = CreateCheckBox(General, ENABLE, C.db.enable, L.OPTIONS_ENABLE_AUTO_SUMMON)
     Enable:SetPoint("TOPLEFT", General, "TOPLEFT", 10, -30)
@@ -547,6 +588,34 @@ do
     end
 
     Dialog.CustomThrottleInterval = CustomThrottleInterval
+
+    local Pets = CreateSection(PETS, Dialog, 640, 290)
+    Pets:SetPoint("BOTTOMLEFT", Dialog, "BOTTOMLEFT", 20, 30)
+
+    local maxDisplay = 3
+    local panels = {}
+
+    for i = 1, math.min(maxDisplay, #T.db.pets) do
+        local petID = T.db.pets[i]
+        local panel = CreatePetPanel(Pets, petID)
+
+        if i == 1 then
+            panel:SetPoint("LEFT", Pets, "LEFT", 20, 0)
+        else
+            panel:SetPoint("LEFT", panels[i - 1], "RIGHT", 25, 0)
+        end
+
+        panels[i] = panel
+    end
+
+    if #T.db.pets > maxDisplay then
+        local remaining = #T.db.pets - maxDisplay
+        local moreText = Pets:CreateFontString(nil, "OVERLAY")
+        moreText:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
+        moreText:SetPoint("BOTTOMRIGHT", Pets, "BOTTOMRIGHT", -20, 5)
+        moreText:SetText(string.format("Plus %d More!", remaining))
+        moreText:SetTextColor(1, 1, 1)
+    end
 
     local function OnCombatEnd()
         if Dialog.RestoreAfterCombat then

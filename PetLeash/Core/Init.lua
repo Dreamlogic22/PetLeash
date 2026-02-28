@@ -12,13 +12,6 @@ local T = select(2, ...)
 ---@class Locale
 T.Locale = {}
 
--- Debug only
-do
-    EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
-        TherapyDevTools_Monitor(Name)
-    end)
-end
-
 -- Load database
 do
     local Version = C_AddOns.GetAddOnMetadata(Name, "Version")

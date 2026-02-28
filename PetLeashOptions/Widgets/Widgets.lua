@@ -2,8 +2,6 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
-local GetNumPets = C_PetJournal.GetNumPets
-
 local Colors = {
     DarkBrownHex = "ff947d66",
     DarkBrownRgb = { 0.58, 0.49, 0.4 },

@@ -210,7 +210,7 @@ do
         Model:SetPoint("TOP", Panel, "TOP", 0, -10)
         Model:SetKeepModelOnHide(true)
         Model:SetCamera(1)
-        Model:SetCamDistanceScale(0.4)
+        Model:SetCamDistanceScale(0.6)
         Model:SetFacing(-math.pi / 4)
 
         local _, customName, _, _, _, displayID, _, name = C_PetJournal.GetPetInfoByPetID(petId)
@@ -614,7 +614,7 @@ do
         moreText:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
         moreText:SetPoint("BOTTOMRIGHT", Pets, "BOTTOMRIGHT", -20, 5)
         moreText:SetText(string.format("Plus %d More!", remaining))
-        moreText:SetTextColor(1, 1, 1)
+        moreText:SetTextColor(unpack(Colors.GoldenBrownRgb))
     end
 
     local function OnCombatEnd()

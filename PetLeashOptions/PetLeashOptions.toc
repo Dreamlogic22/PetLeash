@@ -4,7 +4,7 @@
 ## Author: River
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash
-### LoadOnDemand: 1
+## LoadOnDemand: 1
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Core\Init.lua

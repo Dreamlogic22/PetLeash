@@ -98,22 +98,12 @@ do
         end
     end
 
-    ---@param self PetLeashOptionsButton
-    local function OnClick(self, button)
+    ---@param button MouseButton
+    local function OnClick(_, button)
         PlaySound(856)
 
         if button == "LeftButton" then
             SelectingPets = not SelectingPets
-
-            if SelectingPets then
-                self:GetNormalTexture():SetDesaturated(true)
-                self:SetButtonState("NORMAL", true)
-                self:LockHighlight()
-            else
-                self:UnlockHighlight()
-                self:SetButtonState("PUSHED", false)
-                self:GetNormalTexture():SetDesaturated(false)
-            end
 
             -- extremely expensive call
             PetJournal_UpdatePetList()

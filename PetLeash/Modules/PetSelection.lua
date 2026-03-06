@@ -119,7 +119,7 @@ do
             PetJournal_UpdatePetList()
         end
 
-        if button == "RightButton" then
+        if button == "RightButton" and not SelectingPets then
             LoadOptions()
         end
     end

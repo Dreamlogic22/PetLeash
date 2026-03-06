@@ -99,11 +99,13 @@ do
     end
 
     ---@param button MouseButton
-    local function OnClick(_, button)
+    local function OnClick(self, button)
         PlaySound(856)
 
         if button == "LeftButton" then
             SelectingPets = not SelectingPets
+
+            self.Notification:SetShown(SelectingPets)
 
             -- extremely expensive call
             PetJournal_UpdatePetList()
@@ -159,6 +161,12 @@ do
             Pushed:SetVertexColor(0.9, 0.9, 0.9)
             DisablePixelSnap(Pushed)
         end
+
+        OptionsButton.Notification = OptionsButton:CreateTexture(nil, "OVERLAY")
+        OptionsButton.Notification:SetAtlas("UI-HUD-MicroMenu-Communities-Icon-Notification")
+        OptionsButton.Notification:SetSize(21, 21)
+        OptionsButton.Notification:SetPoint("CENTER", OptionsButton, "CENTER", 0, 0)
+        OptionsButton.Notification:Hide()
 
         OptionsButton:RegisterForClicks("AnyDown")
 

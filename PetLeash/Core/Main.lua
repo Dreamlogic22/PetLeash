@@ -44,6 +44,7 @@ do
     local Throttle = T.db.throttle
     local TimeSinceSwitch = 0
 
+    ---@return boolean
     function T.HasAnyPets()
         return T.db.pets and #T.db.pets > 0
     end
@@ -76,7 +77,6 @@ do
     function T.GetRandomPet()
         if not T.HasAnyPets() then
             T.Disable(L.NO_PETS)
-
             return
         end
 
@@ -95,10 +95,16 @@ do
     end
 
     ---@param petGuid string?
+    ---@return boolean
     function T.KeepPet(petGuid)
         if not petGuid then return false end
 
         if T.HasOverride() then
+            return true
+        end
+
+        -- keep manually-summoned pets
+        if T.db.override == false then
             return true
         end
 
@@ -166,6 +172,7 @@ do
 end
 
 local function OnInitialize()
+    -- reloading or logging during combat
     if InCombatLockdown() then
         EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnInitialize)
     end

@@ -609,6 +609,7 @@ do
     if #T.db.pets > maxDisplay then
         local remaining = #T.db.pets - maxDisplay
         local moreText = Pets:CreateFontString(nil, "OVERLAY")
+
         moreText:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
         moreText:SetPoint("BOTTOMRIGHT", Pets, "BOTTOMRIGHT", -20, 5)
         moreText:SetText(string.format("Plus %d More!", remaining))
@@ -622,21 +623,21 @@ do
         end
     end
 
-    local function OnCombatStart()
-        if Dialog:IsVisible() then
+    ---@param userOpened boolean?
+    local function OnCombatStart(userOpened)
+        if Dialog:IsVisible() or userOpened then
             Dialog:Hide()
+            Dialog.RestoreAfterCombat = true
+
+            C.Print(L.OPTIONS_NOT_IN_COMBAT)
+
+            EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnCombatEnd)
         end
-
-        Dialog.RestoreAfterCombat = true
-
-        C.Print(L.OPTIONS_NOT_IN_COMBAT)
-
-        EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnCombatEnd)
     end
 
     function Dialog:Toggle()
         if InCombatLockdown() then
-            OnCombatStart()
+            OnCombatStart(true)
             return
         end
 

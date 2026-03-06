@@ -3,6 +3,8 @@ local Name = ...
 ---@class PetLeashOptions
 local C = select(2, ...)
 
+local L, Media = PetLeash.Locale, PetLeash.Media
+
 do
 	---@return boolean
 	function C.IsEditModeActive()
@@ -24,6 +26,14 @@ local function OnInitialize()
 		PetLeashOptionsToggle:SetScript("OnClick", function()
 			PlaySound(856)
 			PetLeashOptionsPanel:Toggle()
+		end)
+
+		---@param self PetLeashOptionsButton
+		PetLeashOptionsToggle:SetScript("OnEnter", function(self)
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
+			GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
+			GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_OPTIONS_OPEN, 1, 1, 1, true)
+			GameTooltip:Show()
 		end)
 	end
 end

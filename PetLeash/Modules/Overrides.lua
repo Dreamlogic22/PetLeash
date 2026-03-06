@@ -157,12 +157,12 @@ end
 
 local OverrideEvents = {
     "BAG_UPDATE",
+    "EQUIPMENT_SWAP_FINISHED",
     "PLAYER_EQUIPMENT_CHANGED",
     "QUEST_ACCEPTED",
     "QUEST_FINISHED",
     "UNIT_AURA",
     "ZONE_CHANGED_NEW_AREA",
-    "EQUIPMENT_SWAP_FINISHED"
 }
 
 local OverrideFunctions = {

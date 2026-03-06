@@ -3,11 +3,12 @@ local T = select(2, ...)
 
 ---@class Settings
 T.db = {
-    enable = true,
     autoSwitch = false,
-    switchTimer = 300,
-    pets = {},
     customThrottle = false,
+    enable = true,
+    override = false,
+    pets = {},
+    switchTimer = 300,
     throttle = 3,
     version = 0
 }

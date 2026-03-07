@@ -18,5 +18,8 @@ Core\Main.lua
 
 Media\Media.lua
 
+Widgets\Widgets.lua
+Widgets\Elements\Checkbox.lua
+
 Modules\Overrides.lua
 Modules\PetSelection.lua

@@ -9,13 +9,14 @@
 local T = select(2, ...)
 local L, Media = T.Locale, T.Media
 
-local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
+local OptionsLoaded = false
+local SelectingPets = false
 
----@param texture Texture
-local function DisablePixelSnap(texture)
-    texture:SetSnapToPixelGrid(false)
-    texture:SetTexelSnappingBias(0)
-end
+local CreateCheckBox = T.CreateCheckBox
+local DisablePixelSnap = T.DisablePixelSnap
+local SetInside = T.SetInside
+
+local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 
 ---@param petId number
 local function IsSelected(petId)
@@ -65,18 +66,6 @@ local function RemovePet(petId)
         T.Disable()
     end
 end
-
----@param texture Texture
-local function SetInside(texture)
-    texture:ClearAllPoints()
-
-    local parent = texture:GetParent()
-    texture:SetPoint("TOPLEFT", texture:GetParent(), "TOPLEFT", 1, -1)
-    texture:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -1, 1)
-end
-
-local OptionsLoaded = false
-local SelectingPets = false
 
 local CreateOptionsButton
 do
@@ -180,7 +169,7 @@ do
     end
 end
 
-local AddCheckbox, CreateCheckBox
+local AddCheckbox
 do
     ---@class PetJournalButton: Button
     ---@field petID number
@@ -227,39 +216,6 @@ do
         else
             button.PetLeashCheckbox.CheckedTexture:Hide()
         end
-    end
-
-    ---@param parent Frame
-    CreateCheckBox = function(parent)
-        local Button = CreateFrame("CheckButton", nil, parent)
-        Button:SetSize(24, 24)
-        Button:SetPoint("RIGHT", parent, "RIGHT", -15, 0)
-
-        Button.Border = Button:CreateTexture(nil, "ARTWORK")
-        Button.Border:SetTexture(Media.Textures.Checkbox)
-        Button.Border:SetTexCoord(0, 0.5, 0, 0.5)
-        Button.Border:SetPoint("CENTER", Button, "LEFT", 8, 0)
-        Button.Border:SetSize(32, 32)
-        DisablePixelSnap(Button.Border)
-
-        Button.CheckedTexture = Button:CreateTexture(nil, "OVERLAY")
-        Button.CheckedTexture:SetTexture(Media.Textures.Checkbox)
-        Button.CheckedTexture:SetTexCoord(0.5, 0.75, 0.5, 0.75)
-        Button.CheckedTexture:SetPoint("CENTER", Button.Border, "CENTER", 0, 0)
-        Button.CheckedTexture:SetSize(16, 16)
-        DisablePixelSnap(Button.CheckedTexture)
-        Button.CheckedTexture:Hide()
-
-        Button.Highlight = Button:CreateTexture(nil, "HIGHLIGHT")
-        Button.Highlight:SetTexture(Media.Textures.Checkbox)
-        Button.Highlight:SetTexCoord(0, 0.5, 0.5, 1)
-        Button.Highlight:SetPoint("CENTER", Button.Border, "CENTER", 0, 0)
-        Button.Highlight:SetSize(32, 32)
-        Button.Highlight:SetBlendMode("ADD")
-        Button.Highlight:SetVertexColor(0.5, 0.5, 0.5)
-        DisablePixelSnap(Button.Highlight)
-
-        return Button
     end
 end
 

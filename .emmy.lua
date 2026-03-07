@@ -1,6 +1,21 @@
 ---@meta _
 
 ----------------------------------------------------------------
+-- DevTool
+----------------------------------------------------------------
+---@class DevTool
+DevTool = {}
+
+---[Documentation](https://github.com/brittyazel/DevTool/blob/55fe559db5986b7ed75578d444351370db030f6f/DevTool.lua#L243)
+---@param dataName string?
+function DevTool:AddData(data, dataName) end
+
+----------------------------------------------------------------
+-- ElvUI
+----------------------------------------------------------------
+ElvUI = {}
+
+----------------------------------------------------------------
 -- Therapy
 ----------------------------------------------------------------
 
@@ -11,13 +26,37 @@ TherapyDevTools = {}
 function TherapyDevTools_Monitor(addOnName) end
 
 ----------------------------------------------------------------
--- ElvUI
-----------------------------------------------------------------
-ElvUI = {}
-
-----------------------------------------------------------------
 -- Blizzard
 ----------------------------------------------------------------
+
+---[Documentation](https://warcraft.wiki.gg/wiki/UIOBJECT_Button)
+---@class Button: Region, ScriptObject
+local Button = {}
+
+---[Documentation](https://warcraft.wiki.gg/wiki/UIOBJECT_Frame)
+---@class Frame: Region, ScriptObject
+local Frame = {}
+
+--[Documentation](https://warcraft.wiki.gg/wiki/UIOBJECT_Texture)
+---@class Texture: Region, ScriptRegion
+local Texture = {}
+
+---[Documentation](https://warcraft.wiki.gg/wiki/API_Frame_CreateTexture)
+---@generic Tp
+---@param name? string
+---@param drawLayer? DrawLayer
+---@param templateName? `Tp` | Template
+---@param subLevel? number
+---@return SimpleTexture|Tp
+function Frame:CreateFontString(name, drawLayer, templateName, subLevel) end
+
+---[Documentation](https://warcraft.wiki.gg/wiki/API_Frame_CreateFontString)
+---@generic Tp
+---@param name? string
+---@param drawLayer? DrawLayer
+---@param templateName? `Tp` | Template
+---@return FontString|Tp
+function Frame:CreateTexture(name, drawLayer, templateName, subLevel) end
 
 ---[Documentation](https://github.com/Gethe/wow-ui-source/blob/76925da92f3be482d5bf83f11cc5f203fc78b9c6/Interface/AddOns/Blizzard_SharedXML/EventUtil.lua#L56)
 ---@class EventUtil

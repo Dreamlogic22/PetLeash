@@ -2,8 +2,6 @@
 local T = select(2, ...)
 local L, Media = T.Locale, T.Media
 
-local SelectingPets = false
-
 local function LoadOptions()
     if PlayerIsInCombat() then
         T.Print(L.OPTIONS_NOT_IN_COMBAT)
@@ -19,46 +17,45 @@ local function LoadOptions()
 end
 
 do
-    ---@class PetLeashOptionsButton
-    local OptionsButton = CreateFrame("Button", "PetLeashOptionsButton", UIParent)
-    OptionsButton = Mixin(OptionsButton, PetLeashButtonMixin)
-    OptionsButton:SetSize(48, 48)
-    OptionsButton:SetFrameStrata("HIGH")
-    OptionsButton:SetFrameLevel(10)
-    OptionsButton:SetupTextures(Media.Textures.Paw)
-    OptionsButton:Hide()
-
-    OptionsButton.Notification = OptionsButton:CreateTexture(nil, "OVERLAY")
-    OptionsButton.Notification:SetAtlas("UI-HUD-MicroMenu-Communities-Icon-Notification")
-    OptionsButton.Notification:SetSize(21, 21)
-    OptionsButton.Notification:SetPoint("CENTER", OptionsButton, "CENTER", 0, 0)
-    OptionsButton.Notification:Hide()
-
-    OptionsButton:RegisterForClicks("AnyDown")
-
-    OptionsButton:SetScript("OnClick", function(self, button)
+    ---@param self PetLeashOptionsButton
+    ---@param button MouseButton
+    local function OnClick(self, button)
         PlaySound(856)
 
         if button == "LeftButton" then
-            SelectingPets = not SelectingPets
+            self.SelectingPets = not self.SelectingPets
 
-            self.Notification:SetShown(SelectingPets)
-            self:SetDesaturated(SelectingPets)
+            self:ToggleSelectionMode()
 
             -- extremely expensive call
             PetJournal_UpdatePetList()
         end
 
-        if button == "RightButton" and not SelectingPets then
+        if button == "RightButton" and not self.SelectingPets then
             LoadOptions()
         end
-    end)
+    end
+
+    ---@class PetLeashOptionsButton: Button
+    local OptionsButton = CreateFrame("Button", "PetLeashOptionsButton", UIParent)
+    OptionsButton.SelectingPets = false
+
+    OptionsButton:SetSize(48, 48)
+    OptionsButton:SetFrameStrata("HIGH")
+    OptionsButton:SetFrameLevel(10)
+    OptionsButton:Hide()
+
+    T.SetupButtonTextures(OptionsButton, Media.Textures.Paw)
+
+    OptionsButton:RegisterForClicks("AnyDown")
+
+    OptionsButton:SetScript("OnClick", OnClick)
 
     OptionsButton:SetScript("OnEnter", function(self)
         if not GameTooltip:IsForbidden() then
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
             GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
-            GameTooltip:AddLine(SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
+            GameTooltip:AddLine(self.SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
             GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
             GameTooltip:Show()
         end
@@ -69,11 +66,26 @@ do
     end)
 
     OptionsButton:SetScript("OnHide", function(self)
-        if SelectingPets then
-            SelectingPets = false
-            self.Notification:Hide()
+        if self.SelectingPets then
+            self.SelectingPets = false
+            self:ToggleSelectionMode()
         end
     end)
+
+    function OptionsButton:ToggleSelectionMode()
+        local active = self.SelectingPets
+
+        self:DesaturateHierarchy(active and 1 or 0)
+
+        local r, g, b
+        if active then
+            r, g, b = Media.Colors.Foreground:GetRGB()
+        else
+            r, g, b = 1, 1, 1
+        end
+
+        self:GetNormalTexture():SetVertexColor(r, g, b)
+    end
 
     PetLeashOptionsButton = OptionsButton
 end

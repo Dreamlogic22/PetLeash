@@ -78,54 +78,55 @@ do
             button.PetLeashCheckbox = CreateCheckBox(button, nil, L.ADD_OR_REMOVE_PET)
             button.PetLeashCheckbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 
-            button.PetLeashCheckbox:HookScript("OnClick", function(self)
+            button.PetLeashCheckbox.OnChangeCallback = function(self)
                 local id = button.petID
                 if self:GetChecked() then
                     AddPet(id)
                 else
                     RemovePet(id)
                 end
-            end)
+            end
         end
     end
 end
 
 local function OnPetJournalLoad()
-    PetLeashOptionsButton:SetParent(PetJournal)
-    PetLeashOptionsButton:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
-    PetLeashOptionsButton:Show()
+    local Paw = PetLeashOptionsButton
+    Paw:SetParent(PetJournal)
+    Paw:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
+    Paw:Show()
 
     hooksecurefunc("PetJournal_InitPetButton", function(button)
         AddCheckbox(button)
     end)
 
     -- Hide checkbox for unowned & faction-locked pets
-    -- hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
-    --     if PlayerIsInCombat() then return end
+    hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
+        if PlayerIsInCombat() then return end
 
-    --     frame:ForEachFrame(function(button)
-    --         if not SelectingPets then
-    --             if button.PetLeashCheckbox:IsVisible() then
-    --                 button.PetLeashCheckbox:Hide()
-    --             end
+        frame:ForEachFrame(function(button)
+            if not Paw.SelectingPets then
+                if button.PetLeashCheckbox:IsVisible() then
+                    button.PetLeashCheckbox:Hide()
+                end
 
-    --             return
-    --         end
+                return
+            end
 
-    --         button.PetLeashCheckbox:SetShown(button.owned)
+            button.PetLeashCheckbox:SetShown(button.owned)
 
-    --         if button.petID then
-    --             local _, error = GetPetSummonInfo(button.petID)
-    --             local neverUsable = error == Enum.PetJournalError.InvalidFaction
+            if button.petID then
+                local _, error = GetPetSummonInfo(button.petID)
+                local neverUsable = error == Enum.PetJournalError.InvalidFaction
 
-    --             if neverUsable then
-    --                 button.PetLeashCheckbox:Hide()
-    --             else
-    --                 button.PetLeashCheckbox:Show()
-    --             end
-    --         end
-    --     end)
-    -- end)
+                if neverUsable then
+                    button.PetLeashCheckbox:Hide()
+                else
+                    button.PetLeashCheckbox:Show()
+                end
+            end
+        end)
+    end)
 end
 
 EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)

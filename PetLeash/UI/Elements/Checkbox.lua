@@ -22,31 +22,32 @@ do
         Checkbox.TooltipText = tooltipText
 
         Checkbox.Border = Checkbox:CreateTexture(nil, "ARTWORK")
-        Checkbox.Border = Mixin(Checkbox.Border, PetLeashTextureMixin)
         Checkbox.Border:SetTexture(Media.Textures.Checkbox)
         Checkbox.Border:SetTexCoord(0, 0.5, 0, 0.5)
         Checkbox.Border:SetPoint("CENTER", Checkbox, "LEFT", 8, 0)
         Checkbox.Border:SetSize(32, 32)
-        Checkbox.Border:DisableSharpening()
+
+        T.DisableSharpening(Checkbox.Border)
 
         Checkbox.CheckedTexture = Checkbox:CreateTexture(nil, "OVERLAY")
-        Checkbox.CheckedTexture = Mixin(Checkbox.CheckedTexture, PetLeashTextureMixin)
         Checkbox.CheckedTexture:SetTexture(Media.Textures.Checkbox)
         Checkbox.CheckedTexture:SetTexCoord(0.5, 0.75, 0.5, 0.75)
         Checkbox.CheckedTexture:SetPoint("CENTER", Checkbox.Border, "CENTER", 0, 0)
         Checkbox.CheckedTexture:SetSize(16, 16)
-        Checkbox.CheckedTexture:DisableSharpening()
+
+        T.DisableSharpening(Checkbox.CheckedTexture)
+
         Checkbox.CheckedTexture:Hide()
 
         Checkbox.Highlight = Checkbox:CreateTexture(nil, "HIGHLIGHT")
-        Checkbox.Highlight = Mixin(Checkbox.Highlight, PetLeashTextureMixin)
         Checkbox.Highlight:SetTexture(Media.Textures.Checkbox)
         Checkbox.Highlight:SetTexCoord(0, 0.5, 0.5, 1)
         Checkbox.Highlight:SetPoint("CENTER", Checkbox.Border, "CENTER", 0, 0)
         Checkbox.Highlight:SetSize(32, 32)
         Checkbox.Highlight:SetBlendMode("ADD")
         Checkbox.Highlight:SetVertexColor(0.5, 0.5, 0.5)
-        Checkbox.Highlight:DisableSharpening()
+
+        T.DisableSharpening(Checkbox.Highlight)
 
         Checkbox.Label = Checkbox:CreateFontString(nil, "OVERLAY")
         Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE")
@@ -79,7 +80,7 @@ do
         Checkbox:SetScript("OnEnter", function(self)
             if self.TooltipText then
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-                GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", Media.Colors.Background:GetRGB())
+                GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", Media.Colors.Foreground:GetRGB())
                 GameTooltip:AddLine(self.TooltipText, 1, 1, 1, true)
                 GameTooltip:Show()
             end

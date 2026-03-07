@@ -18,8 +18,8 @@ Core\Main.lua
 
 Media\Media.lua
 
-Templates\Templates.lua
-Templates\Elements\Checkbox.lua
+UI\Utils.lua
+UI\Elements\Checkbox.lua
 
 Widgets\OptionsButton.lua
 

@@ -37,6 +37,10 @@ function EventUtil.ContinueOnPlayerLogin(callback) end
 ---@param callback function
 function EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...) end
 
+---[Documentation](https://github.com/Gethe/wow-ui-source/blob/3fefc3a27250137e2554384b413b9060a4fefcfd/Interface/AddOns/Blizzard_SharedXMLBase/FunctionUtil.lua#L115)
+---@param f function
+function GenerateClosure(f, ...) end
+
 PetJournal = CreateFrame("Frame")
 PetJournalFindBattle = CreateFrame("Button")
 

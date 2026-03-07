@@ -9,12 +9,6 @@ local Colors = {
     GoldenBrownRgb = { 0.84, 0.75, 0.64 }
 }
 
-local _, ScreenWidth = GetPhysicalScreenSize()
-local Perfect = 786 / ScreenWidth
-
-local UIScale = (ElvUI and ElvUI[1].global.general.UIScale) or GetCVar("uiScale")
-local Mult = Perfect / UIScale
-
 ---@param texture Texture
 local function DisablePixelSnap(texture)
     texture:SetSnapToPixelGrid(false)
@@ -25,33 +19,23 @@ local function NotEnoughPets()
     return #C.db.pets < 2
 end
 
----@param size number
-local function Scale(size)
-    if Mult == 1 or size == 0 then
-        return size
-    else
-        local y = Mult > 1 and Mult or -Mult
-        return size - size % (size < 0 and y or -y)
-    end
-end
-
 local CreateCheckBox
 do
-    ---@param self PetLeashCheckBox
+    ---@param self PetLeashCheckbox
     local function OnEnable(self)
         self.CheckedTexture:SetDesaturated(false)
         self.CheckedTexture:SetVertexColor(1, 1, 1)
         self.Label:SetTextColor(unpack(Colors.GoldenBrownRgb))
     end
 
-    ---@param self PetLeashCheckBox
+    ---@param self PetLeashCheckbox
     local function OnDisable(self)
         self.CheckedTexture:SetDesaturated(true)
         self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
         self.Label:SetTextColor(0.5, 0.5, 0.5)
     end
 
-    ---@param self PetLeashCheckBox
+    ---@param self PetLeashCheckbox
     local function OnClick(self)
         if self:GetChecked() then
             self.CheckedTexture:Show()
@@ -62,7 +46,7 @@ do
         end
     end
 
-    ---@param self PetLeashCheckBox
+    ---@param self PetLeashCheckbox
     local function OnEnter(self)
         if self.TooltipText then
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -80,9 +64,9 @@ do
     ---@param label string
     ---@param setting boolean
     ---@param tooltipText string?
-    ---@return PetLeashCheckBox
+    ---@return PetLeashCheckbox
     CreateCheckBox = function(parent, label, setting, tooltipText)
-        ---@class PetLeashCheckBox: CheckButton
+        ---@class PetLeashCheckbox: CheckButton
         local Button = CreateFrame("CheckButton", nil, parent)
         Button:SetSize(24, 24)
 

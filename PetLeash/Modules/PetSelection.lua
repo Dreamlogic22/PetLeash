@@ -24,6 +24,8 @@ local function IsSelected(petId)
         return false
     end
 
+    print("In IsSelected", petId)
+
     for _, id in ipairs(T.db.pets) do
         if id == petId then return true end
     end
@@ -165,6 +167,12 @@ do
             GameTooltip:Hide()
         end)
 
+        PetJournal:HookScript("OnHide", function()
+            if SelectingPets then
+                OnClick(OptionsButton, "LeftButton")
+            end
+        end)
+
         return OptionsButton
     end
 end
@@ -180,19 +188,14 @@ do
         if not button.petID then return end
 
         if not button.PetLeashCheckbox then
-            button.PetLeashCheckbox = CreateCheckBox(button)
-            button:SetSize(24, 24)
-            button:SetPoint("RIGHT", PetJournal, "RIGHT", -15, 0)
+            button.PetLeashCheckbox = CreateCheckBox(button, 24, nil, GenerateClosure(IsSelected, button.petID))
+            button.PetLeashCheckbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 
-            button.PetLeashCheckbox:SetScript("OnClick", function(self)
+            button.PetLeashCheckbox:HookScript("OnClick", function(self)
                 local id = button.petID
                 if self:GetChecked() then
-                    self.CheckedTexture:Show()
-                    PlaySound(857)
                     AddPet(id)
                 else
-                    self.CheckedTexture:Hide()
-                    PlaySound(856)
                     RemovePet(id)
                 end
             end)
@@ -203,18 +206,6 @@ do
                 GameTooltip:AddLine(L.ADD_OR_REMOVE_PET, 1, 1, 1, true)
                 GameTooltip:Show()
             end)
-
-            button.PetLeashCheckbox:SetScript("OnLeave", function()
-                GameTooltip:Hide()
-            end)
-        end
-
-        local IsChecked = IsSelected(button.petID)
-        button.PetLeashCheckbox:SetChecked(IsChecked)
-        if IsChecked then
-            button.PetLeashCheckbox.CheckedTexture:Show()
-        else
-            button.PetLeashCheckbox.CheckedTexture:Hide()
         end
     end
 end

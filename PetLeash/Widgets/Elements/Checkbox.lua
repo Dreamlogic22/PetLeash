@@ -6,11 +6,48 @@ local DisablePixelSnap = T.DisablePixelSnap
 
 local CreateCheckBox
 do
+    ---@param self PetLeashCheckbox
+    local function OnClick(self)
+        if self:GetChecked() then
+            self.CheckedTexture:Show()
+            PlaySound(857)
+        else
+            self.CheckedTexture:Hide()
+            PlaySound(856)
+        end
+    end
+
+    local function OnLeave()
+        GameTooltip:Hide()
+    end
+
+    ---@param self PetLeashCheckbox
+    ---@param predicate function?
+    local function OnValueChanged(self, predicate)
+        if predicate and type(predicate) == "function" then
+            self.Value = predicate()
+        end
+
+        print("In OnValueChanged", self.Value)
+
+        self:SetChecked(self.Value)
+
+        if self:GetChecked() then
+            self.CheckedTexture:Show()
+        else
+            self.CheckedTexture:Hide()
+        end
+    end
+
     ---@param parent Frame
-    CreateCheckBox = function(parent)
+    ---@param size number
+    ---@param onValueChanged function
+    ---@param onShow function?
+    ---@return PetLeashCheckbox
+    CreateCheckBox = function(parent, size, onValueChanged, onShow)
+        ---@class PetLeashCheckbox: CheckButton
         local Button = CreateFrame("CheckButton", nil, parent)
-        Button:SetSize(24, 24)
-        Button:SetPoint("RIGHT", parent, "RIGHT", -15, 0)
+        Button:SetSize(size, size)
 
         Button.Border = Button:CreateTexture(nil, "ARTWORK")
         Button.Border:SetTexture(Media.Textures.Checkbox)
@@ -36,6 +73,17 @@ do
         Button.Highlight:SetBlendMode("ADD")
         Button.Highlight:SetVertexColor(0.5, 0.5, 0.5)
         DisablePixelSnap(Button.Highlight)
+
+        Button.Value = false
+
+        Button:SetScript("OnClick", OnClick)
+        Button:SetScript("OnLeave", OnLeave)
+        Button:SetScript("OnShow", function(self)
+            if onShow and type(onShow) == "function" then
+                Button.Value = onShow()
+                OnValueChanged(self)
+            end
+        end)
 
         return Button
     end

@@ -2,6 +2,8 @@
 local T = select(2, ...)
 local L, Media = T.Locale, T.Media
 
+local SetDefaultFilters = C_PetJournal.SetDefaultFilters
+
 local function LoadOptions()
     if PlayerIsInCombat() then
         T.Print(L.OPTIONS_NOT_IN_COMBAT)
@@ -27,8 +29,8 @@ do
 
             self:ToggleSelectionMode()
 
-            -- extremely expensive call
-            PetJournal_UpdatePetList()
+            -- hack to avoid PetJournal_UpdatePetList
+            SetDefaultFilters()
         end
 
         if button == "RightButton" and not self.SelectingPets then

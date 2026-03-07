@@ -11,6 +11,12 @@ local Media = T.Media
 
 local CreateCheckBox
 do
+
+    ---@param self PetLeashCheckbox
+    local function HandleCheckedTexture(self)
+        self.CheckedTexture:SetShown(self:IsVisible() and self:GetChecked())
+    end
+
     ---@param parent Frame
     ---@param label string
     ---@param tooltipText string?
@@ -86,17 +92,13 @@ do
             end
         end)
 
+        Checkbox:SetScript("OnHide", HandleCheckedTexture)
+
         Checkbox:SetScript("OnLeave", function()
             GameTooltip:Hide()
         end)
 
-        Checkbox:SetScript("OnShow", function(self)
-            if self:GetChecked() then
-                self.CheckedTexture:Show()
-            else
-                self.CheckedTexture:Hide()
-            end
-        end)
+        Checkbox:SetScript("OnShow", HandleCheckedTexture)
 
         return Checkbox
     end

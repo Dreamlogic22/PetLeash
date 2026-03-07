@@ -7,7 +7,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
-local L, Media = T.Locale, T.Media
+local L = T.Locale
 
 local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 
@@ -18,8 +18,6 @@ local function IsSelected(petId)
     if not petId or not T.db.pets then
         return false
     end
-
-    print("In IsSelected", petId)
 
     for _, id in ipairs(T.db.pets) do
         if id == petId then return true end
@@ -78,13 +76,21 @@ do
             button.PetLeashCheckbox = CreateCheckBox(button, nil, L.ADD_OR_REMOVE_PET)
             button.PetLeashCheckbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 
-            button.PetLeashCheckbox.OnChangeCallback = function(self)
+            button.PetLeashCheckbox:HookScript("OnClick", function(self)
                 local id = button.petID
                 if self:GetChecked() then
                     AddPet(id)
                 else
                     RemovePet(id)
                 end
+            end)
+
+            local IsChecked = IsSelected(button.petID)
+            button.PetLeashCheckbox:SetChecked(IsChecked)
+            if IsChecked then
+                button.PetLeashCheckbox.CheckedTexture:Show()
+            else
+                button.PetLeashCheckbox.CheckedTexture:Hide()
             end
         end
     end

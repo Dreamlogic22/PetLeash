@@ -47,7 +47,7 @@ local Texture = {}
 ---@param drawLayer? DrawLayer
 ---@param templateName? `Tp` | Template
 ---@param subLevel? number
----@return SimpleTexture|Tp
+---@return FontString|Tp
 function Frame:CreateFontString(name, drawLayer, templateName, subLevel) end
 
 ---[Documentation](https://warcraft.wiki.gg/wiki/API_Frame_CreateFontString)
@@ -55,7 +55,7 @@ function Frame:CreateFontString(name, drawLayer, templateName, subLevel) end
 ---@param name? string
 ---@param drawLayer? DrawLayer
 ---@param templateName? `Tp` | Template
----@return FontString|Tp
+---@return Texture|Tp
 function Frame:CreateTexture(name, drawLayer, templateName, subLevel) end
 
 ---[Documentation](https://github.com/Gethe/wow-ui-source/blob/76925da92f3be482d5bf83f11cc5f203fc78b9c6/Interface/AddOns/Blizzard_SharedXML/EventUtil.lua#L56)

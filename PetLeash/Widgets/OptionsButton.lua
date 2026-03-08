@@ -39,21 +39,21 @@ do
     end
 
     ---@class PetLeashOptionsButton: Button
-    local OptionsButton = CreateFrame("Button", "PetLeashOptionsButton", UIParent)
-    OptionsButton.SelectingPets = false
+    local Button = CreateFrame("Button", "PetLeashOptionsButton", UIParent)
+    Button.SelectingPets = false
 
-    OptionsButton:SetSize(48, 48)
-    OptionsButton:SetFrameStrata("HIGH")
-    OptionsButton:SetFrameLevel(10)
-    OptionsButton:Hide()
+    Button:SetSize(48, 48)
+    Button:SetFrameStrata("HIGH")
+    Button:SetFrameLevel(10)
+    Button:Hide()
 
-    T.SetupButtonTextures(OptionsButton, Media.Textures.Paw)
+    T.SetupButtonTextures(Button, Media.Textures.Paw)
 
-    OptionsButton:RegisterForClicks("AnyDown")
+    Button:RegisterForClicks("AnyDown")
 
-    OptionsButton:SetScript("OnClick", OnClick)
+    Button:SetScript("OnClick", OnClick)
 
-    OptionsButton:SetScript("OnEnter", function(self)
+    Button:SetScript("OnEnter", function(self)
         if not GameTooltip:IsForbidden() then
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
             GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
@@ -63,18 +63,18 @@ do
         end
     end)
 
-    OptionsButton:SetScript("OnLeave", function()
+    Button:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
 
-    OptionsButton:SetScript("OnHide", function(self)
+    Button:SetScript("OnHide", function(self)
         if self.SelectingPets then
             self.SelectingPets = false
             self:ToggleSelectionMode()
         end
     end)
 
-    function OptionsButton:ToggleSelectionMode()
+    function Button:ToggleSelectionMode()
         local active = self.SelectingPets
 
         self:DesaturateHierarchy(active and 1 or 0)
@@ -89,5 +89,5 @@ do
         self:GetNormalTexture():SetVertexColor(r, g, b)
     end
 
-    PetLeashOptionsButton = OptionsButton
+    PetLeashOptionsButton = Button
 end

@@ -97,21 +97,24 @@ do
 end
 
 local function OnPetJournalLoad()
-    local Paw = PetLeashOptionsButton
-    Paw:SetParent(PetJournal)
-    Paw:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
-    Paw:Show()
+    if PlayerIsInCombat() then
+        EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnPetJournalLoad)
+        return
+    end
+
+    local OptionsButton = PetLeashOptionsButton
+    OptionsButton:SetParent(PetJournal)
+    OptionsButton:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
+    OptionsButton:Show()
 
     hooksecurefunc("PetJournal_InitPetButton", function(button)
         AddCheckbox(button)
     end)
 
-    -- Hide checkbox for unowned & faction-locked pets
+    -- Hide checkboxes for unowned & faction-locked pets
     hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
-        if PlayerIsInCombat() then return end
-
         frame:ForEachFrame(function(button)
-            if not Paw.SelectingPets then
+            if not OptionsButton.SelectingPets then
                 if button.PetLeashCheckbox:IsVisible() then
                     button.PetLeashCheckbox:Hide()
                 end
@@ -119,8 +122,10 @@ local function OnPetJournalLoad()
                 return
             end
 
+            -- unowned
             button.PetLeashCheckbox:SetShown(button.owned)
 
+            -- faction-locked
             if button.petID then
                 local _, error = GetPetSummonInfo(button.petID)
                 local neverUsable = error == Enum.PetJournalError.InvalidFaction

@@ -18,8 +18,18 @@ Core\Main.lua
 
 Media\Media.lua
 
-UI\Utils.lua
-UI\Elements\Checkbox.lua
+UX\Utils.lua
+UX\Elements\Checkbox.lua
+
+# Dev
+
+UX\Core\Init.lua
+
+UX\API\Backdrop.lua
+UX\API\Layout.lua
+UX\API\Texture.lua
+
+UX\Core\Core.lua
 
 Widgets\OptionsButton.lua
 

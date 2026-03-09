@@ -9,7 +9,7 @@
 local T = select(2, ...)
 local LSM = T.UX.LSM
 
----@class UX
+---@class TherapyUX
 local UX = T.UX
 
 ---@class TuxBackdrop: Frame

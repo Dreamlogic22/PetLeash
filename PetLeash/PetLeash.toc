@@ -23,10 +23,7 @@ Core\Main.lua
 
 Media\Media.lua
 
-UX\Utils.lua
-UX\Elements\Checkbox.lua
-
 Widgets\OptionsButton.lua
 
 Modules\Overrides.lua
-Modules\PetSelection.lua
+Modules\OptionsLoader.lua

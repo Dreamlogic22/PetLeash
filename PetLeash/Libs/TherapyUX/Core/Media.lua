@@ -1,4 +1,4 @@
---[[--------------------------------------------------------------------
+--[[---------------------------------------------------------------------
 
     Backup media using LibSharedMedia-3.0.  Parent addon should override
     this and replace any of the defaults in LSM with local assets.
@@ -6,8 +6,8 @@
 -----------------------------------------------------------------------]]
 
 ---@type string, addonTbl
-local Name = ...
-local LSM = LibStub("LibSharedMedia-3.0")
+local Name, T = ...
+local LSM = T.UX.LSM
 
 ---@param type LibSharedMediaTypes
 ---@param name string

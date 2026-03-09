@@ -14,19 +14,19 @@ T.Locale = {}
 
 -- Load database
 do
-    local Version = C_AddOns.GetAddOnMetadata(Name, "Version")
+    local version = C_AddOns.GetAddOnMetadata(Name, "Version")
 
     ---@param target table
     ---@param defaults table
     ---@return table
-    local function Merge(target, defaults)
+    local function merge(target, defaults)
         for k, v in next, defaults do
             if type(v) == "table" then
                 if type(target[k]) ~= "table" then
                     target[k] = {}
                 end
 
-                Merge(target[k], v)
+                merge(target[k], v)
             elseif target[k] == nil then
                 target[k] = v
             end
@@ -40,10 +40,10 @@ do
         PetLeashDB = {}
     end
 
-    PetLeashDB = Merge(PetLeashDB, T.db)
+    PetLeashDB = merge(PetLeashDB, T.db)
 
-    if not PetLeashDB.version or PetLeashDB.version ~= Version then
-        PetLeashDB.version = Version
+    if not PetLeashDB.version or PetLeashDB.version ~= version then
+        PetLeashDB.version = version
     end
 
     T.db = PetLeashDB

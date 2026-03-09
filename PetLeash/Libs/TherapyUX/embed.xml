@@ -4,5 +4,6 @@
     <Script file="API/Backdrop.lua" />
     <Script file="API/Layout.lua" />
     <Script file="API/Texture.lua" />
-    <Script file="Core/Core.lua" />
+    <Script file="Widgets/Button.lua" />
+    <Script file="Widgets/Frame.lua" />
 </Ui>

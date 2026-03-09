@@ -8,7 +8,7 @@
 ---@type addonTbl
 local T = select(2, ...)
 
----@class UX
+---@class TherapyUX
 local UX = T.UX
 
 ---@class TuxTexture: Texture, TuxLayout

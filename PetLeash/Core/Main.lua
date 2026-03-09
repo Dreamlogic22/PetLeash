@@ -12,25 +12,25 @@ local HasControl = HasFullControl
 local IsMoving = IsPlayerMoving
 local SummonPet = C_PetJournal.SummonPetByGUID
 
-local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
+local watchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
 
-local IsExcludedSpecies
+local isExcludedSpecies
 do
-    local Exclusions = {
+    local exclusions = {
         280,  -- Guild Page (Alliance)
         281,  -- Guild Page (Horde)
         282,  -- Guild Herald (Alliance)
         283,  -- Guild Herald (Horde)
     }
 
-    IsExcludedSpecies = function(petGuid)
+    isExcludedSpecies = function(petGuid)
         if not petGuid then return false end
 
-        local SpeciesID = GetSpeciesFromPetID(petGuid)
-        if not SpeciesID then return false end
+        local speciesID = GetSpeciesFromPetID(petGuid)
+        if not speciesID then return false end
 
-        for _, id in ipairs(Exclusions) do
-            if SpeciesID == id then
+        for _, id in ipairs(exclusions) do
+            if speciesID == id then
                 return true
             end
         end
@@ -40,38 +40,38 @@ do
 end
 
 do
-    local Interval = T.db.switchTimer
-    local Throttle = T.db.throttle
-    local TimeSinceSwitch = 0
-
-    ---@return boolean
-    function T.HasAnyPets()
-        return T.db.pets and #T.db.pets > 0
-    end
-
-    function T.Enable()
-        ---@param elapsed number
-        WatchFrame:SetScript("OnUpdate", function(_, elapsed)
-            Throttle = Throttle - elapsed
-            TimeSinceSwitch = TimeSinceSwitch + elapsed
-
-            if Throttle < 0 then
-                Throttle = 3
-                T.TrySummon()
-            end
-        end)
-
-        RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
-    end
+    local interval = T.db.switchTimer
+    local throttle = T.db.throttle
+    local timeSinceSwitch = 0
 
     ---@param reason string?
     function T.Disable(reason)
-        UnregisterAttributeDriver(WatchFrame, "state-visibility")
-        WatchFrame:SetScript("OnUpdate", nil)
+        UnregisterAttributeDriver(watchFrame, "state-visibility")
+        watchFrame:SetScript("OnUpdate", nil)
 
         if reason then
             T.Print(reason)
         end
+    end
+
+    function T.Enable()
+        ---@param elapsed number
+        watchFrame:SetScript("OnUpdate", function(_, elapsed)
+            throttle = throttle - elapsed
+            timeSinceSwitch = timeSinceSwitch + elapsed
+
+            if throttle < 0 then
+                throttle = 3
+                T.TrySummon()
+            end
+        end)
+
+        RegisterAttributeDriver(watchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
+    end
+
+    ---@return boolean
+    function T.HasAnyPets()
+        return T.db.pets and #T.db.pets > 0
     end
 
     function T.GetRandomPet()
@@ -80,18 +80,18 @@ do
             return
         end
 
-        local Candidates = {}
+        local candidates = {}
         for _, guid in ipairs(T.db.pets) do
-            if not IsExcludedSpecies(guid) then
-                table.insert(Candidates, guid)
+            if not isExcludedSpecies(guid) then
+                table.insert(candidates, guid)
             end
         end
 
-        if #Candidates == 0 then
+        if #candidates == 0 then
             return nil
         end
 
-        return Candidates[math.random(1, #Candidates)]
+        return candidates[math.random(1, #candidates)]
     end
 
     ---@param petGuid string?
@@ -122,52 +122,52 @@ do
     end
 
     function T.TrySummon()
-        local CurrentPet = GetCurrentPet()
+        local currentPet = GetCurrentPet()
 
         if not T.db.enable or not HasControl() or IsMoving() then
             return
         end
 
         -- Always respect overrides
-        if CurrentPet and T.HasOverride() then
+        if currentPet and T.HasOverride() then
             return
         end
 
         if T.db.autoSwitch then
-            if TimeSinceSwitch < Interval then
+            if timeSinceSwitch < interval then
                 return
             end
         else
-            if CurrentPet and T.KeepPet(CurrentPet) then
+            if currentPet and T.KeepPet(currentPet) then
                 return
             end
         end
 
-        local NewPet = T.GetRandomPet()
-        if not NewPet then
+        local newPet = T.GetRandomPet()
+        if not newPet then
             return
         end
 
-        if CurrentPet == NewPet then
+        if currentPet == newPet then
             return
         end
 
-        if CanSummon(NewPet) then
-            SummonPet(NewPet)
-            TimeSinceSwitch = 0
+        if CanSummon(newPet) then
+            SummonPet(newPet)
+            timeSinceSwitch = 0
         end
     end
 
     ---@param value number
     function T.UpdateThrottle(value)
         T.db.throttle = value or 3
-        Throttle = value
+        throttle = value
     end
 
     ---@param value number
     function T.UpdateInterval(value)
         T.db.switchTimer = value or 300
-        Interval = value
+        interval = value
     end
 end
 

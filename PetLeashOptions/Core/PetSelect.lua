@@ -1,6 +1,7 @@
 --[[------------------------------------------------------------------
 
-    Loads options addon using a paw icon attached to the pet journal.
+    Hooks into the Blizzard Collections frame that allow a user
+    to select pets they want to add or remove from the pool.
 
 --------------------------------------------------------------------]]
 
@@ -152,10 +153,6 @@ do
             GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
             GameTooltip:Show()
         end
-    end)
-
-    Button:SetScript("OnLeave", function()
-        GameTooltip:Hide()
     end)
 
     Button:SetScript("OnHide", function(self)

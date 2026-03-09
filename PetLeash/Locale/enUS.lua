@@ -17,5 +17,5 @@ L.OPTIONS_NOT_IN_EDIT_MODE = "Options cannot be opened while Edit Mode is active
 L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN = "Left click to toggle pet selection."
 L.PET_SELECTION_INSTRUCTIONS_OPTIONS_OPEN = "Click to toggle the options window."
 L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE = "Currently selecting pets! Left click again to close pet selection."
-L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN = "Right click to open options."
+L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN = "Right click to toggle options."
 L.VERSION = "Version %.2f"

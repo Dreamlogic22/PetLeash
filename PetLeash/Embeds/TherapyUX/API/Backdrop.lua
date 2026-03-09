@@ -20,48 +20,48 @@ do
         if self.Backdrop then return end
 
         ---@class TuxBackdrop: Frame, BackdropTemplate
-        local backdrop = CreateFrame("Frame", nil, self, "BackdropTemplate")
-        backdrop:SetAllPoints()
-        backdrop:SetFrameLevel(self:GetFrameLevel())
+        local Backdrop = CreateFrame("Frame", nil, self, "BackdropTemplate")
+        Backdrop:SetAllPoints()
+        Backdrop:SetFrameLevel(self:GetFrameLevel())
 
         local borderSize = 1
         local borderR, borderG, borderB = 1, 1, 1
         local backdropR, backdropG, backdropB = 0.11, 0.11, 0.11
 
-        backdrop:SetBackdrop({ bgFile = LSM:Fetch("background", "Therapy Blank") })
-        backdrop:SetBackdropColor(backdropR, backdropG, backdropB, transparent and 0.75 or 1)
+        Backdrop:SetBackdrop({ bgFile = LSM:Fetch("background", "Therapy Blank") })
+        Backdrop:SetBackdropColor(backdropR, backdropG, backdropB, transparent and 0.75 or 1)
 
-        backdrop.BorderTop = backdrop:CreateTexture(nil, "BORDER", nil, 1)
-        backdrop.BorderTop:SetSize(borderSize, borderSize)
-        backdrop.BorderTop:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 0, 0)
-        backdrop.BorderTop:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", 0, 0)
-        backdrop.BorderTop:SetSnapToPixelGrid(false)
-        backdrop.BorderTop:SetTexelSnappingBias(0)
+        Backdrop.BorderTop = Backdrop:CreateTexture(nil, "BORDER", nil, 1)
+        Backdrop.BorderTop:SetSize(borderSize, borderSize)
+        Backdrop.BorderTop:SetPoint("TOPLEFT", Backdrop, "TOPLEFT", 0, 0)
+        Backdrop.BorderTop:SetPoint("TOPRIGHT", Backdrop, "TOPRIGHT", 0, 0)
+        Backdrop.BorderTop:SetSnapToPixelGrid(false)
+        Backdrop.BorderTop:SetTexelSnappingBias(0)
 
-        backdrop.BorderBottom = backdrop:CreateTexture(nil, "BORDER", nil, 1)
-        backdrop.BorderBottom:SetSize(borderSize, borderSize)
-        backdrop.BorderBottom:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", 0, 0)
-        backdrop.BorderBottom:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", 0, 0)
-        backdrop.BorderBottom:SetSnapToPixelGrid(false)
-        backdrop.BorderBottom:SetTexelSnappingBias(0)
+        Backdrop.BorderBottom = Backdrop:CreateTexture(nil, "BORDER", nil, 1)
+        Backdrop.BorderBottom:SetSize(borderSize, borderSize)
+        Backdrop.BorderBottom:SetPoint("BOTTOMLEFT", Backdrop, "BOTTOMLEFT", 0, 0)
+        Backdrop.BorderBottom:SetPoint("BOTTOMRIGHT", Backdrop, "BOTTOMRIGHT", 0, 0)
+        Backdrop.BorderBottom:SetSnapToPixelGrid(false)
+        Backdrop.BorderBottom:SetTexelSnappingBias(0)
 
-        backdrop.BorderLeft = backdrop:CreateTexture(nil, "BORDER", nil, 1)
-        backdrop.BorderLeft:SetSize(borderSize, borderSize)
-        backdrop.BorderLeft:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 0, 0)
-        backdrop.BorderLeft:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", 0, 0)
-        backdrop.BorderLeft:SetSnapToPixelGrid(false)
-        backdrop.BorderLeft:SetTexelSnappingBias(0)
+        Backdrop.BorderLeft = Backdrop:CreateTexture(nil, "BORDER", nil, 1)
+        Backdrop.BorderLeft:SetSize(borderSize, borderSize)
+        Backdrop.BorderLeft:SetPoint("TOPLEFT", Backdrop, "TOPLEFT", 0, 0)
+        Backdrop.BorderLeft:SetPoint("BOTTOMLEFT", Backdrop, "BOTTOMLEFT", 0, 0)
+        Backdrop.BorderLeft:SetSnapToPixelGrid(false)
+        Backdrop.BorderLeft:SetTexelSnappingBias(0)
 
-        backdrop.BorderRight = backdrop:CreateTexture(nil, "BORDER", nil, 1)
-        backdrop.BorderRight:SetSize(borderSize, borderSize)
-        backdrop.BorderRight:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", 0, 0)
-        backdrop.BorderRight:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", 0, 0)
-        backdrop.BorderRight:SetSnapToPixelGrid(false)
-        backdrop.BorderRight:SetTexelSnappingBias(0)
+        Backdrop.BorderRight = Backdrop:CreateTexture(nil, "BORDER", nil, 1)
+        Backdrop.BorderRight:SetSize(borderSize, borderSize)
+        Backdrop.BorderRight:SetPoint("TOPRIGHT", Backdrop, "TOPRIGHT", 0, 0)
+        Backdrop.BorderRight:SetPoint("BOTTOMRIGHT", Backdrop, "BOTTOMRIGHT", 0, 0)
+        Backdrop.BorderRight:SetSnapToPixelGrid(false)
+        Backdrop.BorderRight:SetTexelSnappingBias(0)
 
         self:SetBorderColor(borderR, borderG, borderB)
 
-        self.Backdrop = backdrop
+        self.Backdrop = Backdrop
     end
 
     ---@param shadowScale number?
@@ -69,16 +69,16 @@ do
         if self.Shadow then return end
 
         ---@class TuxShadow: Frame, BackdropTemplate
-        local shadow = CreateFrame("Frame", nil, self, "BackdropTemplate")
-        shadow:SetBackdrop({ edgeFile = LSM:Fetch("background", "Therapy Glow"), edgeSize = 4 })
-        shadow:SetFrameLevel((self:GetFrameLevel() - 1 >= 0 and self:GetFrameLevel() - 1) or 0)
-        shadow:SetPoint("TOPLEFT", self, "TOPLEFT", -3, 3)
-        shadow:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
-        shadow:SetBackdropColor(0, 0, 0, 0.8)
-        shadow:SetBackdropBorderColor(0, 0, 0, 0.8)
-        shadow:SetScale(shadowScale or 1)
+        local Shadow = CreateFrame("Frame", nil, self, "BackdropTemplate")
+        Shadow:SetBackdrop({ edgeFile = LSM:Fetch("background", "Therapy Glow"), edgeSize = 4 })
+        Shadow:SetFrameLevel((self:GetFrameLevel() - 1 >= 0 and self:GetFrameLevel() - 1) or 0)
+        Shadow:SetPoint("TOPLEFT", self, "TOPLEFT", -3, 3)
+        Shadow:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)
+        Shadow:SetBackdropColor(0, 0, 0, 0.8)
+        Shadow:SetBackdropBorderColor(0, 0, 0, 0.8)
+        Shadow:SetScale(shadowScale or 1)
 
-        self.Shadow = shadow
+        self.Shadow = Shadow
     end
 
     ---@param r number

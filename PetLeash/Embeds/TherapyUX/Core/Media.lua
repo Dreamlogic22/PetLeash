@@ -12,11 +12,11 @@ local LSM = T.lib.LSM
 ---@param type LibSharedMediaTypes
 ---@param name string
 ---@param file string
-local function addMedia(type, name, file)
+local function AddMedia(type, name, file)
     LSM:Register(type, name, format([[Interface\AddOns\%s\Media\%s]], Name, file))
 end
 
-addMedia("font", "Expressway", [[Fonts\Expressway.ttf]])
-addMedia("font", "PT Sans Narrow", [[Fonts\PTSansNarrow.ttf]])
-addMedia("background", "Therapy Blank", [[Textures\Blank]])
-addMedia("background", "Therapy Glow", [[Textures\Glow]])
+AddMedia("font", "Expressway", [[Fonts\Expressway.ttf]])
+AddMedia("font", "PT Sans Narrow", [[Fonts\PTSansNarrow.ttf]])
+AddMedia("background", "Therapy Blank", [[Textures\Blank]])
+AddMedia("background", "Therapy Glow", [[Textures\Glow]])

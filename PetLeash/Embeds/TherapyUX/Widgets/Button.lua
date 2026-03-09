@@ -44,24 +44,24 @@ do
         self:SetHighlightTexture(texture)
         self:SetPushedTexture(texture)
 
-        local Normal, Highlight, Pushed = self:GetNormalTexture(), self:GetHighlightTexture(), self:GetPushedTexture()
+        local normal, highlight, pushed = self:GetNormalTexture(), self:GetHighlightTexture(), self:GetPushedTexture()
 
-        if Normal then
-            Normal:DisableSharpening()
-            Normal:SetInside()
+        if normal then
+            normal:DisableSharpening()
+            normal:SetInside()
         end
 
-        if Highlight then
-            Highlight:SetBlendMode("ADD")
-            Highlight:SetAlpha(0.25)
-            Highlight:DisableSharpening()
-            Highlight:SetInside()
+        if highlight then
+            highlight:SetBlendMode("ADD")
+            highlight:SetAlpha(0.25)
+            highlight:DisableSharpening()
+            highlight:SetInside()
         end
 
-        if Pushed then
-            Pushed:SetBlendMode("BLEND")
-            Pushed:SetVertexColor(0.9, 0.9, 0.9)
-            Pushed:DisableSharpening()
+        if pushed then
+            pushed:SetBlendMode("BLEND")
+            pushed:SetVertexColor(0.9, 0.9, 0.9)
+            pushed:DisableSharpening()
         end
     end
 end

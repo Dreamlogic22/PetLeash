@@ -32,8 +32,11 @@ local function OnPetJournalLoad()
     Button:SetupTextures(Media.Textures.PetJournalWidget)
     Button:RegisterForClicks("AnyDown")
 
-    Button:SetScript("OnClick", function()
+    ---@param button MouseButton
+    Button:SetScript("OnClick", function(_, button)
         PlaySound(856)
+        Button.LastClicked = button
+
         LoadOptions()
     end)
 

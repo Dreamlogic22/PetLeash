@@ -74,7 +74,7 @@ local zones = {
 }
 
 ---@param unitTarget UnitToken
-local function checkAuras(_, unitTarget)
+local function CheckAuras(_, unitTarget)
     if unitTarget == "player" then
         for _, id in pairs(auras) do
             if not ShouldAurasBeSecret() and GetPlayerAuraBySpellID(id) then
@@ -86,13 +86,13 @@ local function checkAuras(_, unitTarget)
     end
 end
 
-local function isWinterVeil()
+local function IsWinterVeil()
     local month, day = tonumber(date("%m")), tonumber(date("%d"))
     return (month == 12 and day >= 16) or (month == 1 and day <= 2)
 end
 
-local function checkHoliday()
-    if isWinterVeil() then return false end
+local function CheckHoliday()
+    if IsWinterVeil() then return false end
 
     local currentPet = GetSummonedPetGUID()
     if not currentPet then return false end
@@ -107,7 +107,7 @@ local function checkHoliday()
     return false
 end
 
-local function checkEquipped()
+local function CheckEquipped()
     for _, id in pairs(equipment) do
         if IsEquippedItem(id) then
             return true
@@ -117,7 +117,7 @@ local function checkEquipped()
     return false
 end
 
-local function checkInventory()
+local function CheckInventory()
     for _, id in pairs(items) do
         if GetItemCount(id) > 0 then
             return true
@@ -127,7 +127,7 @@ local function checkInventory()
     return false
 end
 
-local function checkZone()
+local function CheckZone()
     for _, id in pairs(zones) do
         local mapname = GetZoneText()
         if id == 46362 and GetItemCount(id) > 0 and mapname == "Un'Goro Crater" or mapname == "Tanaris" then
@@ -146,7 +146,7 @@ local function checkZone()
     return false
 end
 
-local function checkQuests()
+local function CheckQuests()
     for _, id in pairs(quests) do
         if IsOnQuest(id) then
             return true
@@ -167,18 +167,18 @@ local overrideEvents = {
 }
 
 local overrideFunctions = {
-    checkAuras,
-    checkEquipped,
-    checkHoliday,
-    checkInventory,
-    checkQuests,
-    checkZone
+    CheckAuras,
+    CheckEquipped,
+    CheckHoliday,
+    CheckInventory,
+    CheckQuests,
+    CheckZone
 }
 
 local needsCheck = true
 local cachedResult = false
 
-local function markDirty()
+local function MarkDirty()
     needsCheck = true
     cachedResult = false
 end
@@ -202,5 +202,5 @@ function T.HasOverride()
 end
 
 for _, event in pairs(overrideEvents) do
-    EventRegistry:RegisterFrameEventAndCallback(event, markDirty)
+    EventRegistry:RegisterFrameEventAndCallback(event, MarkDirty)
 end

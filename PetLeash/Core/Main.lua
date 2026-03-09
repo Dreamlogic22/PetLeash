@@ -12,9 +12,9 @@ local HasControl = HasFullControl
 local IsMoving = IsPlayerMoving
 local SummonPet = C_PetJournal.SummonPetByGUID
 
-local watchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
+local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
 
-local isExcludedSpecies
+local IsExcludedSpecies
 do
     local exclusions = {
         280,  -- Guild Page (Alliance)
@@ -23,7 +23,7 @@ do
         283,  -- Guild Herald (Horde)
     }
 
-    isExcludedSpecies = function(petGuid)
+    IsExcludedSpecies = function(petGuid)
         if not petGuid then return false end
 
         local speciesID = GetSpeciesFromPetID(petGuid)
@@ -46,8 +46,8 @@ do
 
     ---@param reason string?
     function T.Disable(reason)
-        UnregisterAttributeDriver(watchFrame, "state-visibility")
-        watchFrame:SetScript("OnUpdate", nil)
+        UnregisterAttributeDriver(WatchFrame, "state-visibility")
+        WatchFrame:SetScript("OnUpdate", nil)
 
         if reason then
             T.Print(reason)
@@ -56,7 +56,7 @@ do
 
     function T.Enable()
         ---@param elapsed number
-        watchFrame:SetScript("OnUpdate", function(_, elapsed)
+        WatchFrame:SetScript("OnUpdate", function(_, elapsed)
             throttle = throttle - elapsed
             timeSinceSwitch = timeSinceSwitch + elapsed
 
@@ -66,7 +66,7 @@ do
             end
         end)
 
-        RegisterAttributeDriver(watchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
+        RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
     end
 
     ---@return boolean
@@ -82,7 +82,7 @@ do
 
         local candidates = {}
         for _, guid in ipairs(T.db.pets) do
-            if not isExcludedSpecies(guid) then
+            if not IsExcludedSpecies(guid) then
                 table.insert(candidates, guid)
             end
         end
@@ -103,7 +103,7 @@ do
             return true
         end
 
-        -- keep manually-summoned pets
+        -- Keep manually-summoned pets
         if T.db.override == false then
             return true
         end
@@ -172,7 +172,7 @@ do
 end
 
 local function OnInitialize()
-    -- reloading or logging during combat
+    -- Reloading or logging in during combat
     if InCombatLockdown() then
         EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnInitialize)
     end

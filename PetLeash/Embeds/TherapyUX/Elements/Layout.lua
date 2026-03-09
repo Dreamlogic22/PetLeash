@@ -9,16 +9,16 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local lib = T.lib
+local UX = T.UX
 
----@class TuxLayout: Frame | Texture
-local layout_api = {}
+---@class TherapyLayoutMixin: Frame | Texture
+local TherapyLayoutMixin = {}
 do
     ---@param anchor Frame?
     ---@param xOffset number?
     ---@param yOffset number?
     ---@param noScale boolean?
-    function layout_api:SetInside(anchor, xOffset, yOffset, noScale)
+    function TherapyLayoutMixin:SetInside(anchor, xOffset, yOffset, noScale)
         if not anchor then
             anchor = self:GetParent()
         end
@@ -41,7 +41,7 @@ do
     ---@param xOffset number?
     ---@param yOffset number?
     ---@param noScale boolean?
-    function layout_api:SetOutside(anchor, xOffset, yOffset, noScale)
+    function TherapyLayoutMixin:SetOutside(anchor, xOffset, yOffset, noScale)
         if not anchor then
             anchor = self:GetParent()
         end
@@ -61,4 +61,4 @@ do
     end
 end
 
-lib.layout_api = layout_api
+UX.TherapyLayoutMixin = TherapyLayoutMixin

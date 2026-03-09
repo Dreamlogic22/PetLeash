@@ -8,22 +8,22 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local lib = T.lib
+local UX = T.UX
 
 local baseFrame = CreateFrame("Frame")
+
 local createTexture = baseFrame.CreateTexture
 
----@class TuxFrame: Frame, TuxBackdrop, TuxLayout
-local frame_api = CreateFromMixins(lib.backdrop_api, lib.layout_api)
+---@class TherapyFrameMixin: Frame, TherapyBackdropMixin, TherapyLayoutMixin
+local TherapyFrameMixin = CreateFromMixins(UX.TherapyBackdropMixin, UX.TherapyLayoutMixin)
 do
     ---@generic Tp
     ---@param name? string
     ---@param drawLayer? DrawLayer
     ---@param templateName? `Tp` | Template
-    ---@return TuxTexture|Tp
-    function frame_api:CreateTexture(name, drawLayer, templateName)
-        local texture = createTexture(self, name, drawLayer, templateName)
-        return Mixin(texture, lib.texture_api)
+    ---@return TherapyTextureMixin|Tp
+    function TherapyFrameMixin:CreateTexture(name, drawLayer, templateName)
+        return Mixin(createTexture(self, name, drawLayer, templateName), UX.TherapyTextureMixin)
     end
 end
 
@@ -32,10 +32,8 @@ end
 ---@param parent? any
 ---@param template? `T` | Template
 ---@param id? number
----@return TuxFrame|T
-function T.ConstructFrame(name, parent, template, id)
-    local frame = CreateFrame("Frame", name, parent, template, id)
-    frame = Mixin(frame, frame_api)
-
-    return frame
+---@return TherapyFrame|T
+function T.CreateFrame(name, parent, template, id)
+    ---@class TherapyFrame
+    return Mixin(CreateFrame("Frame", name, parent, template, id), TherapyFrameMixin)
 end

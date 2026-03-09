@@ -7,19 +7,19 @@
 
 ---@type addonTbl
 local T = select(2, ...)
-local LSM = T.lib.LSM
+local LSM = T.UX.LSM
 
 ---@class TherapyUX
-local lib = T.lib
+local UX = T.UX
 
----@class TuxBackdrop: Frame
-local backdrop_api = {}
+---@class TherapyBackdropMixin: Frame
+local TherapyBackdropMixin = {}
 do
     ---@param transparent boolean?
-    function backdrop_api:CreateBackdrop(transparent)
+    function TherapyBackdropMixin:CreateBackdrop(transparent)
         if self.Backdrop then return end
 
-        ---@class TuxBackdrop: Frame, BackdropTemplate
+        ---@class TherapyBackdrop: Frame, BackdropTemplate
         local Backdrop = CreateFrame("Frame", nil, self, "BackdropTemplate")
         Backdrop:SetAllPoints()
         Backdrop:SetFrameLevel(self:GetFrameLevel())
@@ -65,10 +65,10 @@ do
     end
 
     ---@param shadowScale number?
-    function backdrop_api:CreateShadow(shadowScale)
+    function TherapyBackdropMixin:CreateShadow(shadowScale)
         if self.Shadow then return end
 
-        ---@class TuxShadow: Frame, BackdropTemplate
+        ---@class TherapyShadow: Frame, BackdropTemplate
         local Shadow = CreateFrame("Frame", nil, self, "BackdropTemplate")
         Shadow:SetBackdrop({ edgeFile = LSM:Fetch("background", "Therapy Glow"), edgeSize = 4 })
         Shadow:SetFrameLevel((self:GetFrameLevel() - 1 >= 0 and self:GetFrameLevel() - 1) or 0)
@@ -85,14 +85,14 @@ do
     ---@param g number
     ---@param b number
     ---@param a number?
-    function backdrop_api:SetBackdropColor(r, g, b, a)
+    function TherapyBackdropMixin:SetBackdropColor(r, g, b, a)
         if self.Backdrop then
             self.Backdrop:SetBackdropColor(r, g, b, a or 1)
         end
     end
 
     ---@param texture TextureAsset
-    function backdrop_api:SetBackdropTexture(texture)
+    function TherapyBackdropMixin:SetBackdropTexture(texture)
         if self.Backdrop then
             self.Backdrop:SetBackdrop({ bgFile = texture })
         end
@@ -102,7 +102,7 @@ do
     ---@param g number
     ---@param b number
     ---@param a number?
-    function backdrop_api:SetBorderColor(r, g, b, a)
+    function TherapyBackdropMixin:SetBorderColor(r, g, b, a)
         if self.Backdrop then
             self.Backdrop.BorderTop:SetColorTexture(r, g, b, a or 1)
             self.Backdrop.BorderBottom:SetColorTexture(r, g, b, a or 1)
@@ -112,7 +112,7 @@ do
     end
 
     ---@param size number
-    function backdrop_api:SetBorderSize(size)
+    function TherapyBackdropMixin:SetBorderSize(size)
         if self.Backdrop then
             self.Backdrop.BorderTop:SetSize(size, size)
             self.Backdrop.BorderBottom:SetSize(size, size)
@@ -125,11 +125,11 @@ do
     ---@param g number
     ---@param b number
     ---@param a number?
-    function backdrop_api:SetShadowColor(r, g, b, a)
+    function TherapyBackdropMixin:SetShadowColor(r, g, b, a)
         if self.Shadow then
             self.Shadow:SetBackdropBorderColor(r, g, b, a or 0.8)
         end
     end
 end
 
-lib.backdrop_api = backdrop_api
+UX.TherapyBackdropMixin = TherapyBackdropMixin

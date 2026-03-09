@@ -9,16 +9,16 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local lib = T.lib
+local UX = T.UX
 
----@class TuxTexture: Texture, TuxLayout
-local texture_api = CreateFromMixins(lib.layout_api)
+---@class TherapyTextureMixin: Texture, TherapyLayoutMixin
+local TherapyTextureMixin = CreateFromMixins(UX.TherapyLayoutMixin)
 do
     ---@param self Texture
-    function texture_api:DisableSharpening()
+    function TherapyTextureMixin:DisableSharpening()
         self:SetSnapToPixelGrid(false)
         self:SetTexelSnappingBias(0)
     end
 end
 
-lib.texture_api = texture_api
+UX.TherapyTextureMixin = TherapyTextureMixin

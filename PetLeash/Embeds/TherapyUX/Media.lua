@@ -7,7 +7,7 @@
 
 ---@type string, addonTbl
 local Name, T = ...
-local LSM = T.lib.LSM
+local LSM = T.UX.LSM
 
 ---@param type LibSharedMediaTypes
 ---@param name string

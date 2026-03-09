@@ -23,8 +23,8 @@ local function LoadOptions()
 end
 
 local function OnPetJournalLoad()
-    ---@class PetLeashOptionsButton: TuxButton
-    local Button = T.ConstructButton("PetLeashOptionsButton", PetJournal)
+    ---@class PetLeashOptionsButton: TherapyButtonMixin
+    local Button = T.CreateButton("PetLeashOptionsButton", PetJournal)
     Button:SetSize(48, 48)
     Button:SetFrameStrata("HIGH")
     Button:SetFrameLevel(10)

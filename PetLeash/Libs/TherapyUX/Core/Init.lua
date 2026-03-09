@@ -4,10 +4,9 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
+---@class addonTbl
 local T = select(2, ...)
-local Media = T.Media
 
----@class UX
-local UX = {}
-T.UX = UX
+---@class TherapyUX
+T.UX = {}
+T.UX.LSM = LibStub("LibSharedMedia-3.0")

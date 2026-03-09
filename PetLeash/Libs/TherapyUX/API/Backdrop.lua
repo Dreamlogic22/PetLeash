@@ -5,9 +5,9 @@
 
 --------------------------------------------------------------------]]
 
----@type PetLeash
+---@type addonTbl
 local T = select(2, ...)
-local Media = T.Media
+local LSM = T.UX.LSM
 
 ---@class UX
 local UX = T.UX
@@ -28,7 +28,7 @@ do
         local borderR, borderG, borderB = 1, 1, 1
         local backdropR, backdropG, backdropB = 0.11, 0.11, 0.11
 
-        backdrop:SetBackdrop({ bgFile = Media.Textures.Blank })
+        backdrop:SetBackdrop({ bgFile = LSM:Fetch("background", "Therapy Blank") })
         backdrop:SetBackdropColor(backdropR, backdropG, backdropB, transparent and 0.75 or 1)
 
         backdrop.BorderTop = backdrop:CreateTexture(nil, "BORDER", nil, 1)
@@ -70,7 +70,7 @@ do
 
         ---@class TuxShadow: Frame, BackdropTemplate
         local shadow = CreateFrame("Frame", nil, self, "BackdropTemplate")
-        shadow:SetBackdrop({ edgeFile = Media.Textures.Glow, edgeSize = 4 })
+        shadow:SetBackdrop({ edgeFile = LSM:Fetch("background", "Therapy Glow"), edgeSize = 4 })
         shadow:SetFrameLevel((self:GetFrameLevel() - 1 >= 0 and self:GetFrameLevel() - 1) or 0)
         shadow:SetPoint("TOPLEFT", self, "TOPLEFT", -3, 3)
         shadow:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)

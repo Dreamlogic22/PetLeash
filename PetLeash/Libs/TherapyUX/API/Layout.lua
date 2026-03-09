@@ -1,11 +1,11 @@
---[[--------------------------------------------------------------------
+--[[------------------------------------------------------------------
 
     Therapy UX API methods for positioning and sizing screen elements
     created using the library.
 
 --------------------------------------------------------------------]]
 
----@type PetLeash
+---@type addonTbl
 local T = select(2, ...)
 
 ---@class UX

@@ -2,11 +2,10 @@
 
     Factory for Therapy UX basic elements using the API.
 
-----------------------------------------------------------------------]]
+-----------------------------------------------------------------------]]
 
----@type PetLeash
+---@class addonTbl
 local T = select(2, ...)
-local Media = T.Media
 
 ---@class UX
 local UX = T.UX
@@ -27,6 +26,8 @@ do
         local texture = createTexture(self, name, drawLayer, templateName)
         return Mixin(texture, UX.texture_api)
     end
+
+    UX.frame_api = frame_api
 end
 
 ---@generic T, Tp
@@ -36,15 +37,9 @@ end
 ---@param template? `Tp` | Template
 ---@param id? number
 ---@return TuxFrame|T|Tp
-function UX.ConstructFrame(frameType, name, parent, template, id)
+function T.ConstructFrame(frameType, name, parent, template, id)
     local frame = CreateFrame(frameType, name, parent, template, id)
     frame = Mixin(frame, frame_api)
 
     return frame
 end
-
-local test = UX.ConstructFrame("Frame")
-test:SetSize(200, 100)
-test:SetPoint("CENTER")
-test:CreateBackdrop(true)
-test:SetBackdropTexture(Media.Textures.Background)

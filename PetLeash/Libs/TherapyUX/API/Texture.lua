@@ -1,11 +1,11 @@
---[[--------------------------------------------------------------------
+--[[------------------------------------------------------------------
 
     Therapy UX API methods for working with textures, including
     pixel-perfect rendering and layout.
 
 --------------------------------------------------------------------]]
 
----@type PetLeash
+---@type addonTbl
 local T = select(2, ...)
 
 ---@class UX

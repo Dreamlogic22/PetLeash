@@ -1,7 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Toggle element for options. Shared between PetSelection and
-    options.
+    Toggle element for options.
 
 --------------------------------------------------------------------]]
 

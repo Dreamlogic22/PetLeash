@@ -9,6 +9,11 @@
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\LibSharedMedia-3.0.lua
+Libs\TherapyUX\embed.xml
+
 Core\Settings.lua
 Core\Init.lua
 
@@ -20,16 +25,6 @@ Media\Media.lua
 
 UX\Utils.lua
 UX\Elements\Checkbox.lua
-
-# Dev
-
-UX\Core\Init.lua
-
-UX\API\Backdrop.lua
-UX\API\Layout.lua
-UX\API\Texture.lua
-
-UX\Core\Core.lua
 
 Widgets\OptionsButton.lua
 

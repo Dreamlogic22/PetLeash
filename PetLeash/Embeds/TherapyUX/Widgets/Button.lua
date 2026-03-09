@@ -5,7 +5,7 @@
 
 ----------------------------------------------------------------------]]
 
----@type addonTbl
+---@class addonTbl
 local T = select(2, ...)
 
 ---@class TherapyUX
@@ -38,14 +38,13 @@ do
         return Mixin(texture, lib.texture_api)
     end
 
-    ---@param button TuxButton
     ---@param texture TextureAsset
-    function button_api:SetupTextures(button, texture)
-        button:SetNormalTexture(texture)
-        button:SetHighlightTexture(texture)
-        button:SetPushedTexture(texture)
+    function button_api:SetupTextures(texture)
+        self:SetNormalTexture(texture)
+        self:SetHighlightTexture(texture)
+        self:SetPushedTexture(texture)
 
-        local Normal, Highlight, Pushed = button:GetNormalTexture(), button:GetHighlightTexture(), button:GetPushedTexture()
+        local Normal, Highlight, Pushed = self:GetNormalTexture(), self:GetHighlightTexture(), self:GetPushedTexture()
 
         if Normal then
             Normal:DisableSharpening()

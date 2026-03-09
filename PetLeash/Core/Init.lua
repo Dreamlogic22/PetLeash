@@ -6,7 +6,7 @@
 
 ---@type string
 local Name = ...
----@class PetLeash
+---@class PetLeash: addonTbl
 local T = select(2, ...)
 
 ---@class Locale

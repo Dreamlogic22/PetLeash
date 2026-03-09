@@ -12,7 +12,8 @@
 Libs\LibStub.lua
 Libs\CallbackHandler-1.0.lua
 Libs\LibSharedMedia-3.0.lua
-Libs\TherapyUX\embed.xml
+
+Embeds\TherapyUX\embed.xml
 
 Core\Settings.lua
 Core\Init.lua
@@ -22,8 +23,6 @@ Locale\enUS.lua
 Core\Main.lua
 
 Media\Media.lua
-
-Widgets\OptionsButton.lua
 
 Modules\Overrides.lua
 Modules\OptionsLoader.lua

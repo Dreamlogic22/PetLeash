@@ -9,11 +9,8 @@
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
-Libs\LibStub.lua
-Libs\CallbackHandler-1.0.lua
-Libs\LibSharedMedia-3.0.lua
-
 Embeds\TherapyUX\Embed.xml
+Media\Media.lua
 
 Core\Settings.lua
 Core\Init.lua
@@ -21,8 +18,6 @@ Core\Init.lua
 Locale\enUS.lua
 
 Core\Main.lua
-
-Media\Media.lua
 
 Modules\SummonPet.lua
 Modules\Overrides.lua

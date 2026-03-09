@@ -7,7 +7,7 @@
 
 ---@type addonTbl
 local T = select(2, ...)
-local LSM = T.TherapyUX.LSM
+local Media = T.Media
 
 ---@class TherapyUX
 local UX = T.TherapyUX
@@ -28,7 +28,7 @@ do
         local borderR, borderG, borderB = 1, 1, 1
         local backdropR, backdropG, backdropB = 0.11, 0.11, 0.11
 
-        Backdrop:SetBackdrop({ bgFile = LSM:Fetch("background", "Therapy Blank") })
+        Backdrop:SetBackdrop({ bgFile = Media.Textures.Blank })
         Backdrop:SetBackdropColor(backdropR, backdropG, backdropB, transparent and 0.75 or 1)
 
         Backdrop.BorderTop = Backdrop:CreateTexture(nil, "BORDER", nil, 1)
@@ -70,7 +70,7 @@ do
 
         ---@class TherapyShadow: Frame, BackdropTemplate
         local Shadow = CreateFrame("Frame", nil, self, "BackdropTemplate")
-        Shadow:SetBackdrop({ edgeFile = LSM:Fetch("background", "Therapy Glow"), edgeSize = 4 })
+        Shadow:SetBackdrop({ edgeFile = Media.Textures.Glow, edgeSize = 4 })
         Shadow:SetFrameLevel((self:GetFrameLevel() - 1 >= 0 and self:GetFrameLevel() - 1) or 0)
         Shadow:SetPoint("TOPLEFT", self, "TOPLEFT", -3, 3)
         Shadow:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 3, -3)

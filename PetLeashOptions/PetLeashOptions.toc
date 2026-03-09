@@ -10,5 +10,11 @@
 Core\Init.lua
 Core\Main.lua
 
-Widgets\Templates.xml
-Widgets\Widgets.lua
+Widgets\Elements\CheckBox.lua
+Widgets\OptionsDialog.lua
+
+Modules\PetSelect.lua
+
+# Widgets\Templates.xml
+# Widgets\CheckBox.lua
+# Widgets\Widgets.lua

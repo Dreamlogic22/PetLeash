@@ -1,8 +1,8 @@
 --[[------------------------------------------------------------------
 
-    Therapy UX Media structure added to the addon namespace and populated
-    using assets found in the library's Media folder as well as assets
-    contained in the addon.
+    Therapy UX Media structure added to the addon namespace. Can be
+    populated using assets found in the library's Media folder as well as
+    assets contained in the addon.
 
 --------------------------------------------------------------------]]
 

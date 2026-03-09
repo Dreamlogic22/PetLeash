@@ -1,28 +1,26 @@
 --[[--------------------------------------------------------------------
 
-    Toggle element for options.
+    Stylized settings checkbox.
 
---------------------------------------------------------------------]]
+----------------------------------------------------------------------]]
 
----@class PetLeash
-local T = select(2, ...)
+---@class PetLeashOptions
+local C, T = select(2, ...), PetLeash
 local Media = T.Media
 
 local CreateCheckBox
 do
-
     ---@param self PetLeashCheckbox
     local function HandleCheckedTexture(self)
         self.CheckedTexture:SetShown(self:IsVisible() and self:GetChecked())
     end
 
     ---@param parent Frame
-    ---@param label string
+    ---@param label string?
     ---@param tooltipText string?
-    ---@return PetLeashCheckbox
-    CreateCheckBox = function(parent, label, tooltipText)
-        ---@class PetLeashCheckbox: CheckButton
-        local Checkbox = CreateFrame("CheckButton", nil, parent)
+    CreateCheckbox = function(parent, label, tooltipText)
+        ---@class PetLeashCheckbox: TherapyFrameMixin
+        local Checkbox = T.CreateFrame("CheckButton", nil, parent)
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText
 
@@ -31,16 +29,14 @@ do
         Checkbox.Border:SetTexCoord(0, 0.5, 0, 0.5)
         Checkbox.Border:SetPoint("CENTER", Checkbox, "LEFT", 8, 0)
         Checkbox.Border:SetSize(32, 32)
-
-        T.DisableSharpening(Checkbox.Border)
+        Checkbox.Border:DisableSharpening()
 
         Checkbox.CheckedTexture = Checkbox:CreateTexture(nil, "OVERLAY")
         Checkbox.CheckedTexture:SetTexture(Media.Textures.Checkbox)
         Checkbox.CheckedTexture:SetTexCoord(0.5, 0.75, 0.5, 0.75)
         Checkbox.CheckedTexture:SetPoint("CENTER", Checkbox.Border, "CENTER", 0, 0)
         Checkbox.CheckedTexture:SetSize(16, 16)
-
-        T.DisableSharpening(Checkbox.CheckedTexture)
+        Checkbox.CheckedTexture:DisableSharpening()
 
         Checkbox.CheckedTexture:Hide()
 
@@ -51,8 +47,7 @@ do
         Checkbox.Highlight:SetSize(32, 32)
         Checkbox.Highlight:SetBlendMode("ADD")
         Checkbox.Highlight:SetVertexColor(0.5, 0.5, 0.5)
-
-        T.DisableSharpening(Checkbox.Highlight)
+        Checkbox.Highlight:DisableSharpening()
 
         Checkbox.Label = Checkbox:CreateFontString(nil, "OVERLAY")
         Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE")
@@ -102,5 +97,5 @@ do
         return Checkbox
     end
 
-    T.CreateCheckBox = CreateCheckBox
+    C.CreateCheckbox = CreateCheckBox
 end

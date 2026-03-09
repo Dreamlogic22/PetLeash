@@ -10,7 +10,6 @@
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Embeds\TherapyUX\Embed.xml
-Media\Media.lua
 
 Core\Settings.lua
 Core\Init.lua
@@ -18,6 +17,8 @@ Core\Init.lua
 Locale\enUS.lua
 
 Core\Main.lua
+
+Media\Media.lua
 
 Modules\SummonPet.lua
 Modules\Overrides.lua

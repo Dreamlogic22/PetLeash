@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Therapy UX modifications for basic frame widgets.
+    Therapy UX modifications for various frame types.
 
 ----------------------------------------------------------------------]]
 
@@ -27,13 +27,13 @@ do
     end
 end
 
----@generic T
----@param name? string
----@param parent? any
----@param template? `T` | Template
----@param id? number
----@return TherapyFrame|T
-function T.CreateFrame(name, parent, template, id)
-    ---@class TherapyFrame
-    return Mixin(CreateFrame("Frame", name, parent, template, id), TherapyFrameMixin)
+---@generic T, Tp
+---@param frameType `T` | FrameType
+---@param name string?
+---@param parent Frame?
+---@param template? `Tp` | Template
+---@param id number?
+---@return TherapyFrameMixin|T|Tp
+function T.CreateFrame(frameType, name, parent, template, id)
+    return Mixin(CreateFrame(frameType, name, parent, template, id), TherapyFrameMixin)
 end

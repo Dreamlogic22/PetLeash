@@ -9,3 +9,11 @@ local T = select(2, ...)
 
 ---@class TherapyUX
 T.TherapyUX = {}
+
+-- Placeholder for the addon's media table
+T.Media = {
+    Colors = {},
+    Fonts = {},
+    Sounds = {},
+    Textures = {}
+}

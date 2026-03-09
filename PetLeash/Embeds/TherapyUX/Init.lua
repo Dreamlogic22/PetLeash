@@ -8,5 +8,5 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-T.UX = {}
-T.UX.LSM = LibStub("LibSharedMedia-3.0")
+T.TherapyUX = {}
+T.TherapyUX.LSM = LibStub("LibSharedMedia-3.0")

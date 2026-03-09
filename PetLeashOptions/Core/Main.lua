@@ -39,7 +39,7 @@ end
 
 local function AddHooks()
     hooksecurefunc("PetJournal_InitPetButton", function(button)
-        AddCheckbox(button)
+        -- AddCheckbox(button)
     end)
 
     -- Hide checkbox for unowned & faction-locked pets

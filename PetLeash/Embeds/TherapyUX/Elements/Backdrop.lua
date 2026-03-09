@@ -7,10 +7,10 @@
 
 ---@type addonTbl
 local T = select(2, ...)
-local LSM = T.UX.LSM
+local LSM = T.TherapyUX.LSM
 
 ---@class TherapyUX
-local UX = T.UX
+local UX = T.TherapyUX
 
 ---@class TherapyBackdropMixin: Frame
 local TherapyBackdropMixin = {}

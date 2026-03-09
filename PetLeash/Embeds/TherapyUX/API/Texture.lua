@@ -9,10 +9,10 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.UX
+local lib = T.lib
 
 ---@class TuxTexture: Texture, TuxLayout
-local texture_api = CreateFromMixins(UX.layout_api)
+local texture_api = CreateFromMixins(lib.layout_api)
 do
     ---@param self Texture
     function texture_api:DisableSharpening()
@@ -21,4 +21,4 @@ do
     end
 end
 
-UX.texture_api = texture_api
+lib.texture_api = texture_api

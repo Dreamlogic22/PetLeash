@@ -4,17 +4,17 @@
 
 ----------------------------------------------------------------------]]
 
----@type addonTbl
+---@class addonTbl
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.UX
+local lib = T.lib
 
 local baseFrame = CreateFrame("Frame")
 local createTexture = baseFrame.CreateTexture
 
 ---@class TuxFrame: Frame, TuxBackdrop, TuxLayout
-local frame_api = CreateFromMixins(UX.backdrop_api, UX.layout_api)
+local frame_api = CreateFromMixins(lib.backdrop_api, lib.layout_api)
 do
     ---@generic Tp
     ---@param name? string
@@ -23,7 +23,7 @@ do
     ---@return TuxTexture|Tp
     function frame_api:CreateTexture(name, drawLayer, templateName)
         local texture = createTexture(self, name, drawLayer, templateName)
-        return Mixin(texture, UX.texture_api)
+        return Mixin(texture, lib.texture_api)
     end
 end
 
@@ -39,5 +39,3 @@ function T.ConstructFrame(name, parent, template, id)
 
     return frame
 end
-
-UX.frame_api = frame_api

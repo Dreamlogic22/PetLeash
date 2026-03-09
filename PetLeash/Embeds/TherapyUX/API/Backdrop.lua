@@ -7,10 +7,10 @@
 
 ---@type addonTbl
 local T = select(2, ...)
-local LSM = T.UX.LSM
+local LSM = T.lib.LSM
 
 ---@class TherapyUX
-local UX = T.UX
+local lib = T.lib
 
 ---@class TuxBackdrop: Frame
 local backdrop_api = {}
@@ -132,4 +132,4 @@ do
     end
 end
 
-UX.backdrop_api = backdrop_api
+lib.backdrop_api = backdrop_api

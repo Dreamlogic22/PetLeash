@@ -9,7 +9,7 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.UX
+local lib = T.lib
 
 ---@class TuxLayout: Frame | Texture
 local layout_api = {}
@@ -61,4 +61,4 @@ do
     end
 end
 
-UX.layout_api = layout_api
+lib.layout_api = layout_api

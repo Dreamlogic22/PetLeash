@@ -39,7 +39,7 @@ do
     end
 
     ---@class PetLeashOptionsButton: Button
-    local Button = CreateFrame("Button", "PetLeashOptionsButton", UIParent)
+    local Button = T.ConstructButton() -- CreateFrame("Button", "PetLeashOptionsButton", UIParent)
     Button.SelectingPets = false
 
     Button:SetSize(48, 48)

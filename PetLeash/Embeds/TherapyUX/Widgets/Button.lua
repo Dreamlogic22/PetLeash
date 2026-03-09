@@ -9,7 +9,7 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.UX
+local lib = T.lib
 
 local baseButton = CreateFrame("Button")
 
@@ -18,24 +18,24 @@ local getNormalTexture = baseButton.GetNormalTexture
 local getPushedTexture = baseButton.GetPushedTexture
 
 ---@class TuxButton: Button, TuxLayout, TuxTexture
-local button_api = CreateFromMixins(UX.layout_api, UX.texture_api)
+local button_api = CreateFromMixins(lib.layout_api, lib.texture_api)
 do
     ---@return TuxTexture
     function button_api:GetHighlightTexture()
         local texture = getHighlightTexture(self)
-        return Mixin(texture, UX.texture_api)
+        return Mixin(texture, lib.texture_api)
     end
 
     ---@return TuxTexture
     function button_api:GetNormalTexture()
         local texture = getNormalTexture(self)
-        return Mixin(texture, UX.texture_api)
+        return Mixin(texture, lib.texture_api)
     end
 
     ---@return TuxTexture
     function button_api:GetPushedTexture()
         local texture = getPushedTexture(self)
-        return Mixin(texture, UX.texture_api)
+        return Mixin(texture, lib.texture_api)
     end
 
     ---@param button TuxButton
@@ -79,5 +79,3 @@ function T.ConstructButton(name, parent, template, id)
 
     return button
 end
-
-UX.button_api = button_api

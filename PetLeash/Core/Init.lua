@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.01 (March 8, 2026)
+    PetLeash 4.01 (March 9, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -14,7 +14,7 @@ T.Locale = {}
 
 -- Load database
 do
-    local version = C_AddOns.GetAddOnMetadata(Name, "Version")
+    local Version = C_AddOns.GetAddOnMetadata(Name, "Version")
 
     ---@param target table
     ---@param defaults table
@@ -42,8 +42,8 @@ do
 
     PetLeashDB = merge(PetLeashDB, T.db)
 
-    if not PetLeashDB.version or PetLeashDB.version ~= version then
-        PetLeashDB.version = version
+    if not PetLeashDB.version or PetLeashDB.version ~= Version then
+        PetLeashDB.version = Version
     end
 
     T.db = PetLeashDB

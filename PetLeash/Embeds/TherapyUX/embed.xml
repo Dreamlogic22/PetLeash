@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="Core/Init.lua" />
-    <Script file="Core/Media.lua" />
-    <Script file="API/Backdrop.lua" />
-    <Script file="API/Layout.lua" />
-    <Script file="API/Texture.lua" />
+    <Script file="Init.lua" />
+    <Script file="Media.lua" />
+    <Script file="Elements/Backdrop.lua" />
+    <Script file="Elements/Layout.lua" />
+    <Script file="Elements/Texture.lua" />
     <Script file="Widgets/Button.lua" />
     <Script file="Widgets/Frame.lua" />
 </Ui>

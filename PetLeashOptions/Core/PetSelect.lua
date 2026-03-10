@@ -74,6 +74,10 @@ local function ToggleSelectionMode()
         OptionsDialog:Hide()
     end
 
+    if GameTooltip:IsShown() then
+        OptionsButton:GetScript("OnEnter")(OptionsButton)
+    end
+
     -- Hack to avoid PetJournal_UpdatePetList
 	SetDefaultFilters()
 end

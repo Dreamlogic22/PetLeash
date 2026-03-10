@@ -5,26 +5,17 @@
 
 --------------------------------------------------------------------]]
 
----@class PetLeash
-local T = select(2, ...)
+---@class PetLeashOptions
+local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
 local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
+local SetDefaultFilters = C_PetJournal.SetDefaultFilters
 
-local CreateCheckBox = T.CreateCheckBox
+local OptionsButton = PetLeashOptionsButton
+local OptionsDialog = PetLeashOptionsDialog
 
----@param petId number
-local function IsSelected(petId)
-    if not petId or not T.db.pets then
-        return false
-    end
-
-    for _, id in ipairs(T.db.pets) do
-        if id == petId then return true end
-    end
-
-    return false
-end
+local SelectingPets = false
 
 ---@param petId number
 local function AddPet(petId)
@@ -47,6 +38,19 @@ local function AddPet(petId)
 end
 
 ---@param petId number
+local function IsSelected(petId)
+    if not petId or not T.db.pets then
+        return false
+    end
+
+    for _, id in ipairs(T.db.pets) do
+        if id == petId then return true end
+    end
+
+    return false
+end
+
+---@param petId number
 local function RemovePet(petId)
     if not petId or not T.db.pets then return end
 
@@ -62,21 +66,64 @@ local function RemovePet(petId)
     end
 end
 
-local AddCheckbox
+local function ToggleSelectionMode()
+	local active = SelectingPets
+	OptionsButton:DesaturateHierarchy(active and 1 or 0)
+
+    if OptionsDialog:IsVisible() then
+        OptionsDialog:Hide()
+    end
+
+    -- Hack to avoid PetJournal_UpdatePetList
+	SetDefaultFilters()
+end
+
 do
-    ---@class PetJournalButton: Button
-    ---@field petID number
-    ---@field owned boolean
+    OptionsButton:HookScript("OnClick", function(_, button)
+		if button == "LeftButton" then
+			SelectingPets = not SelectingPets
+			ToggleSelectionMode()
+		end
 
-    ---@param button PetJournalButton
-    AddCheckbox = function(button)
-        if not button.petID then return end
+		if button == "RightButton" then
+			if SelectingPets then
+				SelectingPets = false
+				ToggleSelectionMode()
+			end
 
+			OptionsDialog:SetShown(not OptionsDialog:IsVisible())
+		end
+	end)
+
+    OptionsButton:SetScript("OnEnter", function(self)
+        if not GameTooltip:IsForbidden() then
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
+            GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
+            GameTooltip:AddLine(SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
+
+            if not SelectingPets then
+                GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
+            end
+
+            GameTooltip:Show()
+        end
+    end)
+
+    OptionsButton:SetScript("OnHide", function()
+        if SelectingPets then
+            SelectingPets = false
+			ToggleSelectionMode()
+        end
+    end)
+end
+
+do
+    hooksecurefunc("PetJournal_InitPetButton", function(button)
         if not button.PetLeashCheckbox then
-            button.PetLeashCheckbox = CreateCheckBox(button, nil, L.ADD_OR_REMOVE_PET)
-            button.PetLeashCheckbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
+            local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
+            Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 
-            button.PetLeashCheckbox:HookScript("OnClick", function(self)
+            Checkbox:HookScript("OnClick", function(self)
                 local id = button.petID
                 if self:GetChecked() then
                     AddPet(id)
@@ -85,88 +132,41 @@ do
                 end
             end)
 
-            local IsChecked = IsSelected(button.petID)
-            button.PetLeashCheckbox:SetChecked(IsChecked)
-            if IsChecked then
-                button.PetLeashCheckbox.CheckedTexture:Show()
-            else
-                button.PetLeashCheckbox.CheckedTexture:Hide()
+            button.PetLeashCheckbox = Checkbox
+        end
+
+        local IsChecked = IsSelected(button.petID)
+        button.PetLeashCheckbox:SetChecked(IsChecked)
+        if IsChecked then
+            button.PetLeashCheckbox.CheckedTexture:Show()
+        else
+            button.PetLeashCheckbox.CheckedTexture:Hide()
+        end
+    end)
+
+    -- Hide checkbox for unowned & faction-locked pets
+    hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
+        frame:ForEachFrame(function(button)
+            if not SelectingPets then
+                if button.PetLeashCheckbox:IsVisible() then
+                    button.PetLeashCheckbox:Hide()
+                end
+
+                return
             end
-        end
-    end
-end
 
-local SetDefaultFilters = C_PetJournal.SetDefaultFilters
+            button.PetLeashCheckbox:SetShown(button.owned)
 
-local function LoadOptions()
-    if PlayerIsInCombat() then
-        T.Print(L.OPTIONS_NOT_IN_COMBAT)
-        EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", LoadOptions)
-        return
-    end
+            if button.petID then
+                local _, error = GetPetSummonInfo(button.petID)
+                local neverUsable = error == Enum.PetJournalError.InvalidFaction
 
-    local loaded, reason = C_AddOns.LoadAddOn("PetLeashOptions")
-    if not loaded then
-        T.Print(L.OPTIONS_LOAD_ERROR, reason or UNKNOWN)
-        return
-    end
-end
-
-do
-    ---@param self PetLeashOptionsButton
-    ---@param button MouseButton
-    local function OnClick(self, button)
-        PlaySound(856)
-
-        if button == "LeftButton" then
-            self.SelectingPets = not self.SelectingPets
-
-            self:ToggleSelectionMode()
-
-            -- hack to avoid PetJournal_UpdatePetList
-            SetDefaultFilters()
-        end
-
-        if button == "RightButton" and not self.SelectingPets then
-            LoadOptions()
-        end
-    end
-
-    ---@class PetLeashOptionsButton: Button
-    local Button = CreateFrame("Button", "PetLeashOptionsButton", PetJournal)
-    Button:SetSize(48, 48)
-    Button:SetFrameStrata("HIGH")
-    Button:SetFrameLevel(10)
-    Button:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
-
-    T.SetupButtonTextures(Button, Media.Textures.Paw)
-
-    Button:RegisterForClicks("AnyDown")
-
-    Button:SetScript("OnClick", OnClick)
-
-    Button:SetScript("OnEnter", function(self)
-        if not GameTooltip:IsForbidden() then
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
-            GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
-            GameTooltip:AddLine(self.SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
-            GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
-            GameTooltip:Show()
-        end
+                if neverUsable then
+                    button.PetLeashCheckbox:Hide()
+                else
+                    button.PetLeashCheckbox:Show()
+                end
+            end
+        end)
     end)
-
-    Button:SetScript("OnHide", function(self)
-        if self.SelectingPets then
-            self.SelectingPets = false
-            self:ToggleSelectionMode()
-        end
-    end)
-
-    PetLeashOptionsButton = Button
 end
-
-local function OnPetJournalLoad()
-    
-end
-
-EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)

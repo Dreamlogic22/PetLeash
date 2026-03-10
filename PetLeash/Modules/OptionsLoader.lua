@@ -6,7 +6,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
-local L, Media = T.Locale, T.Media
+local L= T.Locale
 
 local function LoadOptions()
     if PlayerIsInCombat() then
@@ -23,38 +23,7 @@ local function LoadOptions()
 end
 
 local function OnPetJournalLoad()
-    ---@class PetLeashOptionsButton: TherapyButtonMixin
-    local Button = T.CreateButton("PetLeashOptionsButton", PetJournal)
-    Button:SetSize(48, 48)
-    Button:SetFrameStrata("HIGH")
-    Button:SetFrameLevel(10)
-    Button:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
-    Button:SetupTextures(Media.Textures.PetJournalWidget)
-    Button:RegisterForClicks("AnyDown")
-
-    ---@param button MouseButton
-    Button:SetScript("OnClick", function(_, button)
-        PlaySound(856)
-        Button.LastClicked = button
-
-        LoadOptions()
-    end)
-
-    Button:SetScript("OnEnter", function(self)
-        if not GameTooltip:IsForbidden() then
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
-            GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
-            GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
-            GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
-            GameTooltip:Show()
-        end
-    end)
-
-    Button:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
-
-    PetLeashOptionsButton = Button
+    LoadOptions()
 end
 
 EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)

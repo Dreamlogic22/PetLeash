@@ -8,7 +8,7 @@
 local C, T = select(2, ...), PetLeash
 local Media = T.Media
 
-local CreateCheckBox
+local CreateCheckbox
 do
     ---@param self PetLeashCheckbox
     local function HandleCheckedTexture(self)
@@ -97,5 +97,5 @@ do
         return Checkbox
     end
 
-    C.CreateCheckbox = CreateCheckBox
+    C.CreateCheckbox = CreateCheckbox
 end

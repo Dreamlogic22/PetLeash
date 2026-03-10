@@ -1,6 +1,7 @@
 --[[--------------------------------------------------------------------
 
-    Settings panel.
+    Primary settings panel opened by right-clicking the icon attached
+    to the PetJournal.
 
 ----------------------------------------------------------------------]]
 
@@ -12,7 +13,7 @@ do
     ---@class PetLeashOptionsDialog: TherapyFrameMixin
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
     Dialog:SetSize(680, 580)
-    Dialog:SetPoint("CENTER")
+    Dialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
     Dialog:SetClampedToScreen(true)
     Dialog:SetFrameLevel(500)
     Dialog:SetFrameStrata("DIALOG")

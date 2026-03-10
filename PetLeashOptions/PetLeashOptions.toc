@@ -8,12 +8,12 @@
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Core\Init.lua
-Core\Main.lua
 
 Widgets\Elements\CheckBox.lua
+Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 
-Modules\PetSelect.lua
+Core\PetSelect.lua
 
 # Widgets\Templates.xml
 # Widgets\CheckBox.lua

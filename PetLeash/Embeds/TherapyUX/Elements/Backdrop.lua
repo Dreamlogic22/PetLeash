@@ -9,6 +9,9 @@
 local T = select(2, ...)
 local Media = T.Media
 
+-- TODO: fix this once we get this out of a library and into an addon
+local BackdropTexture = [[Interface\Buttons\WHITE8X8]]
+
 ---@class TherapyUX
 local UX = T.TherapyUX
 
@@ -28,7 +31,7 @@ do
         local borderR, borderG, borderB = 1, 1, 1
         local backdropR, backdropG, backdropB = 0.11, 0.11, 0.11
 
-        Backdrop:SetBackdrop({ bgFile = Media.Textures.Blank })
+        Backdrop:SetBackdrop({ bgFile = BackdropTexture })
         Backdrop:SetBackdropColor(backdropR, backdropG, backdropB, transparent and 0.75 or 1)
 
         Backdrop.BorderTop = Backdrop:CreateTexture(nil, "BORDER", nil, 1)

@@ -41,8 +41,6 @@ do
         CloseButton.Texture:SetSize(32, 32)
         CloseButton.Texture:DisableSharpening()
 
-        DevTool:AddData(CloseButton.Texture)
-
         CloseButton.Highlight = CloseButton:CreateTexture(nil, "HIGHLIGHT")
         CloseButton.Highlight:SetTexture(Media.Textures.CloseButton)
         CloseButton.Highlight:SetPoint("CENTER", CloseButton, "CENTER", 0, 0)

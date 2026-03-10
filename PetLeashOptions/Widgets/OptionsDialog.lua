@@ -43,5 +43,11 @@ do
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
     Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
+    Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
+    Dialog.General:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -50)
+
+    Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
+    Dialog.PetCards:SetPoint("BOTTOMLEFT", Dialog, "BOTTOMLEFT", 20, 30)
+
     PetLeashOptionsDialog = Dialog
 end

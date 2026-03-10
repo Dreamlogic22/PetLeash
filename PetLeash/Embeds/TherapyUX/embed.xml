@@ -3,6 +3,5 @@
     <Script file="Elements/Backdrop.lua" />
     <Script file="Elements/Layout.lua" />
     <Script file="Elements/Texture.lua" />
-    <Script file="Widgets/Button.lua" />
-    <Script file="Widgets/Frame.lua" />
+    <Script file="Frames.lua" />
 </Ui>

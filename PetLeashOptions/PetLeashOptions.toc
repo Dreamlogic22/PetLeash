@@ -10,6 +10,7 @@
 Core\Init.lua
 
 Widgets\Elements\CheckBox.lua
+Widgets\Elements\CloseButton.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

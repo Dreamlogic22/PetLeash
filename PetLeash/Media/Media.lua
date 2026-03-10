@@ -15,13 +15,13 @@ T.Media = {
         Background = [[Interface\AddOns\PetLeash\Media\Textures\Background]],
         Blank = [[Interface\AddOns\PetLeash\Embeds\TherapyUX\Media\Blank]],
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]],
+        CloseButton = [[Interface\AddOns\PetLeash\Media\Textures\CloseButton]],
         Glow = [[Interface\AddOns\PetLeash\Embeds\TherapyUX\Media\Glow]],
         PetJournalWidget = [[Interface\AddOns\PetLeash\Media\Textures\Paw.png]]
     }
 }
 
 --     Textures = {
---         CloseButton = [[Interface\AddOns\PetLeash\Media\Textures\CloseButton]],
 --         Slider = [[Interface\AddOns\PetLeash\Media\Textures\Slider.png]]
 --     }
 -- }

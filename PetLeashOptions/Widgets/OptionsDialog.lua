@@ -37,11 +37,11 @@ do
     local Version = Dialog:CreateFontString(nil, "OVERLAY")
     Version:SetFont(Media.Fonts.Bold, 12, "OUTLINE")
     Version:SetTextColor(Media.Colors.Background:GetRGB())
-    Version:SetText(format(L.VERSION, 4.01))
+    Version:SetText(format(L.VERSION, C.Version))
     Version:SetPoint("BOTTOMRIGHT", Dialog, "BOTTOMRIGHT", -7, 7)
 
-    -- Dialog.CloseButton = CreateCloseButton(Dialog)
-    -- Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
+    Dialog.CloseButton = C.CreateCloseButton(Dialog)
+    Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
     PetLeashOptionsDialog = Dialog
 end

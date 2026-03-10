@@ -1,7 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Therapy UX modifications for Blizzard button and check button
-    widgets.
+    Therapy UX modifications for various frame types.
 
 ----------------------------------------------------------------------]]
 
@@ -12,31 +11,41 @@ local T = select(2, ...)
 local UX = T.TherapyUX
 
 local baseButton = CreateFrame("Button")
+local baseFrame = CreateFrame("Frame")
 
+local createTexture = baseFrame.CreateTexture
 local getHighlightTexture = baseButton.GetHighlightTexture
 local getNormalTexture = baseButton.GetNormalTexture
 local getPushedTexture = baseButton.GetPushedTexture
 
----@class TherapyButtonMixin: Button, TherapyLayoutMixin, TherapyTextureMixin
-local TherapyButtonMixin = CreateFromMixins(UX.TherapyLayoutMixin, UX.TherapyTextureMixin)
+---@class TherapyFrameMixin: Frame, Button, TherapyBackdropMixin, TherapyLayoutMixin
+local TherapyFrameMixin = CreateFromMixins(UX.TherapyBackdropMixin, UX.TherapyLayoutMixin)
 do
+    ---@param name? string
+    ---@param drawLayer? DrawLayer
+    ---@param templateName Template?
     ---@return TherapyTextureMixin
-    function TherapyButtonMixin:GetHighlightTexture()
+    function TherapyFrameMixin:CreateTexture(name, drawLayer, templateName)
+        return Mixin(createTexture(self, name, drawLayer, templateName), UX.TherapyTextureMixin)
+    end
+
+    ---@return TherapyTextureMixin
+    function TherapyFrameMixin:GetHighlightTexture()
         return Mixin(getHighlightTexture(self), UX.TherapyTextureMixin)
     end
 
     ---@return TherapyTextureMixin
-    function TherapyButtonMixin:GetNormalTexture()
+    function TherapyFrameMixin:GetNormalTexture()
         return Mixin(getNormalTexture(self), UX.TherapyTextureMixin)
     end
 
     ---@return TherapyTextureMixin
-    function TherapyButtonMixin:GetPushedTexture()
+    function TherapyFrameMixin:GetPushedTexture()
         return Mixin(getPushedTexture(self), UX.TherapyTextureMixin)
     end
 
     ---@param texture TextureAsset
-    function TherapyButtonMixin:SetupTextures(texture)
+    function TherapyFrameMixin:SetupTextures(texture)
         self:SetNormalTexture(texture)
         self:SetHighlightTexture(texture)
         self:SetPushedTexture(texture)
@@ -63,13 +72,13 @@ do
     end
 end
 
----@generic T
----@param name? string
----@param parent? any
----@param template? `T` | Template
----@param id? number
----@return TherapyButton|T
-function T.CreateButton(name, parent, template, id)
-    ---@class TherapyButton
-    return Mixin(CreateFrame("Button", name, parent, template, id), TherapyButtonMixin)
+---@generic T, Tp
+---@param frameType `T`
+---@param name string?
+---@param parent Frame?
+---@param template? `Tp`
+---@param id number?
+---@return TherapyFrameMixin|T|Tp
+function T.CreateFrame(frameType, name, parent, template, id)
+    return Mixin(CreateFrame(frameType, name, parent, template, id), TherapyFrameMixin)
 end

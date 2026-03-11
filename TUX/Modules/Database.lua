@@ -1,3 +1,11 @@
+--[[--------------------------------------------------------------------
+
+    Therapy UX method for merging saved variables with defaults and
+    storing the resulting table in a database attached to the parent
+    namespace as "db".
+
+--------------------------------------------------------------------]]
+
 ---@type string
 local Name = ...
 ---@class addonTbl

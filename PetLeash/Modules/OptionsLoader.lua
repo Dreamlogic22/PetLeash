@@ -6,7 +6,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
-local L= T.Locale
+local L = T.Locale
 
 local function LoadOptions()
     if PlayerIsInCombat() then

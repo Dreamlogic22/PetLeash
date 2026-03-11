@@ -4,6 +4,10 @@
 
 ----------------------------------------------------------------------]]
 
+---@type string
+local Name = ...
 ---@class addonTbl
 local T = select(2, ...)
-T.TUX = {}
+T.UX = {}
+
+T.Title = C_AddOns.GetAddOnMetadata(Name, "Title")

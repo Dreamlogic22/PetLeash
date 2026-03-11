@@ -22,4 +22,4 @@ Media\Media.lua
 
 Modules\SummonPet.lua
 Modules\Overrides.lua
-# Modules\OptionsLoader.lua
+Modules\OptionsLoader.lua

@@ -34,10 +34,6 @@ function T.Enable()
     RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
 end
 
-function T.Print(...)
-    print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
-end
-
 ---@param value number
 function T.UpdateThrottle(value)
     T.db.throttle = value or 3
@@ -45,10 +41,8 @@ function T.UpdateThrottle(value)
 end
 
 local function OnInitialize()
-    -- Reloading or logging in during combat
-    if InCombatLockdown() then
-        EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnInitialize)
-    end
+    ---@class Settings
+    PetLeashDB = {}
 
     T.InitializeDatabase("PetLeashDB")
 

@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 
-    Bootleg data broker that handles pet selection and showing the
-    configuration dialog.
+    Button that handles pet selection and showing the configuration
+    dialog.
 
 ----------------------------------------------------------------------]]
 

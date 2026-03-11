@@ -8,7 +8,7 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.TherapyUX
+local UX = T.UX
 
 local baseButton = CreateFrame("Button")
 local baseFrame = CreateFrame("Frame")

@@ -61,7 +61,7 @@ local function RemovePet(petId)
         end
     end
 
-    if not T.db.pets or #T.db.pet == 0 then
+    if not T.db.pets or #T.db.pets == 0 then
         T.Disable()
     end
 end

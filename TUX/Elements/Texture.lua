@@ -9,7 +9,7 @@
 local T = select(2, ...)
 
 ---@class TherapyUX
-local UX = T.TherapyUX
+local UX = T.UX
 
 ---@class TherapyTextureMixin: Texture, TherapyLayoutMixin
 local TherapyTextureMixin = CreateFromMixins(UX.TherapyLayoutMixin)

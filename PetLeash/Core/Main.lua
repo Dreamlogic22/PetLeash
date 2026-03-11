@@ -50,6 +50,8 @@ local function OnInitialize()
         EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_REGEN_ENABLED", OnInitialize)
     end
 
+    T.InitializeDatabase("PetLeashDB")
+
     if T.db.pets and #T.db.pets > 0 then
         T.Enable()
     else

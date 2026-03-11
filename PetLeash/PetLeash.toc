@@ -9,6 +9,8 @@
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
+..\TUX\Embed.xml
+
 Core\Settings.lua
 Core\Init.lua
 

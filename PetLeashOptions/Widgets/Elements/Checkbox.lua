@@ -10,11 +10,6 @@ local Media = T.Media
 
 local CreateCheckbox
 do
-    ---@param self PetLeashCheckbox
-    local function HandleCheckedTexture(self)
-        self.CheckedTexture:SetShown(self:IsVisible() and self:GetChecked())
-    end
-
     ---@param parent Frame
     ---@param label string?
     ---@param tooltipText string?
@@ -24,6 +19,7 @@ do
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText
 
+        ---@type TherapyTextureMixin
         Checkbox.Border = Checkbox:CreateTexture(nil, "ARTWORK")
         Checkbox.Border:SetTexture(Media.Textures.Checkbox)
         Checkbox.Border:SetTexCoord(0, 0.5, 0, 0.5)
@@ -31,6 +27,7 @@ do
         Checkbox.Border:SetSize(32, 32)
         Checkbox.Border:DisableSharpening()
 
+        ---@type TherapyTextureMixin
         Checkbox.CheckedTexture = Checkbox:CreateTexture(nil, "OVERLAY")
         Checkbox.CheckedTexture:SetTexture(Media.Textures.Checkbox)
         Checkbox.CheckedTexture:SetTexCoord(0.5, 0.75, 0.5, 0.75)
@@ -40,6 +37,7 @@ do
 
         Checkbox.CheckedTexture:Hide()
 
+        ---@type TherapyTextureMixin
         Checkbox.Highlight = Checkbox:CreateTexture(nil, "HIGHLIGHT")
         Checkbox.Highlight:SetTexture(Media.Textures.Checkbox)
         Checkbox.Highlight:SetTexCoord(0, 0.5, 0.5, 1)
@@ -55,14 +53,21 @@ do
         Checkbox.Label:SetText(label)
         Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
+        ---@param self PetLeashCheckbox
+        function Checkbox:HandleCheckedTexture()
+            if self:IsVisible() then
+                self.CheckedTexture:SetShown(self:GetChecked())
+            end
+        end
+
         Checkbox:SetScript("OnClick", function(self)
             if self:GetChecked() then
-                self.CheckedTexture:Show()
                 PlaySound(857)
             else
-                self.CheckedTexture:Hide()
                 PlaySound(856)
             end
+
+            self:HandleCheckedTexture()
         end)
 
         Checkbox:SetScript("OnDisable", function(self)
@@ -86,13 +91,17 @@ do
             end
         end)
 
-        Checkbox:SetScript("OnHide", HandleCheckedTexture)
+        Checkbox:SetScript("OnHide", function(self)
+            self:HandleCheckedTexture()
+        end)
 
         Checkbox:SetScript("OnLeave", function()
             GameTooltip:Hide()
         end)
 
-        Checkbox:SetScript("OnShow", HandleCheckedTexture)
+        Checkbox:SetScript("OnShow", function(self)
+            self:HandleCheckedTexture()
+        end)
 
         return Checkbox
     end

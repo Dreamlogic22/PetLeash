@@ -13,6 +13,9 @@ Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Section.lua
 
+Widgets\Controls\Base.lua
+Widgets\Controls\Toggle.lua
+
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

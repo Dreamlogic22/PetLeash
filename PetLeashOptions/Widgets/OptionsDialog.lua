@@ -9,6 +9,8 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
+local PetLeashToggleMixin = C.PetLeastToggleMixin
+
 do
     ---@class PetLeashOptionsDialog: TherapyFrameMixin
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -43,11 +45,22 @@ do
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
     Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
+    -- General
+
     Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
     Dialog.General:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -50)
 
+    local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
+    Enable = Mixin(Enable, PetLeashToggleMixin)
+    Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
+    Enable:Bind("enable", function(value)
+        print(value)
+    end)
+
     Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
     Dialog.PetCards:SetPoint("BOTTOMLEFT", Dialog, "BOTTOMLEFT", 20, 30)
+
+    -- todo: hide and restore (if opened) in combat
 
     PetLeashOptionsDialog = Dialog
 end

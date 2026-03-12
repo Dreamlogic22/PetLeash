@@ -35,12 +35,14 @@ do
         local CloseButton = T.CreateFrame("Button", nil, parent)
         CloseButton:SetSize(24, 24)
 
+        ---@type TherapyTextureMixin
         CloseButton.Texture = CloseButton:CreateTexture(nil, "ARTWORK")
         CloseButton.Texture:SetTexture(Media.Textures.CloseButton)
         CloseButton.Texture:SetPoint("CENTER", CloseButton, "CENTER", 0, 0)
         CloseButton.Texture:SetSize(32, 32)
         CloseButton.Texture:DisableSharpening()
 
+        ---@type TherapyTextureMixin
         CloseButton.Highlight = CloseButton:CreateTexture(nil, "HIGHLIGHT")
         CloseButton.Highlight:SetTexture(Media.Textures.CloseButton)
         CloseButton.Highlight:SetPoint("CENTER", CloseButton, "CENTER", 0, 0)

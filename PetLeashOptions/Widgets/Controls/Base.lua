@@ -6,23 +6,23 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
+local C = select(2, ...)
 
 ---@class PetLeashSettingsMixin: PetLeashCheckbox
 local PetLeashSettingsMixin = {}
 do
-    ---@param dbKey string
+    ---@param path PetLeashDB
     ---@param onValueChanged function?
-    function PetLeashSettingsMixin:Bind(dbKey, onValueChanged)
-        self.dbKey = dbKey
+    function PetLeashSettingsMixin:Bind(path, onValueChanged)
+        self.path = path
         self.onValueChanged = onValueChanged
-        self:SetValue(C.db[dbKey])
+        self:SetValue(path)
         self:SetScriptHandler()
     end
 
     function PetLeashSettingsMixin:CommitChange(value)
-        if self.dbKey then
-            C.db[self.dbKey] = value
+        if self.path then
+            C.db[self.path] = value
         end
 
         if self.onValueChanged then
@@ -31,7 +31,7 @@ do
     end
 
     function PetLeashSettingsMixin:SetScriptHandler()
-        error("Widget must implement :SetScriptHandler")
+        error("Control must implement :SetScriptHandler")
     end
 
     function PetLeashSettingsMixin:SetValue(value)

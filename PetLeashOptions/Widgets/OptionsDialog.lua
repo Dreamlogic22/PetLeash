@@ -50,15 +50,41 @@ do
     Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
     Dialog.General:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -50)
 
+    -- create a function in the mixins for CreateSettingsChecbox and attach it to the group
+
     local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
     Enable = Mixin(Enable, PetLeashToggleMixin)
     Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
-    Enable:Bind("enable", function(value)
+    Enable:Bind(C.db.enable, function(value)
         print(value)
     end)
 
+    Dialog.Enable = Enable
+
+    local AutoSwitch = C.CreateCheckbox(PetLeashOptionsDialog.General, L.OPTIONS_ENABLE_AUTO_SWITCH)
+    AutoSwitch = Mixin(AutoSwitch, PetLeashToggleMixin)
+    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
+    AutoSwitch:Bind(C.db.autoSwitch, function(value)
+        print(value)
+    end)
+
+    -- AutoSwitch:HookScript("OnClick", function(self)
+    --     local value = self:GetChecked()
+    --     C.db.autoSwitch = value
+
+    --     if not value or NotEnoughPets() then
+    --         Dialog.AutoSwitchInterval:Disable()
+    --     else
+    --         Dialog.AutoSwitchInterval:Enable()
+    --     end
+    -- end)
+
+    Dialog.AutoSwitch = AutoSwitch
+
     Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
     Dialog.PetCards:SetPoint("BOTTOMLEFT", Dialog, "BOTTOMLEFT", 20, 30)
+
+    -- todo: disabling logic that is not manual
 
     -- todo: hide and restore (if opened) in combat
 

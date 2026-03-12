@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
+local C = select(2, ...)
 
 ---@class PetLeashToggleMixin: PetLeashSettingsMixin
 local PetLeashToggleMixin = CreateFromMixins(C.PetLeashSettingsMixin)

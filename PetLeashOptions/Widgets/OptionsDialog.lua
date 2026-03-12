@@ -69,7 +69,7 @@ do
         print(value)
     end)
 
-    local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL)
+    local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL, 1, 30, 1)
     AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
 
     -- AutoSwitch:HookScript("OnClick", function(self)

@@ -10,12 +10,25 @@ local Media = T.Media
 
 local CreateSlider
 do
+    ---@param self PetLeashSliderControl
+    local function StepOnClick(self)
+        PlaySound(229883)
+
+        if self.Delta then
+            ---@type PetLeashSlider
+            local parent = self:GetParent()
+            parent:SetValueByDelta(self.Delta)
+        end
+    end
 
     ---@param parent Frame
     ---@param label string
+    ---@param min number?
+    ---@param max number?
+    ---@param step number?
     ---@return PetLeashSlider
-    CreateSlider = function(parent, label)
-        ---@class PetLeashSlider: Slider
+    CreateSlider = function(parent, label, min, max, step)
+        ---@class PetLeashSlider: Frame
         local Container = CreateFrame("Frame", nil, parent)
         Container:SetSize(386, 24)
 
@@ -53,30 +66,32 @@ do
         Slider.Thumb:SetSize(12, 12)
         Slider:SetThumbTexture(Slider.Thumb)
 
-        Slider.ThumbNormal = Slider:CreateTexture(nil, "OVERLAY")
-        Slider.ThumbNormal:SetTexture(Media.Textures.Slider)
-        Slider.ThumbNormal:SetTexCoord(0, 0.5, 0, 0.25)
-        Slider.ThumbNormal:SetSize(32, 32)
-        Slider.ThumbNormal:SetPoint("CENTER", Slider.Thumb)
+        Slider.ThumbTexture = Slider:CreateTexture(nil, "OVERLAY")
+        Slider.ThumbTexture:SetTexture(Media.Textures.Slider)
+        Slider.ThumbTexture:SetTexCoord(0, 0.5, 0, 0.25)
+        Slider.ThumbTexture:SetSize(32, 32)
+        Slider.ThumbTexture:SetPoint("CENTER", Slider.Thumb)
 
         Slider.ThumbHighlight = Slider:CreateTexture(nil, "HIGHLIGHT")
         Slider.ThumbHighlight:SetTexture(Media.Textures.Slider)
         Slider.ThumbHighlight:SetTexCoord(0, 0.5, 0.25, 0.5)
         Slider.ThumbHighlight:SetSize(32, 32)
-        Slider.ThumbHighlight:SetPoint("CENTER", Slider.ThumbNormal, "CENTER")
+        Slider.ThumbHighlight:SetPoint("CENTER", Slider.ThumbTexture, "CENTER")
         Slider.ThumbHighlight:SetBlendMode("ADD")
         Slider.ThumbHighlight:SetVertexColor(0.5, 0.5, 0.5)
 
-        Slider:SetMinMaxValues(0, 100)
-        Slider:SetValueStep(10)
+        Slider:SetMinMaxValues(min or 0, max or 100)
+        Slider:SetValueStep(step or 10)
         Slider:SetObeyStepOnDrag(true)
         Slider:SetValue(0)
 
         Container.Slider = Slider
 
+        ---@class PetLeashSliderControl: Button
         local Forward = CreateFrame("Button", nil, Container)
         Forward:SetSize(16, 24)
         Forward:SetPoint("LEFT", Container.Slider, "RIGHT", 4, 0)
+        Forward.Delta = step
 
         Forward.Texture = Forward:CreateTexture(nil, "ARTWORK")
         Forward.Texture:SetTexture(Media.Textures.Slider)
@@ -94,9 +109,11 @@ do
 
         Container.Forward = Forward
 
+        ---@class PetLeashSliderControl: Button
         local Back = CreateFrame("Button", nil, Container)
         Back:SetSize(16, 24)
         Back:SetPoint("RIGHT", Container.Slider, "LEFT", -4, 0)
+        Back.Delta = -step
 
         Back.Texture = Back:CreateTexture(nil, "ARTWORK")
         Back.Texture:SetTexture(Media.Textures.Slider)
@@ -128,177 +145,61 @@ do
         ValueText:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
         ValueText:SetTextColor(1, 0.82, 0)
         ValueText:SetPoint("LEFT", Container.Forward, "RIGHT", 6, 0)
-        ValueText:SetText(10)
+        ValueText:SetText(0)
 
-        Container.ValueText = ValueText
+        Slider.ValueText = ValueText
+
+        Slider:SetScript("OnValueChanged", function(self, value)
+            if value == self.PreviousValue then return end
+
+            self.PreviousValue = value
+            self.ThumbTexture:SetPoint("CENTER", self.Thumb, "CENTER", 0, 0)
+
+            self.ValueText:SetText(value)
+        end)
+
+        Back:SetScript("OnClick", StepOnClick)
+        Forward:SetScript("OnClick", StepOnClick)
+
+        function Container:Disable()
+            self.Slider:Disable()
+            self.Slider.ThumbTexture:SetTexCoord(0.5, 1, 0, 0.25)
+            self.Slider.ThumbHighlight:Hide()
+
+            self.Slider:UnlockHighlight()
+
+            self.Back:Disable()
+            self.Back.Texture:SetTexCoord(0.25, 0.5, 0.5, 0.625)
+
+            self.Forward:Disable()
+            self.Forward.Texture:SetTexCoord(0.25, 0.5, 0.625, 0.75)
+
+            self.Label:SetTextColor(0.5, 0.5, 0.5)
+            self.Slider.ValueText:SetTextColor(0.5, 0.5, 0.5)
+        end
+
+        function Container:Enable()
+            self.Slider:Enable()
+            self.Slider.ThumbTexture:SetTexCoord(0, 0.5, 0, 0.25)
+
+            self.Back:Enable()
+            self.Back.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
+
+            self.Forward:Enable()
+            self.Forward.Texture:SetTexCoord(0, 0.25, 0.625, 0.75)
+
+            self.Label:SetTextColor(1, 1, 1)
+            self.Slider.ValueText:SetTextColor(1, 0.82, 0)
+        end
+
+        ---@param delta number
+        function Container:SetValueByDelta(delta)
+            local value = self.Slider:GetValue()
+            self.Slider:SetValue(value + delta)
+        end
 
         return Container
     end
 
     C.CreateSlider = CreateSlider
 end
-
---[[ local CreateSlider
-do
-    local BackDisable = { 0.25, 0.5, 0.5, 0.625 }
-    local ForwardDisable = { 0.25, 0.5, 0.625, 0.75 }
-    local ThumbDisable = { 0.5, 1, 0, 0.25 }
-
-    ---@param self PetLeashSliderBackButton | PetLeashSliderForwardButton
-    local function OnClick(self)
-        PlaySound(229883)
-
-        if self.Delta then
-            ---@type PetLeashSlider
-            local parent = self:GetParent()
-            parent:SetValueByDelta(self.Delta)
-        end
-    end
-
-    ---@param self PetLeashSliderTemplate
-    ---@param value number
-    local function OnValueChanged(self, value)
-        if value == self.PreviousValue then return end
-
-        self.PreviousValue = value
-        self.ThumbTexture:SetPoint("CENTER", self.Thumb, "CENTER", 0, 0)
-
-        if self.ValueText then
-            self.ValueText:SetText(value)
-
-            if self.Callback then
-                pcall(self.Callback, value)
-            end
-        end
-    end
-
-    ---@param parent Frame
-    ---@param label string
-    ---@param setting number
-    ---@param callback function
-    ---@param step number
-    ---@param min number?
-    ---@param max number?
-    ---@return PetLeashSlider
-    CreateSlider = function(parent, label, setting, callback, step, min, max)
-
-        Slider:SetScript("OnValueChanged", OnValueChanged)
-
-        Frame.Slider = Slider
-
-        ---@class PetLeashSliderBackButton: Button
-        local Back = CreateFrame("Button", nil, Frame)
-        Back:SetSize(16, 24)
-        Back:SetPoint("RIGHT", Frame.Slider, "LEFT", -4, 0)
-
-        Back.Texture = Back:CreateTexture(nil, "ARTWORK")
-        Back.Texture:SetTexture(Media.Textures.Slider)
-        Back.Texture:SetTexCoord(unpack(BackNormal))
-        Back.Texture:SetSize(16, 16)
-        Back.Texture:SetPoint("CENTER", Back, "CENTER")
-
-        Back.Highlight = Back:CreateTexture(nil, "HIGHLIGHT")
-        Back.Highlight:SetTexture(Media.Textures.Slider)
-        Back.Highlight:SetTexCoord(unpack(BackHighlight))
-        Back.Highlight:SetSize(16, 16)
-        Back.Highlight:SetPoint("CENTER", Back, "CENTER")
-        Back.Highlight:SetBlendMode("ADD")
-        Back.Highlight:SetVertexColor(0.5, 0.5, 0.5)
-
-        Back.Delta = -step
-
-        Back:SetScript("OnClick", OnClick)
-
-        Frame.Back = Back
-
-        ---@class PetLeashSliderForwardButton: Button
-        local Forward = CreateFrame("Button", nil, Frame)
-        Forward:SetSize(16, 24)
-        Forward:SetPoint("LEFT", Frame.Slider, "RIGHT", 4, 0)
-
-        Forward.Texture = Forward:CreateTexture(nil, "ARTWORK")
-        Forward.Texture:SetTexture(Media.Textures.Slider)
-        Forward.Texture:SetTexCoord(unpack(ForwardNomral))
-        Forward.Texture:SetSize(16, 16)
-        Forward.Texture:SetPoint("CENTER", Forward, "CENTER")
-
-        Forward.Highlight = Forward:CreateTexture(nil, "HIGHLIGHT")
-        Forward.Highlight:SetTexture(Media.Textures.Slider)
-        Forward.Highlight:SetTexCoord(unpack(ForwardHighlight))
-        Forward.Highlight:SetSize(16, 16)
-        Forward.Highlight:SetPoint("CENTER", Forward, "CENTER")
-        Forward.Highlight:SetBlendMode("ADD")
-        Forward.Highlight:SetVertexColor(0.5, 0.5, 0.5)
-
-        Forward.Delta = step
-
-        Forward:SetScript("OnClick", OnClick)
-
-        Frame.Forward = Forward
-
-        local Label = Frame:CreateFontString(nil, "ARTWORK")
-        Label:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
-        Label:SetTextColor(1, 1, 1)
-        Label:SetText(label)
-        Label:SetSize(100, 32)
-        Label:SetPoint("LEFT", Frame, "LEFT")
-        Label:SetWidth(144)
-
-        Frame.Label = Label
-
-        local RightText = Frame:CreateFontString(nil, "ARTWORK")
-        RightText:SetFont(Media.Fonts.Normal, 10, "OUTLINE")
-        RightText:SetTextColor(1, 0.82, 0)
-        RightText:SetPoint("LEFT", Frame.Forward, "RIGHT", 6, 0)
-
-        Frame.RightText = RightText
-
-        Frame.Slider.Back = Frame.Back
-        Frame.Slider.Forward = Frame.Forward
-        Frame.Slider.ValueText = Frame.RightText
-
-        Frame.Slider:SetMinMaxValues(min or 0, max or 100)
-        Frame.Slider:SetValueStep(step)
-        Frame.Slider:SetObeyStepOnDrag(true)
-        Frame.Slider:SetValue(setting)
-
-        function Frame:Enable()
-            self.Slider:Enable()
-            self.Slider.ThumbTexture:SetTexCoord(unpack(ThumbNormal))
-
-            self.Back:Enable()
-            self.Back.Texture:SetTexCoord(unpack(BackNormal))
-            self.Forward:Enable()
-
-            self.Label:SetTextColor(1, 1, 1)
-            self.RightText:SetTextColor(1, 0.82, 0)
-        end
-
-        function Frame:Disable()
-            self.Slider:Disable()
-            self.Slider.ThumbTexture:SetTexCoord(unpack(ThumbDisable))
-
-            self.Back:Disable()
-            self.Back.Texture:SetTexCoord(unpack(BackDisable))
-
-            self.Forward:Disable()
-            self.Forward.Texture:SetTexCoord(unpack(ForwardDisable))
-
-            self.Slider:UnlockHighlight()
-
-            self.Label:SetTextColor(0.5, 0.5, 0.5)
-            self.RightText:SetTextColor(0.5, 0.5, 0.5)
-        end
-
-        function Frame:SetValueByDelta(delta)
-            local value = self.Slider:GetValue()
-            self.Slider:SetValue(value + delta)
-        end
-
-        if callback and type(callback) == "function" then
-            Slider.Callback = callback
-        end
-
-        return Frame
-    end
-end ]]

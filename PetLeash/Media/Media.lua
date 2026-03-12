@@ -17,11 +17,7 @@ T.Media = {
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]],
         CloseButton = [[Interface\AddOns\PetLeash\Media\Textures\CloseButton]],
         Glow = [[Interface\AddOns\PetLeash\Media\Textures\Glow]],
-        PetJournalWidget = [[Interface\AddOns\PetLeash\Media\Textures\PetJournalWidget.png]]
+        PetJournalWidget = [[Interface\AddOns\PetLeash\Media\Textures\PetJournalWidget.png]],
+        Slider = [[Interface\AddOns\PetLeash\Media\Textures\Slider.png]]
     }
 }
-
---     Textures = {
---         Slider = [[Interface\AddOns\PetLeash\Media\Textures\Slider.png]]
---     }
--- }

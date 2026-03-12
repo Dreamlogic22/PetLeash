@@ -12,6 +12,7 @@ Core\Init.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Section.lua
+Widgets\Elements\Slider.lua
 
 Widgets\Controls\Base.lua
 Widgets\Controls\Toggle.lua
@@ -21,6 +22,4 @@ Widgets\OptionsDialog.lua
 
 Core\PetSelect.lua
 
-# Widgets\Templates.xml
-# Widgets\CheckBox.lua
 # Widgets\Widgets.lua

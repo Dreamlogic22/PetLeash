@@ -13,6 +13,7 @@ local GetCurrentPet = C_PetJournal.GetSummonedPetGUID
 local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID
 local HasControl = HasFullControl
 local IsMoving = IsPlayerMoving
+local PlayerIsInCombat = PlayerIsInCombat
 local SummonPet = C_PetJournal.SummonPetByGUID
 
 local Interval = T.db.switchTimer
@@ -40,6 +41,7 @@ local function IsExcludedSpecies(petGuid)
     return false
 end
 
+---@return string?
 function T.GetRandomPet()
     if not T.db.pets and #T.db.pets > 0 then
         T.Disable(L.NO_PETS)
@@ -84,6 +86,8 @@ function T.KeepPet(petGuid)
 end
 
 function T.TrySummon()
+    if PlayerIsInCombat() then return end
+
     local CurrentPet = GetCurrentPet()
 
     if not T.db.enable or not HasControl() or IsMoving() then

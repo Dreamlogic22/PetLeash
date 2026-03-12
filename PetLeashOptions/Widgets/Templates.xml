@@ -1,7 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Slider name="PetLeashSliderTemplate" virtual="true">
-        <ThumbTexture parentKey="Thumb">
-            <Size x="12" y="12"/>
-        </ThumbTexture>
-    </Slider>
-</Ui>

@@ -13,13 +13,12 @@ do
     ---@param parent Frame
     ---@param label string?
     ---@param tooltipText string?
+    ---@return CheckButton
     CreateCheckbox = function(parent, label, tooltipText)
-        ---@class PetLeashCheckbox: TherapyFrameMixin
         local Checkbox = T.CreateFrame("CheckButton", nil, parent)
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText
 
-        ---@type TherapyTextureMixin
         Checkbox.Border = Checkbox:CreateTexture(nil, "ARTWORK")
         Checkbox.Border:SetTexture(Media.Textures.Checkbox)
         Checkbox.Border:SetTexCoord(0, 0.5, 0, 0.5)
@@ -27,7 +26,6 @@ do
         Checkbox.Border:SetSize(32, 32)
         Checkbox.Border:DisableSharpening()
 
-        ---@type TherapyTextureMixin
         Checkbox.CheckedTexture = Checkbox:CreateTexture(nil, "OVERLAY")
         Checkbox.CheckedTexture:SetTexture(Media.Textures.Checkbox)
         Checkbox.CheckedTexture:SetTexCoord(0.5, 0.75, 0.5, 0.75)
@@ -37,7 +35,6 @@ do
 
         Checkbox.CheckedTexture:Hide()
 
-        ---@type TherapyTextureMixin
         Checkbox.Highlight = Checkbox:CreateTexture(nil, "HIGHLIGHT")
         Checkbox.Highlight:SetTexture(Media.Textures.Checkbox)
         Checkbox.Highlight:SetTexCoord(0, 0.5, 0.5, 1)
@@ -53,7 +50,6 @@ do
         Checkbox.Label:SetText(label)
         Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
-        ---@param self PetLeashCheckbox
         function Checkbox:HandleCheckedTexture()
             if self:IsVisible() then
                 self.CheckedTexture:SetShown(self:GetChecked())

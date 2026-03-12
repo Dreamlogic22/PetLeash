@@ -29,13 +29,11 @@ do
     end
 
     ---@param parent Frame
-    ---@return PetLeashCloseButton
+    ---@return Button
     CreateCloseButton = function(parent)
-        ---@class PetLeashCloseButton: TherapyFrameMixin
         local CloseButton = T.CreateFrame("Button", nil, parent)
         CloseButton:SetSize(24, 24)
 
-        ---@type TherapyTextureMixin
         CloseButton.Texture = CloseButton:CreateTexture(nil, "ARTWORK")
         CloseButton.Texture:SetTexture(Media.Textures.CloseButton)
         CloseButton.Texture:SetPoint("CENTER", CloseButton, "CENTER", 0, 0)

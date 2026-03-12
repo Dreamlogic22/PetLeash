@@ -16,6 +16,7 @@ do
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
+    Dialog:SetPoint("TOP", CollectionsJournal, "TOP")
     Dialog:SetClampedToScreen(true)
     Dialog:SetFrameLevel(500)
     Dialog:SetFrameStrata("DIALOG")
@@ -34,13 +35,13 @@ do
     local Title = Dialog:CreateFontString(nil, "OVERLAY")
     Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
     Title:SetText(C.Title)
-    Title:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -15)
+    Title:SetPoint("TOPLEFT", 20, -15)
 
     local Version = Dialog:CreateFontString(nil, "OVERLAY")
     Version:SetFont(Media.Fonts.Bold, 12, "OUTLINE")
     Version:SetTextColor(Media.Colors.Background:GetRGB())
     Version:SetText(format(L.VERSION, C.Version))
-    Version:SetPoint("BOTTOMRIGHT", Dialog, "BOTTOMRIGHT", -7, 7)
+    Version:SetPoint("BOTTOMRIGHT", -7, 7)
 
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
     Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
@@ -48,7 +49,7 @@ do
     -- General
 
     Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
-    Dialog.General:SetPoint("TOPLEFT", Dialog, "TOPLEFT", 20, -50)
+    Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
     -- create a function in the mixins for CreateSettingsChecbox and attach it to the group
 
@@ -68,6 +69,9 @@ do
         print(value)
     end)
 
+    local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL)
+    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
+
     -- AutoSwitch:HookScript("OnClick", function(self)
     --     local value = self:GetChecked()
     --     C.db.autoSwitch = value
@@ -82,7 +86,7 @@ do
     Dialog.AutoSwitch = AutoSwitch
 
     Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
-    Dialog.PetCards:SetPoint("BOTTOMLEFT", Dialog, "BOTTOMLEFT", 20, 30)
+    Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
     -- todo: disabling logic that is not manual
 

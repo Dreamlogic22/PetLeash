@@ -5,6 +5,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeash
 local T = PetLeash
 local Media = T.Media
 

@@ -1,6 +1,6 @@
 ---@type string
 local Name = ...
----@class PetLeash
+---@class PetLeash: TherapyAPI
 local T = select(2, ...)
 
 local L = T.Locale
@@ -34,6 +34,10 @@ function T.Enable()
     RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
 end
 
+function T.Print(...)
+    print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
+end
+
 ---@param value number
 function T.UpdateThrottle(value)
     T.db.throttle = value or 3
@@ -41,10 +45,7 @@ function T.UpdateThrottle(value)
 end
 
 local function OnInitialize()
-    ---@class Settings
-    PetLeashDB = {}
-
-    T.InitializeDatabase("PetLeashDB")
+    TherapyUX.Embed(T)
 
     if T.db.pets and #T.db.pets > 0 then
         T.Enable()

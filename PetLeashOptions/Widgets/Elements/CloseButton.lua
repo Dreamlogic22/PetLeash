@@ -29,8 +29,9 @@ do
     end
 
     ---@param parent Frame
-    ---@return Button
+    ---@return PetLeashCloseButton
     CreateCloseButton = function(parent)
+        ---@class PetLeashCloseButton: TherapyFrameMixin
         local CloseButton = T.CreateFrame("Button", nil, parent)
         CloseButton:SetSize(24, 24)
 

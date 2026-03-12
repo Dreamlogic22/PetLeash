@@ -9,8 +9,6 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
-local PetLeashToggleMixin = C.PetLeastToggleMixin
-
 do
     ---@class PetLeashOptionsDialog: TherapyFrameMixin
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -23,7 +21,6 @@ do
     Dialog:SetMovable(true)
     Dialog:EnableMouse(true)
     Dialog:RegisterForDrag("LeftButton")
-
     Dialog:Hide()
 
     Dialog:SetScript("OnDragStart", Dialog.StartMoving)
@@ -31,6 +28,15 @@ do
 
     Dialog:CreateBackdrop()
     Dialog:SetBackdropTexture(Media.Textures.Background)
+
+    ---@param name string
+    ---@param width number
+    ---@param height number
+    ---@return ControlContainerMixin: Section
+    function Dialog:CreateGroup(name, width, height)
+        local group = C.CreateSection(name, self, width, height)
+        return Mixin(group, C.ControlContainerMixin)
+    end
 
     local Title = Dialog:CreateFontString(nil, "OVERLAY")
     Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
@@ -48,29 +54,36 @@ do
 
     -- General
 
-    Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
+    Dialog.General = Dialog:CreateGroup(GENERAL, 640, 200)
     Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
-    -- create a function in the mixins for CreateSettingsChecbox and attach it to the group
-
     local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
-    Enable = Mixin(Enable, PetLeashToggleMixin)
     Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
-    Enable:Bind(C.db.enable, function(value)
-        print(value)
-    end)
+    Dialog.General:AddControl(Enable)
 
-    Dialog.Enable = Enable
+    -- Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
+    -- Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
-    local AutoSwitch = C.CreateCheckbox(PetLeashOptionsDialog.General, L.OPTIONS_ENABLE_AUTO_SWITCH)
-    AutoSwitch = Mixin(AutoSwitch, PetLeashToggleMixin)
-    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
-    AutoSwitch:Bind(C.db.autoSwitch, function(value)
-        print(value)
-    end)
+    -- -- create a function in the mixins for CreateSettingsChecbox and attach it to the group
 
-    local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL, 1, 30, 1)
-    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
+    -- local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
+    -- Enable = Mixin(Enable, PetLeashToggleMixin)
+    -- Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
+    -- Enable:Bind(C.db.enable, function(value)
+    --     print(value)
+    -- end)
+
+    -- Dialog.Enable = Enable
+
+    -- local AutoSwitch = C.CreateCheckbox(PetLeashOptionsDialog.General, L.OPTIONS_ENABLE_AUTO_SWITCH)
+    -- AutoSwitch = Mixin(AutoSwitch, PetLeashToggleMixin)
+    -- AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
+    -- AutoSwitch:Bind(C.db.autoSwitch, function(value)
+    --     print(value)
+    -- end)
+
+    -- local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL, 1, 30, 1)
+    -- AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
 
     -- AutoSwitch:HookScript("OnClick", function(self)
     --     local value = self:GetChecked()
@@ -83,14 +96,15 @@ do
     --     end
     -- end)
 
-    Dialog.AutoSwitch = AutoSwitch
+    -- Dialog.AutoSwitch = AutoSwitch
 
-    Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
-    Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
+    -- Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
+    -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
     -- todo: disabling logic that is not manual
 
     -- todo: hide and restore (if opened) in combat
 
     PetLeashOptionsDialog = Dialog
+    tinsert(UISpecialFrames, "PetLeashOptionsDialog")
 end

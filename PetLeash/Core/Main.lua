@@ -5,9 +5,26 @@ local T = select(2, ...)
 
 local L = T.Locale
 
+local Interval = T.db.switchTimer
 local TimeSinceSwitch = 0
 local Throttle = T.db.throttle
 local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
+
+---@param elapsed number
+local function ScanPets(_, elapsed)
+    Throttle = Throttle - elapsed
+    TimeSinceSwitch = TimeSinceSwitch + elapsed
+
+    if Throttle < 0 then
+        Throttle = 3
+
+        if not T.db.autoSwitch or TimeSinceSwitch >= Interval then
+            if T.TrySummon() then
+                TimeSinceSwitch = 0
+            end
+        end
+    end
+end
 
 ---@param reason string?
 function T.Disable(reason)
@@ -20,22 +37,18 @@ function T.Disable(reason)
 end
 
 function T.Enable()
-    ---@param elapsed number
-    WatchFrame:SetScript("OnUpdate", function(_, elapsed)
-        Throttle = Throttle - elapsed
-        TimeSinceSwitch = TimeSinceSwitch + elapsed
-
-        if Throttle < 0 then
-            Throttle = 3
-            T.TrySummon()
-        end
-    end)
-
+    WatchFrame:SetScript("OnUpdate", ScanPets)
     RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
 end
 
 function T.Print(...)
     print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
+end
+
+---@param value number
+function T.UpdateInterval(value)
+    T.db.switchTimer = value or 300
+    Interval = value
 end
 
 ---@param value number

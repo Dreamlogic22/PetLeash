@@ -85,47 +85,42 @@ function T.KeepPet(petGuid)
     return false
 end
 
+---@return boolean
 function T.TrySummon()
-    if PlayerIsInCombat() then return end
+    if PlayerIsInCombat() then
+        return false
+    end
 
     local CurrentPet = GetCurrentPet()
 
     if not T.db.enable or not HasControl() or IsMoving() then
-        return
+        return false
     end
 
     -- Always respect overrides
     if CurrentPet and T.HasOverride() then
-        return
+        return false
     end
 
     if T.db.autoSwitch then
-        if TimeSinceSwitch < Interval then
-            return
-        end
-    else
         if CurrentPet and T.KeepPet(CurrentPet) then
-            return
+            return false
         end
     end
 
     local NewPet = T.GetRandomPet()
     if not NewPet then
-        return
+        return false
     end
 
     if CurrentPet == NewPet then
-        return
+        return false
     end
 
     if CanSummon(NewPet) then
         SummonPet(NewPet)
-        TimeSinceSwitch = 0
+        return true
     end
-end
 
----@param value number
-function T.UpdateInterval(value)
-    T.db.switchTimer = value or 300
-    Interval = value
+    return false
 end

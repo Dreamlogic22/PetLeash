@@ -8,7 +8,7 @@ T.db = {
     enable = true,
     override = false,
     pets = {},
-    switchTimer = 300,
+    switchTimer = 5,
     throttle = 5,
     version = 0
 }

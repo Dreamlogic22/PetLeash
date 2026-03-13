@@ -21,7 +21,6 @@ do
         local Group = T.CreateFrame("Frame", nil, parent)
         Group:SetSize(width, height)
         Group:SetFrameLevel(parent:GetFrameLevel() + 1)
-
         Group:CreateBackdrop()
         Group:SetBackdropColor(0.11, 0.11, 0.11, 0.5)
 

@@ -13,8 +13,9 @@ do
     ---@param parent Frame
     ---@param label string?
     ---@param tooltipText string?
-    ---@return CheckButton
+    ---@return PetLeashCheckbox
     CreateCheckbox = function(parent, label, tooltipText)
+        ---@class PetLeashCheckbox: TherapyFrameMixin, CheckButton
         local Checkbox = T.CreateFrame("CheckButton", nil, parent)
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText

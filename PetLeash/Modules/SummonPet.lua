@@ -91,11 +91,11 @@ function T.TrySummon()
         return false
     end
 
-    local CurrentPet = GetCurrentPet()
-
     if not T.db.enable or not HasControl() or IsMoving() then
         return false
     end
+
+    local CurrentPet = GetCurrentPet()
 
     -- Always respect overrides
     if CurrentPet and T.HasOverride() then

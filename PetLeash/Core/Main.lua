@@ -8,7 +8,18 @@ local L = T.Locale
 local Interval = T.db.switchTimer
 local TimeSinceSwitch = 0
 local Throttle = T.db.throttle
+
 local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
+
+--[[
+
+    TODO:
+
+    do not lookup db values here, do as much processing as possible outside of onupdate.
+    for settings, just use a single function to update Interval, Throttle, and Auto-Switch
+    Throttle is one thing, TimeSinceLastCheck is another
+
+]]
 
 ---@param elapsed number
 local function ScanPets(_, elapsed)
@@ -16,7 +27,7 @@ local function ScanPets(_, elapsed)
     TimeSinceSwitch = TimeSinceSwitch + elapsed
 
     if Throttle < 0 then
-        Throttle = 3
+        Throttle = 5
 
         if not T.db.autoSwitch or TimeSinceSwitch >= Interval then
             if T.TrySummon() then
@@ -53,7 +64,7 @@ end
 
 ---@param value number
 function T.UpdateThrottle(value)
-    T.db.throttle = value or 3
+    T.db.throttle = value or 5
     Throttle = value
 end
 

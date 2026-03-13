@@ -29,15 +29,6 @@ do
     Dialog:CreateBackdrop()
     Dialog:SetBackdropTexture(Media.Textures.Background)
 
-    ---@param name string
-    ---@param width number
-    ---@param height number
-    ---@return ControlContainerMixin: Section
-    function Dialog:CreateGroup(name, width, height)
-        local group = C.CreateSection(name, self, width, height)
-        return Mixin(group, C.ControlContainerMixin)
-    end
-
     local Title = Dialog:CreateFontString(nil, "OVERLAY")
     Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
     Title:SetText(C.Title)
@@ -61,7 +52,7 @@ do
     -- Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
     -- Dialog.General:AddControl(Enable)
 
-    Dialog.General = C.CreateSection(GENERAL, Dialog, 640, 200)
+    Dialog.General = C.CreateGroup(GENERAL, Dialog, 640, 200)
     Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
     -- -- create a function in the mixins for CreateSettingsChecbox and attach it to the group

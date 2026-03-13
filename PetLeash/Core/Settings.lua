@@ -9,6 +9,6 @@ T.db = {
     override = false,
     pets = {},
     switchTimer = 300,
-    throttle = 3,
+    throttle = 5,
     version = 0
 }

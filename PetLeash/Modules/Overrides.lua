@@ -75,18 +75,14 @@ local Zones = {
 local NeedsCheck = true
 local IsCached = false
 
----@param unitTarget UnitToken
----@return boolean?
-local function CheckAuras(_, unitTarget)
-    if unitTarget == "player" then
-        for _, id in pairs(Auras) do
-            if not issecrettable(GetPlayerAuraBySpellID(id)) then
-                return true
-            end
+local function CheckAuras()
+    for _, id in pairs(Auras) do
+        if not issecrettable(GetPlayerAuraBySpellID(id)) then
+            return true
         end
-
-        return false
     end
+
+    return false
 end
 
 ---@return boolean
@@ -136,19 +132,21 @@ end
 
 ---@return boolean
 local function CheckZone()
-    for _, id in pairs(Zones) do
-        local mapname = GetZoneText()
-        if id == 46362 and GetItemCount(id) > 0 and mapname == "Un'Goro Crater" or mapname == "Tanaris" then
-            return true
-        end
+    local mapname = GetZoneText()
 
-        if id == 68646 and GetItemCount(id) > 0 and mapname == "Winterspring" then
-            return true
-        end
+    -- Venomhide Hatchling: Un'Goro or Tanaris, must have item
+    if GetItemCount(46362) > 0 and (mapname == "Un'Goro Crater" or mapname == "Tanaris") then
+        return true
+    end
 
-        if id == 3247 and mapname == "Zereth Mortis" then
-            return true
-        end
+    -- Winterspring Cub: Winterspring, must have item
+    if GetItemCount(68646) > 0 and mapname == "Winterspring" then
+        return true
+    end
+
+    -- Pocopoc: Zereth Mortis, no item check
+    if mapname == "Zereth Mortis" then
+        return true
     end
 
     return false
@@ -194,7 +192,13 @@ function T.HasOverride()
     return IsCached
 end
 
-local function MarkDirty()
+---@param event WowEvent
+---@param unit UnitToken?
+local function MarkDirty(event, unit)
+    if event == "UNIT_AURA" and unit ~= "player" then
+        return
+    end
+
     NeedsCheck = true
     IsCached = false
 end

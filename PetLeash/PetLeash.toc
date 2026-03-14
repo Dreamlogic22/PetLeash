@@ -15,10 +15,8 @@ Core\Init.lua
 
 Locale\enUS.lua
 
-# Core\Main.lua
+Core\Main.lua
 
-# Media\Media.lua
-
-# Modules\SummonPet.lua
-# Modules\Overrides.lua
-# Modules\OptionsLoader.lua
+Modules\SummonPet.lua
+Modules\Overrides.lua
+Modules\OptionsLoader.lua

@@ -27,3 +27,7 @@ local function OnPetJournalLoad()
 end
 
 EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)
+
+SLASH_PETLEASH1 = "/petleash"
+SLASH_PETLEASH2 = "/pl"
+SlashCmdList["PETLEASH"] = LoadOptions

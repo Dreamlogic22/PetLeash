@@ -61,6 +61,61 @@ local ControlDefinitions = {
     }
 }
 
+local CreatePetCard
+do
+    local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
+    local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
+    local GetPetStats = C_PetJournal.GetPetStats
+
+    ---@param parent TherapyGroup
+    ---@param petID string
+    ---@return PetCard
+    CreatePetCard = function(parent, petID)
+        local health, _, _, _, rarity = GetPetStats(petID)
+        local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
+
+        local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
+
+        ---@class PetCard: TherapyFrame
+        local Panel = T.CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        Panel:SetSize(180, 230)
+        Panel:SetFrameLevel(parent:GetFrameLevel() + 1)
+        Panel:CreateBackdrop()
+        Panel:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
+        Panel:SetBorderColor(colorData.r, colorData.g, colorData.b)
+
+        -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
+        local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(speciesID))
+
+        Panel.ModelScene = CreateFrame("ModelScene", nil, Panel, "ModelSceneMixinTemplate")
+        Panel.ModelScene:SetUsingParentLevel(true)
+        Panel.ModelScene:SetSize(160, 180)
+        Panel.ModelScene:SetPoint("TOP", 0, -10)
+
+        Panel.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_DISCARD, true)
+
+        local PetActor = Panel.ModelScene:GetActorByTag("pet")
+        if PetActor then
+            PetActor:SetModelByCreatureDisplayID(displayID, true)
+            PetActor:SetAnimationBlendOperation(Enum.ModelBlendOperation.None)
+
+            if health <= 0 then
+                PetActor:SetAnimation(6, 1)
+            else
+                PetActor:SetAnimation(0, -1)
+            end
+        end
+
+        local Name = Panel:CreateFontString(nil, "OVERLAY")
+        Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
+        Name:SetPoint("BOTTOM", Panel, "BOTTOM", 0, 10)
+        Name:SetText(customName or name or UNKNOWN)
+        Name:SetTextColor(Media.Colors.Foreground:GetRGB())
+
+        return Panel
+    end
+end
+
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -116,10 +171,26 @@ do
 
     Dialog.General:NotifyChange()
 
-    -- Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
-    -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
+    Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
+    Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
-    -- todo: disabling logic that is not manual
+    do
+        local MaxDisplay = 3
+        local Panels = {}
+
+        for i = 1, math.min(MaxDisplay, #C.db.pets) do
+            local petID = C.db.pets[i]
+            local panel = CreatePetCard(Dialog.PetCards, petID)
+
+            if i == 1 then
+                panel:SetPoint("LEFT", Dialog.PetCards, "LEFT", 20, 0)
+            else
+                panel:SetPoint("LEFT", Panels[i - 1], "RIGHT", 25, 0)
+            end
+
+            Panels[i] = panel
+        end
+    end
 
     -- todo: hide and restore (if opened) in combat
 

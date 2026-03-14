@@ -1,7 +1,7 @@
 ## Interface: 120001
 ## Title: |cffd6bfa3PetLeash|r |cff947d66Options|r
 ## Version: 4.01
-## Author: River
+## Author: January, Claude & River
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash
 ## LoadOnDemand: 1
@@ -19,5 +19,3 @@ Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 
 Core\PetSelect.lua
-
-# Widgets\Widgets.lua

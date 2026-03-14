@@ -14,8 +14,6 @@ T.Locale = {}
 
 -- Load database
 do
-    local version = C_AddOns.GetAddOnMetadata(Name, "Version")
-
     ---@param target table
     ---@param defaults table
     ---@return table
@@ -42,11 +40,12 @@ do
 
     PetLeashDB = merge(PetLeashDB, T.db)
 
-    if not PetLeashDB.version or PetLeashDB.version ~= version then
-        PetLeashDB.version = version
-    end
-
     T.db = PetLeashDB
 end
+
+-- TODO: remove
+EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
+    TherapyDevTools_Monitor(Name)
+end)
 
 PetLeash = T

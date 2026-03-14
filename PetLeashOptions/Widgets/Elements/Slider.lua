@@ -5,8 +5,8 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
-local Media = T.Media
+local C = select(2, ...)
+local Media = C.Media
 
 local CreateSlider
 do
@@ -32,7 +32,7 @@ do
         local Container = CreateFrame("Frame", nil, parent)
         Container:SetSize(386, 24)
 
-        local Slider = T.CreateFrame("Slider", nil, parent)
+        local Slider = C.CreateFrame("Slider", nil, parent)
         Slider:SetOrientation("HORIZONTAL")
         Slider:SetSize(200, 24)
         Slider:SetPoint("LEFT", Container, "LEFT", 172, 0)

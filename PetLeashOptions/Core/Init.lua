@@ -6,14 +6,16 @@
 
 ---@type string
 local Name = ...
----@class PetLeashOptions
+---@class PetLeashOptions: TherapyAPI
 local C = select(2, ...)
 
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 
 C.Title = GetAddOnMetadata(Name, "Title")
 C.Version = GetAddOnMetadata(Name, "Version")
-C.db = PetLeashDB or {}
+C.db = PetLeashDB
+
+TherapyUX.Embed(C)
 
 do
 	---@return boolean
@@ -25,3 +27,6 @@ do
 		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end
 end
+
+-- TODO: remove
+TherapyDevTools_Monitor(Name)

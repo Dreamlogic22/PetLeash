@@ -7,7 +7,7 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media = T.Locale, T.Media
+local L, Media = T.Locale, C.Media
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
@@ -15,44 +15,51 @@ local GetPetStats = C_PetJournal.GetPetStats
 
 local ControlDefinitions = {
     AutoSwitch = {
-        disable = function() return not C.db.enable end, -- or #C.db.pets < 2 end,
+        disable = function() return not C.db.enable end,
         get = function() return C.db.autoSwitch end,
-        name = L.OPTIONS_ENABLE_AUTO_SWITCH,
+        name = L.OPTIONS_AUTO_SWITCH,
         set = function(value)
             C.db.autoSwitch = value
+            T.RefreshVariables()
             if value then T.Enable() else T.Disable() end
         end,
         type = "toggle"
     },
     AutoSwitchInterval = {
-        disable = function() return (not C.db.autoSwitch or not C.db.enable) end, -- or #C.db.pets < 2 end,
-        get = function() return C.db.switchTimer end,
+        disable = function() return (not C.db.autoSwitch or not C.db.enable) end,
+        get = function() return C.db.autoSwitchInterval / 60 end,  -- Convert seconds → minutes
         min = 1, max = 30, step = 1,
         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
-        set = function(value) C.db.switchTimer = value * 60 end,
+        set = function(value)
+            C.db.autoSwitchInterval = value * 60  -- Convert minutes → seconds
+            T.RefreshVariables()
+        end,
         type = "range"
     },
     Enable = {
-        desc = L.OPTIONS_ENABLE_AUTO_SUMMON,
+        desc = L.OPTIONS_SCAN_TOOLTIP,
         get = function() return C.db.enable end,
         name = ENABLE,
         set = function(value) C.db.enable = value end,
         type = "toggle",
     },
-    Throttle = {
+    ScanInterval = {  -- Renamed from "Throttle" to match the setting
         disable = function() return not C.db.enable end,
-        get = function() return C.db.throttle end,
+        get = function() return C.db.scanInterval end,
         min = 1, max = 120, step = 1,
-        name = L.OPTIONS_CUSTOM_THROTTLE_INTERVAL,
-        set = function(value) C.db.throttle = value end,
+        name = L.OPTIONS_SCAN_INTERVAL,
+        set = function(value)
+            C.db.scanInterval = value
+            T.RefreshVariables()
+        end,
         type = "range"
     },
-    OverrideSummonedPets = {
-        desc = L.OPTIONS_ENABLE_OVERRIDE_TOOLTIP,
+    KeepSummonedPets = {  -- Renamed from "OverrideSummonedPets" to match the setting
+        desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
         disable = function() return not C.db.enable end,
-        get = function() return C.db.override end,
-        name = L.OPTIONS_ENABLE_OVERRIDE,
-        set = function(value) C.db.override = value end,
+        get = function() return C.db.keepSummonedPets end,
+        name = L.OPTIONS_KEEP_SUMMONED,
+        set = function(value) C.db.keepSummonedPets = value end,
         type = "toggle"
     }
 }
@@ -67,7 +74,7 @@ local function CreateCard(parent, petID)
     local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
 
     ---@class PetCard: TherapyFrame
-    local Panel = T.CreateFrame("Frame", nil, parent, "BackdropTemplate")
+    local Panel = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
     Panel:SetSize(180, 230)
     Panel:SetFrameLevel(parent:GetFrameLevel() + 1)
     Panel:CreateBackdrop()
@@ -134,7 +141,7 @@ end
 
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
-    local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
+    local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
     Dialog:SetPoint("TOP", CollectionsJournal, "TOP")
@@ -171,16 +178,16 @@ do
 
     Dialog.Enable = Dialog.General:RegisterControl(ControlDefinitions.Enable)
     Dialog.Enable:SetPoint("TOPLEFT", 10, -30)
-    Dialog.Throttle = Dialog.General:RegisterControl(ControlDefinitions.Throttle)
-    Dialog.Throttle:SetPoint("LEFT", Dialog.Enable, "RIGHT", 230, 0)
+    Dialog.ScanInterval = Dialog.General:RegisterControl(ControlDefinitions.ScanInterval)
+    Dialog.ScanInterval:SetPoint("LEFT", Dialog.Enable, "RIGHT", 230, 0)
 
     Dialog.AutoSwitch = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitch)
     Dialog.AutoSwitch:SetPoint("TOP", Dialog.Enable, "BOTTOM", 0, 0)
     Dialog.AutoSwitchInterval = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitchInterval)
     Dialog.AutoSwitchInterval:SetPoint("LEFT", Dialog.AutoSwitch, "RIGHT", 230, 0)
 
-    Dialog.Override = Dialog.General:RegisterControl(ControlDefinitions.OverrideSummonedPets)
-    Dialog.Override:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
+    Dialog.KeepSummonedPets = Dialog.General:RegisterControl(ControlDefinitions.KeepSummonedPets)
+    Dialog.KeepSummonedPets:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
 
     Dialog.General:NotifyChange()
 

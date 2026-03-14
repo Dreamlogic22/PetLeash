@@ -5,8 +5,8 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
-local Media = T.Media
+local C = select(2, ...)
+local Media = C.Media
 
 local CreateCheckbox
 do
@@ -16,7 +16,7 @@ do
     ---@return TherapyCheckbox
     CreateCheckbox = function(parent, label, tooltipText)
         ---@class TherapyCheckbox: TherapyFrame, CheckButton
-        local Checkbox = T.CreateFrame("CheckButton", nil, parent)
+        local Checkbox = C.CreateFrame("CheckButton", nil, parent)
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText and tooltipText or label
 

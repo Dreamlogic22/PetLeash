@@ -1,8 +1,8 @@
----@class PetLeash
-local T = select(2, ...)
+---@class PetLeashOptions
+local C = select(2, ...)
 
 ---@class Media
-T.Media = {
+C.Media = {
     Colors = {
         Background = CreateColor(0.58, 0.49, 0.4),
         Foreground = CreateColor(0.84, 0.75, 0.64)

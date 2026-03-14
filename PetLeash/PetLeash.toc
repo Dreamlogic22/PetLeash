@@ -5,7 +5,6 @@
 ## LoadSavedVariablesFirst: 1
 ## Author: River
 ## Notes: Walks the Dog
-## Dependencies: TherapyUX
 ## DefaultState: Enabled
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo

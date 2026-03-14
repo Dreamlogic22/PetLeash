@@ -7,7 +7,7 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media = T.Locale, T.Media
+local L, Media = T.Locale, C.Media
 
 local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 local SetDefaultFilters = C_PetJournal.SetDefaultFilters

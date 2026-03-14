@@ -5,8 +5,8 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
-local Media = T.Media
+local C = select(2, ...)
+local Media = C.Media
 
 local CreateGroup
 do
@@ -17,7 +17,7 @@ do
     ---@return TherapyGroup
     CreateGroup = function(title, parent, width, height)
         ---@class TherapyGroup: TherapyFrame
-        local Group = T.CreateFrame("Frame", nil, parent)
+        local Group = C.CreateFrame("Frame", nil, parent)
         Group:SetSize(width, height)
         Group:SetFrameLevel(parent:GetFrameLevel() + 1)
         Group:CreateBackdrop()

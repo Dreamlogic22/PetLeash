@@ -5,13 +5,13 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
-local T = PetLeash
-local Media = T.Media
+---@class PetLeashOptions
+local C = select(2, ...)
+local Media = C.Media
 
 do
     ---@class PetLeashOptionsButton: TherapyFrame
-    local Button = T.CreateFrame("Button", "PetLeashOptionsButton", PetJournal)
+    local Button = C.CreateFrame("Button", "PetLeashOptionsButton", PetJournal)
     Button:SetSize(48, 48)
     Button:SetFrameStrata("HIGH")
     Button:SetFrameLevel(10)

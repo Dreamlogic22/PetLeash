@@ -43,9 +43,4 @@ do
     T.db = PetLeashDB
 end
 
--- TODO: remove
-EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
-    TherapyDevTools_Monitor(Name)
-end)
-
 PetLeash = T

@@ -6,7 +6,7 @@
 
 ---@type string
 local Name = ...
----@class PetLeash: TherapyAPI
+---@class PetLeash
 local T = select(2, ...)
 
 local L = T.Locale

@@ -5,8 +5,8 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
-local Media = T.Media
+local C = select(2, ...)
+local Media = C.Media
 
 local CreateCloseButton
 do
@@ -32,7 +32,7 @@ do
     ---@return TherapyCloseButton
     CreateCloseButton = function(parent)
         ---@class TherapyCloseButton: TherapyFrame
-        local CloseButton = T.CreateFrame("Button", nil, parent)
+        local CloseButton = C.CreateFrame("Button", nil, parent)
         CloseButton:SetSize(24, 24)
 
         CloseButton.Texture = CloseButton:CreateTexture(nil, "ARTWORK")

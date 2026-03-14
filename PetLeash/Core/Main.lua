@@ -5,31 +5,22 @@ local T = select(2, ...)
 
 local L = T.Locale
 
-local Interval = T.db.switchTimer
+local AutoSwitch = T.db.autoSwitch
+local AutoSwitchInterval = T.db.switchTimer
 local TimeSinceSwitch = 0
 local Throttle = T.db.throttle
 
 local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
 
---[[
-
-    TODO:
-
-    do not lookup db values here, do as much processing as possible outside of onupdate.
-    for settings, just use a single function to update Interval, Throttle, and Auto-Switch
-    Throttle is one thing, TimeSinceLastCheck is another
-
-]]
-
 ---@param elapsed number
-local function ScanPets(_, elapsed)
+local function CheckPets(_, elapsed)
     Throttle = Throttle - elapsed
     TimeSinceSwitch = TimeSinceSwitch + elapsed
 
     if Throttle < 0 then
         Throttle = 5
 
-        if not T.db.autoSwitch or TimeSinceSwitch >= Interval then
+        if AutoSwitch and TimeSinceSwitch >= AutoSwitchInterval then
             if T.TrySummon() then
                 TimeSinceSwitch = 0
             end
@@ -48,7 +39,7 @@ function T.Disable(reason)
 end
 
 function T.Enable()
-    WatchFrame:SetScript("OnUpdate", ScanPets)
+    WatchFrame:SetScript("OnUpdate", CheckPets)
     RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
 end
 
@@ -56,16 +47,12 @@ function T.Print(...)
     print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
 end
 
----@param value number
-function T.UpdateInterval(value)
-    T.db.switchTimer = value or 300
-    Interval = value
-end
-
----@param value number
-function T.UpdateThrottle(value)
-    T.db.throttle = value or 5
-    Throttle = value
+-- Settings hook
+function T.Refresh()
+    AutoSwitch = T.db.autoSwitch
+    AutoSwitchInterval = T.db.switchTimer
+    TimeSinceSwitch = 0
+    Throttle = T.db.throttle
 end
 
 local function OnInitialize()

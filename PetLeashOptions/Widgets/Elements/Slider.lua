@@ -134,6 +134,7 @@ do
         local Label = Container:CreateFontString(nil, "ARTWORK")
         Label:SetFont(Media.Fonts.Normal, 12, "OUTLINE")
         Label:SetTextColor(1, 1, 1)
+        Label:SetJustifyH("RIGHT")
         Label:SetText(label)
         Label:SetSize(100, 32)
         Label:SetPoint("LEFT", Container, "LEFT")

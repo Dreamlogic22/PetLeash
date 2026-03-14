@@ -17,62 +17,66 @@ local OptionsDialog = PetLeashOptionsDialog
 
 local SelectingPets = false
 
----@param petId number
-local function AddPet(petId)
-    if not petId then return end
+---@param petID number
+local function AddPet(petID)
+    if not petID then return end
 
-    if not T.db.pets then
-        T.db.pets = {}
+    if not C.db.pets then
+        C.db.pets = {}
     end
 
-    if T.db.pets and tContains(T.db.pets, petId) then
+    if C.db.pets and tContains(C.db.pets, petID) then
         return
     end
 
-    if #T.db.pets == 0 then
+    if #C.db.pets == 0 then
         -- If this is our first pet on a fresh install, enable
         T.Enable()
     end
 
-    table.insert(T.db.pets, petId)
+    table.insert(C.db.pets, petID)
+
+    if PetLeashOptionsDialog:IsVisible() then
+        C.UpdatePetCards()
+    end
 end
 
----@param petId number
-local function IsSelected(petId)
-    if not petId or not T.db.pets then
+---@param petID number
+local function IsSelected(petID)
+    if not petID or not C.db.pets then
         return false
     end
 
-    for _, id in ipairs(T.db.pets) do
-        if id == petId then return true end
+    for _, id in ipairs(C.db.pets) do
+        if id == petID then return true end
     end
 
     return false
 end
 
----@param petId number
-local function RemovePet(petId)
-    if not petId or not T.db.pets then return end
+---@param petID number
+local function RemovePet(petID)
+    if not petID or not C.db.pets then return end
 
-    for i, id in ipairs(T.db.pets) do
-        if id == petId then
-            table.remove(T.db.pets, i)
-            return
+    for i, id in ipairs(C.db.pets) do
+        if id == petID then
+            table.remove(C.db.pets, i)
+            break
         end
     end
 
-    if not T.db.pets or #T.db.pets == 0 then
+    if not C.db.pets or #C.db.pets == 0 then
         T.Disable()
+    end
+
+    if PetLeashOptionsDialog:IsVisible() then
+        C.UpdatePetCards()
     end
 end
 
 local function ToggleSelectionMode()
 	local active = SelectingPets
 	OptionsButton:DesaturateHierarchy(active and 1 or 0)
-
-    if OptionsDialog:IsVisible() then
-        OptionsDialog:Hide()
-    end
 
     if GameTooltip:IsShown() then
         OptionsButton:GetScript("OnEnter")(OptionsButton)

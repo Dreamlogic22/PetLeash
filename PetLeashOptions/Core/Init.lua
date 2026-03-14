@@ -27,6 +27,3 @@ do
 		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end
 end
-
--- TODO: remove
-TherapyDevTools_Monitor(Name)

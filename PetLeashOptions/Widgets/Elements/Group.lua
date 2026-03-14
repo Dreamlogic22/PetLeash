@@ -1,7 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Groups for organizing and managing options widgets & their
-    dependencies.
+    Simple visual container for organization.
 
 ----------------------------------------------------------------------]]
 
@@ -15,9 +14,9 @@ do
     ---@param parent Frame
     ---@param width number
     ---@param height number
-    ---@return PetLeashOptionsGroup
+    ---@return TherapyGroup
     CreateGroup = function(title, parent, width, height)
-        ---@class PetLeashOptionsGroup: TherapyFrameMixin
+        ---@class TherapyGroup: TherapyFrame
         local Group = T.CreateFrame("Frame", nil, parent)
         Group:SetSize(width, height)
         Group:SetFrameLevel(parent:GetFrameLevel() + 1)

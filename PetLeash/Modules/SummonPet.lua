@@ -16,8 +16,6 @@ local IsMoving = IsPlayerMoving
 local PlayerIsInCombat = PlayerIsInCombat
 local SummonPet = C_PetJournal.SummonPetByGUID
 
-local Interval = T.db.switchTimer
-
 local Exclusions = {
     280,  -- Guild Page (Alliance)
     281,  -- Guild Page (Horde)

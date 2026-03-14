@@ -11,14 +11,14 @@ local Media = T.Media
 local CreateCheckbox
 do
     ---@param parent Frame
-    ---@param label string?
+    ---@param label string
     ---@param tooltipText string?
-    ---@return PetLeashCheckbox
+    ---@return TherapyCheckbox
     CreateCheckbox = function(parent, label, tooltipText)
-        ---@class PetLeashCheckbox: TherapyFrameMixin, CheckButton
+        ---@class TherapyCheckbox: TherapyFrame, CheckButton
         local Checkbox = T.CreateFrame("CheckButton", nil, parent)
         Checkbox:SetSize(24, 24)
-        Checkbox.TooltipText = tooltipText
+        Checkbox.TooltipText = tooltipText and tooltipText or label
 
         Checkbox.Border = Checkbox:CreateTexture(nil, "ARTWORK")
         Checkbox.Border:SetTexture(Media.Textures.Checkbox)

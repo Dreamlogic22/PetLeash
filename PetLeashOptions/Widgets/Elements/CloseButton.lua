@@ -10,28 +10,28 @@ local Media = T.Media
 
 local CreateCloseButton
 do
-    ---@param self PetLeashCloseButton
+    ---@param self TherapyCloseButton
     local function OnClick(self)
         PlaySoundFile(567481)
         self:GetParent():Hide()
     end
 
-    ---@param self PetLeashCloseButton
+    ---@param self TherapyCloseButton
     local function ShowNormalTexture(self)
         self.Texture:SetTexCoord(0, 0.5, 0, 0.5)
         self.Highlight:SetTexCoord(0, 0.5, 0.5, 1)
     end
 
-    ---@param self PetLeashCloseButton
+    ---@param self TherapyCloseButton
     local function ShowPushedTexture(self)
         self.Texture:SetTexCoord(0.5, 1, 0, 0.5)
         self.Highlight:SetTexCoord(0.5, 1, 0.5, 1)
     end
 
     ---@param parent Frame
-    ---@return PetLeashCloseButton
+    ---@return TherapyCloseButton
     CreateCloseButton = function(parent)
-        ---@class PetLeashCloseButton: TherapyFrameMixin
+        ---@class TherapyCloseButton: TherapyFrame
         local CloseButton = T.CreateFrame("Button", nil, parent)
         CloseButton:SetSize(24, 24)
 
@@ -41,7 +41,6 @@ do
         CloseButton.Texture:SetSize(32, 32)
         CloseButton.Texture:DisableSharpening()
 
-        ---@type TherapyTextureMixin
         CloseButton.Highlight = CloseButton:CreateTexture(nil, "HIGHLIGHT")
         CloseButton.Highlight:SetTexture(Media.Textures.CloseButton)
         CloseButton.Highlight:SetPoint("CENTER", CloseButton, "CENTER", 0, 0)

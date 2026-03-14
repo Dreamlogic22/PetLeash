@@ -10,7 +10,7 @@ local T = PetLeash
 local Media = T.Media
 
 do
-    ---@class PetLeashOptionsButton: TherapyFrameMixin
+    ---@class PetLeashOptionsButton: TherapyFrame
     local Button = T.CreateFrame("Button", "PetLeashOptionsButton", PetJournal)
     Button:SetSize(48, 48)
     Button:SetFrameStrata("HIGH")

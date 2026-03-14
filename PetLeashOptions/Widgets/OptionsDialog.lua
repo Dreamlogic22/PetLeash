@@ -9,8 +9,60 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, T.Media
 
+local ControlDefinitions = {
+    AutoSwitch = {
+        disable = function() return not C.db.enable end, -- or #C.db.pets < 2 end,
+        get = function() return C.db.autoSwitch end,
+        name = L.OPTIONS_ENABLE_AUTO_SWITCH,
+        set = function(value)
+            C.db.autoSwitch = value
+            if value then T.Enable() else T.Disable() end
+        end,
+        type = "toggle"
+    },
+    AutoSwitchInterval = {
+        disable = function() return (not C.db.autoSwitch or not C.db.enable) end, -- or #C.db.pets < 2 end,
+        get = function() return C.db.switchTimer end,
+        min = 1, max = 30, step = 1,
+        name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
+        set = function(value) C.db.switchTimer = value end,
+        type = "range"
+    },
+    Enable = {
+        desc = L.OPTIONS_ENABLE_AUTO_SUMMON,
+        get = function() return C.db.enable end,
+        name = ENABLE,
+        set = function(value) C.db.enable = value end,
+        type = "toggle",
+    },
+    Throttle = {
+        disable = function() return not C.db.enable end,
+        desc = L.OPTIONS_CUSTOM_THROTTLE_TOOLTIP,
+        get = function() return C.db.customThrottle end,
+        name = L.OPTIONS_CUSTOM_THROTTLE,
+        set = function(value) C.db.customThrottle = value end,
+        type = "toggle"
+    },
+    ThrottleInterval = {
+        disable = function() return (not C.db.customThrottle or not C.db.enable) end,
+        get = function() return C.db.throttle end,
+        min = 1, max = 120, step = 1,
+        name = L.OPTIONS_CUSTOM_THROTTLE_INTERVAL,
+        set = function(value) C.db.throttle = value end,
+        type = "range"
+    },
+    OverrideSummonedPets = {
+        desc = L.OPTIONS_ENABLE_OVERRIDE_TOOLTIP,
+        disable = function() return not C.db.enable end,
+        get = function() return C.db.override end,
+        name = L.OPTIONS_ENABLE_OVERRIDE,
+        set = function(value) C.db.override = value end,
+        type = "toggle"
+    }
+}
+
 do
-    ---@class PetLeashOptionsDialog: TherapyFrameMixin
+    ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = T.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
@@ -43,52 +95,26 @@ do
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
     Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
-    -- General
-
-    -- Dialog.General = Dialog:CreateGroup(GENERAL, 640, 200)
-    -- Dialog.General:SetPoint("TOPLEFT", 20, -50)
-
-    -- local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
-    -- Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
-    -- Dialog.General:AddControl(Enable)
-
-    Dialog.General = C.CreateGroup(GENERAL, Dialog, 640, 200)
+    Dialog.General = C.CreateOptionsGroup(GENERAL, Dialog, 640, 200)
     Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
-    -- -- create a function in the mixins for CreateSettingsChecbox and attach it to the group
+    Dialog.Enable = Dialog.General:RegisterControl(ControlDefinitions.Enable)
+    Dialog.Enable:SetPoint("TOPLEFT", 10, -30)
 
-    local Enable = C.CreateCheckbox(PetLeashOptionsDialog.General, ENABLE, L.OPTIONS_ENABLE_AUTO_SUMMON)
-    -- Enable = Mixin(Enable, PetLeashToggleMixin)
-    Enable:SetPoint("TOPLEFT", PetLeashOptionsDialog.General, "TOPLEFT", 10, -30)
-    -- Enable:Bind(C.db.enable, function(value)
-    --     print(value)
-    -- end)
+    Dialog.AutoSwitch = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitch)
+    Dialog.AutoSwitch:SetPoint("TOP", Dialog.Enable, "BOTTOM", 0, 0)
+    Dialog.AutoSwitchInterval = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitchInterval)
+    Dialog.AutoSwitchInterval:SetPoint("LEFT", Dialog.AutoSwitch, "RIGHT", 230, 0)
 
-    Dialog.Enable = Enable
+    Dialog.Throttle = Dialog.General:RegisterControl(ControlDefinitions.Throttle)
+    Dialog.Throttle:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
+    Dialog.ThrottleInterval = Dialog.General:RegisterControl(ControlDefinitions.ThrottleInterval)
+    Dialog.ThrottleInterval:SetPoint("LEFT", Dialog.Throttle, "RIGHT", 230, 0)
 
-    local AutoSwitch = C.CreateCheckbox(PetLeashOptionsDialog.General, L.OPTIONS_ENABLE_AUTO_SWITCH)
-    -- AutoSwitch = Mixin(AutoSwitch, PetLeashToggleMixin)
-    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
-    -- AutoSwitch:Bind(C.db.autoSwitch, function(value)
-    --     print(value)
-    -- end)
+    Dialog.Override = Dialog.General:RegisterControl(ControlDefinitions.OverrideSummonedPets)
+    Dialog.Override:SetPoint("TOP", Dialog.Throttle, "BOTTOM", 0, 0)
 
-    local AutoSwitchInterval = C.CreateSlider(PetLeashOptionsDialog.General, L.OPTIONS_AUTO_SWITCH_INTERVAL, 1, 30, 1)
-    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
-
-    AutoSwitch:HookScript("OnClick", function(self)
-        local value = self:GetChecked()
-        C.db.autoSwitch = value
-
-        if not value or #C.db.pets > 1 then
-            Dialog.AutoSwitchInterval:Disable()
-        else
-            Dialog.AutoSwitchInterval:Enable()
-        end
-    end)
-
-    Dialog.AutoSwitch = AutoSwitch
-    Dialog.AutoSwitchInterval = AutoSwitch
+    Dialog.General:NotifyChange()
 
     -- Dialog.PetCards = C.CreateSection(PETS, Dialog, 640, 290)
     -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)

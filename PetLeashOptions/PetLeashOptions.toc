@@ -14,8 +14,7 @@ Widgets\Elements\CloseButton.lua
 Widgets\Elements\Group.lua
 Widgets\Elements\Slider.lua
 
-Widgets\Elements\Blueprint.lua
-
+Widgets\ControlGroup.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

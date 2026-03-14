@@ -64,8 +64,8 @@ local Options = {
                 type = "toggle",
                 name = L.OPTIONS_ENABLE_AUTO_SWITCH,
                 position = { "TOP", "enable", "BOTTOM", x = 0, y = 0 },
-                disable = function() return not C.db.enable end,
-                get = function() return C.db.autoSwitch end, -- and #C.db.pets < 2 end,
+                disable = function() return not C.db.enable or #C.db.pets < 2 end,
+                get = function() return C.db.autoSwitch end,
                 set = function(value) C.db.autoSwitch = value end,
                 order = 1
             },
@@ -74,8 +74,9 @@ local Options = {
                 name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
                 min = 1, max = 30, step = 1,
                 position = { "LEFT", "autoSwitch", "RIGHT", 230, 0 },
-                disable = function() return not C.db.autoSwitch end, -- or #C.db.pets < 2 end,
+                disable = function() return not C.db.autoSwitch or #C.db.pets < 2 end,
                 get = function() return C.db.switchTimer end,
+                set = function(value) C.db.switchTimer = value end,
                 order = 2
             }
         }
@@ -129,6 +130,12 @@ local function CreateRange(obj, group)
     widget.disable = obj.disable
 
     widget.Slider:SetValue(obj.get(), true)
+
+    widget.Slider:HookScript("OnValueChanged", function(self)
+        local value = self.Slider:GetValue()
+        widget.set(value)
+        NotifyChange()
+    end)
 
     return widget
 end

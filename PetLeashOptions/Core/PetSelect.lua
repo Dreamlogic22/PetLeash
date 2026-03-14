@@ -124,7 +124,7 @@ end
 do
     hooksecurefunc("PetJournal_InitPetButton", function(button)
         if not button.PetLeashCheckbox then
-            ---@type PetLeashCheckbox
+            ---@type TherapyCheckbox
             local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
             Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 

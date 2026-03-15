@@ -150,39 +150,78 @@ local function CreateCard(parent, petID)
     Name:SetText(customName or name or UNKNOWN)
     Name:SetTextColor(Media.Colors.Foreground:GetRGB())
 
+    Panel.SlideAnimation = Panel:CreateAnimationGroup()
+    Panel.SlideTranslation = Panel.SlideAnimation:CreateAnimation("Translation")
+    Panel.SlideTranslation:SetDuration(0.4)
+    Panel.SlideTranslation:SetSmoothing("IN_OUT")
+
     return Panel
 end
 
-local MaxDisplay = 3
-local Panels = {}
+-- Animation block
+do
+    local MaxDisplay = 3
+    local Panels = {}
+    local CurrentIndex = 1
+    local CardsCurrentlyAnimating = 0
 
-function C.UpdatePetCards()
-    for _, panel in ipairs(Panels) do
-        panel:Hide()
-        panel:SetParent(nil)
-    end
-
-    wipe(Panels)
-
-    for i = 1, math.min(MaxDisplay, #C.db.pets) do
-        local petID = C.db.pets[i]
-        local panel = CreateCard(PetLeashOptionsDialog.PetCards, petID)
-
-        if i == 1 then
-            panel:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 20, 0)
-        else
-            panel:SetPoint("LEFT", Panels[i - 1], "RIGHT", 25, 0)
+    local function UpdateVisibleCards()
+        for _, panel in ipairs(Panels) do
+            panel:Hide()
         end
 
-        Panels[i] = panel
+        -- Show and position the 3-card window starting at CurrentIndex
+        for i = 1, MaxDisplay do
+            local panelIndex = CurrentIndex + i - 1
+            if Panels[panelIndex] then
+                Panels[panelIndex]:ClearAllPoints()
+                Panels[panelIndex]:Show()
+
+                if i == 1 then
+                    Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 20, 0)
+                else
+                    Panels[panelIndex]:SetPoint("LEFT", Panels[CurrentIndex + i - 2], "RIGHT", 25, 0)
+                end
+            end
+        end
+
+        -- Update arrow states
+        PetLeashOptionsDialog.LeftArrow:SetEnabled(CurrentIndex > 1)
+        PetLeashOptionsDialog.RightArrow:SetEnabled(CurrentIndex + MaxDisplay - 1 < #Panels)
     end
 
-    if #C.db.pets > MaxDisplay then
-        local Remaining = #C.db.pets - MaxDisplay
-        PetLeashOptionsDialog.MoreText:SetText(string.format(L.OPTIONS_MORE_PETS, Remaining))
-        PetLeashOptionsDialog.MoreText:Show()
-    else
-        PetLeashOptionsDialog.MoreText:Hide()
+    function C.UpdatePetCards()
+        for _, panel in ipairs(Panels) do
+            panel:Hide()
+            panel:SetParent(nil)
+        end
+
+        wipe(Panels)
+
+        for i = 1, #C.db.pets do  -- Create ALL cards
+            local petID = C.db.pets[i]
+            local panel = CreateCard(PetLeashOptionsDialog.PetCards, petID)
+            Panels[i] = panel
+        end
+
+        CurrentIndex = 1  -- Reset to first card
+        UpdateVisibleCards()  -- Show and position first 3
+    end
+
+    function C.SetupArrowHandlers()
+        PetLeashOptionsDialog.LeftArrow:SetScript("OnClick", function(self)
+            if CurrentIndex > 1 and CardsCurrentlyAnimating == 0 then
+                StartAnimation(-1)
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            end
+        end)
+
+        PetLeashOptionsDialog.RightArrow:SetScript("OnClick", function()
+            if CurrentIndex + MaxDisplay - 1 < #Panels and CardsCurrentlyAnimating == 0 then
+                StartAnimation(1)
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            end
+        end)
     end
 end
 
@@ -240,48 +279,23 @@ do
     Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
     Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
-    Dialog.MoreText = Dialog:CreateFontString(nil, "OVERLAY")
-    Dialog.MoreText:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
-    Dialog.MoreText:SetPoint("BOTTOMRIGHT", Dialog.PetCards, "BOTTOMRIGHT", -20, 5)
-    Dialog.MoreText:SetTextColor(1, 1, 1)
-    Dialog.MoreText:EnableMouse(true)
-    Dialog.MoreText:Hide()
+    -- Left arrow
+    Dialog.LeftArrow = CreateFrame("Button", nil, Dialog.PetCards)
+    Dialog.LeftArrow:SetSize(32, 32)
+    Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
+    Dialog.LeftArrow:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up")
+    Dialog.LeftArrow:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down")
+    Dialog.LeftArrow:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled")
 
-    Dialog.Underline = Dialog:CreateTexture(nil, "ARTWORK")
-    Dialog.Underline:SetColorTexture(Media.Colors.Foreground:GetRGB())
-    Dialog.Underline:SetPoint("TOPLEFT", Dialog.MoreText, "BOTTOMLEFT", 0, -2)
-    Dialog.Underline:SetPoint("TOPRIGHT", Dialog.MoreText, "BOTTOMRIGHT", 0, -2)
-    Dialog.Underline:SetHeight(1)
-    Dialog.Underline:Hide()
+    -- Right arrow
+    Dialog.RightArrow = CreateFrame("Button", nil, Dialog.PetCards)
+    Dialog.RightArrow:SetSize(32, 32)
+    Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
+    Dialog.RightArrow:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
+    Dialog.RightArrow:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down")
+    Dialog.RightArrow:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled")
 
     C.UpdatePetCards()
-
-    PetLeashOptionsDialog.MoreText:SetScript("OnEnter", function(self)
-        self:SetVertexColor(Media.Colors.Foreground:GetRGB())
-        PetLeashOptionsDialog.Underline:Show()
-
-        GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-        GameTooltip:AddLine(L.OPTIONS_MORE_PETS_TOOLTIP, Media.Colors.Foreground:GetRGB())
-        GameTooltip:AddLine(" ")
-
-        for i = MaxDisplay + 1, #C.db.pets do
-            local petID = C.db.pets[i]
-            local rarity = select(5, GetPetStats(petID))
-            local _, customName, _, _, _, _, _, name = GetPetInfoByPetID(petID)
-
-            local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
-
-            GameTooltip:AddLine(customName or name or UNKNOWN, colorData.r, colorData.g, colorData.b)
-        end
-
-        GameTooltip:Show()
-    end)
-
-    PetLeashOptionsDialog.MoreText:SetScript("OnLeave", function(self)
-        self:SetVertexColor(1, 1, 1)
-        PetLeashOptionsDialog.Underline:Hide()
-        GameTooltip:Hide()
-    end)
 
     function Dialog:Toggle()
         if PlayerIsInCombat() then

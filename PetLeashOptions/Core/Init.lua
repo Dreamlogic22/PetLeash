@@ -27,3 +27,14 @@ do
 		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end
 end
+
+local function OnInitialize()
+	SlashCmdList.PETLEASH = function() PetLeashOptionsDialog:Toggle() end
+
+    if not C.IsEditModeActive() then
+        -- Echo user's first slash command
+        PetLeashOptionsDialog:Toggle()
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

@@ -125,7 +125,14 @@ do
     end)
 end
 
-do
+local function OnPetJournalLoad()
+    PetLeashOptionsButton:SetParent(PetJournal)
+    PetLeashOptionsButton:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
+
+    PetLeashOptionsDialog:ClearAllPoints()
+    PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
+    PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
+
     hooksecurefunc("PetJournal_InitPetButton", function(button)
         if not button.PetLeashCheckbox then
             ---@type TherapyCheckbox
@@ -179,3 +186,5 @@ do
         end)
     end)
 end
+
+EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)

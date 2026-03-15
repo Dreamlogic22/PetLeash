@@ -22,11 +22,7 @@ local function LoadOptions()
     end
 end
 
-local function OnPetJournalLoad()
-    LoadOptions()
-end
-
-EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)
+EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", LoadOptions)
 
 SLASH_PETLEASH1 = "/petleash"
 SLASH_PETLEASH2 = "/pl"

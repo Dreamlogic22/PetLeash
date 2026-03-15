@@ -143,8 +143,7 @@ do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
     Dialog:SetSize(680, 580)
-    Dialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
-    Dialog:SetPoint("TOP", CollectionsJournal, "TOP")
+    Dialog:SetPoint("CENTER")
     Dialog:SetClampedToScreen(true)
     Dialog:SetFrameLevel(500)
     Dialog:SetFrameStrata("DIALOG")
@@ -196,7 +195,39 @@ do
 
     C.UpdatePetCards()
 
-    -- todo: hide and restore (if opened) in combat
+    function Dialog:Toggle()
+        if PlayerIsInCombat() then
+            if self:IsVisible() then
+                self:Hide()
+            end
+
+            self.RestoreAfterCombat = true
+            C.Print(L.OPTIONS_NOT_IN_COMBAT)
+            return
+        end
+
+        if C.IsEditModeActive() then
+            C.Print(L.OPTIONS_NOT_IN_EDIT_MODE)
+            return
+        end
+
+        self:SetShown(not self:IsVisible())
+    end
+
+    Dialog:RegisterEvent("PLAYER_IN_COMBAT_CHANGED")
+    Dialog:SetScript("OnEvent", function(self, event, inCombat)
+        if inCombat then
+            if self:IsVisible() then
+                self.RestoreAfterCombat = true
+                self:Hide()
+            end
+        else
+            if self.RestoreAfterCombat then
+                self.RestoreAfterCombat = nil
+                self:Show()
+            end
+        end
+    end)
 
     PetLeashOptionsDialog = Dialog
     tinsert(UISpecialFrames, "PetLeashOptionsDialog")

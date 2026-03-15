@@ -29,14 +29,19 @@ local function AddPet(petID)
         return
     end
 
+    table.insert(C.db.pets, petID)
+
     if #C.db.pets == 0 then
         -- If this is our first pet on a fresh install, enable
         T.Enable()
     end
 
-    table.insert(C.db.pets, petID)
+    if #C.db.pets >= 2 then
+        C.db.autoSwitch = true
+    end
 
     if PetLeashOptionsDialog:IsVisible() then
+        PetLeashOptionsDialog.General:NotifyChange()
         C.UpdatePetCards()
     end
 end
@@ -70,6 +75,7 @@ local function RemovePet(petID)
     end
 
     if PetLeashOptionsDialog:IsVisible() then
+        PetLeashOptionsDialog.General:NotifyChange()
         C.UpdatePetCards()
     end
 end

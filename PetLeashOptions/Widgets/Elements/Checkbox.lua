@@ -33,8 +33,7 @@ do
         Checkbox.CheckedTexture:SetPoint("CENTER", Checkbox.Border, "CENTER", 0, 0)
         Checkbox.CheckedTexture:SetSize(16, 16)
         Checkbox.CheckedTexture:DisableSharpening()
-
-        Checkbox.CheckedTexture:Hide()
+        Checkbox:SetCheckedTexture(Checkbox.CheckedTexture)
 
         Checkbox.Highlight = Checkbox:CreateTexture(nil, "HIGHLIGHT")
         Checkbox.Highlight:SetTexture(Media.Textures.Checkbox)
@@ -51,25 +50,18 @@ do
         Checkbox.Label:SetText(label)
         Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
-        function Checkbox:HandleCheckedTexture()
-            if self:IsVisible() then
-                self.CheckedTexture:SetShown(self:GetChecked())
-            end
-        end
-
         Checkbox:SetScript("OnClick", function(self)
             if self:GetChecked() then
                 PlaySound(857)
             else
                 PlaySound(856)
             end
-
-            self:HandleCheckedTexture()
         end)
 
         Checkbox:SetScript("OnDisable", function(self)
             self.CheckedTexture:SetDesaturated(true)
             self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
+
             self.Label:SetTextColor(0.5, 0.5, 0.5)
         end)
 
@@ -88,16 +80,8 @@ do
             end
         end)
 
-        Checkbox:SetScript("OnHide", function(self)
-            self:HandleCheckedTexture()
-        end)
-
         Checkbox:SetScript("OnLeave", function()
             GameTooltip:Hide()
-        end)
-
-        Checkbox:SetScript("OnShow", function(self)
-            self:HandleCheckedTexture()
         end)
 
         return Checkbox

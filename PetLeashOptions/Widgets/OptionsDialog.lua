@@ -15,23 +15,22 @@ local GetPetStats = C_PetJournal.GetPetStats
 
 local ControlDefinitions = {
     AutoSwitch = {
-        disable = function() return not C.db.enable end,
+        disable = function() if #C.db.pets < 2 then C.db.autoSwitch = false; return true else return not C.db.enable end end,
         get = function() return C.db.autoSwitch end,
         name = L.OPTIONS_AUTO_SWITCH,
         set = function(value)
             C.db.autoSwitch = value
             T.RefreshVariables()
-            if value then T.Enable() else T.Disable() end
         end,
         type = "toggle"
     },
     AutoSwitchInterval = {
         disable = function() return (not C.db.autoSwitch or not C.db.enable) end,
-        get = function() return C.db.autoSwitchInterval / 60 end,  -- Convert seconds → minutes
+        get = function() return C.db.autoSwitchInterval / 60 end,
         min = 1, max = 30, step = 1,
         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
         set = function(value)
-            C.db.autoSwitchInterval = value * 60  -- Convert minutes → seconds
+            C.db.autoSwitchInterval = value * 60
             T.RefreshVariables()
         end,
         type = "range"
@@ -43,7 +42,7 @@ local ControlDefinitions = {
         set = function(value) C.db.enable = value end,
         type = "toggle",
     },
-    ScanInterval = {  -- Renamed from "Throttle" to match the setting
+    ScanInterval = {
         disable = function() return not C.db.enable end,
         get = function() return C.db.scanInterval end,
         min = 1, max = 120, step = 1,
@@ -54,7 +53,7 @@ local ControlDefinitions = {
         end,
         type = "range"
     },
-    KeepSummonedPets = {  -- Renamed from "OverrideSummonedPets" to match the setting
+    KeepSummonedPets = {
         desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
         disable = function() return not C.db.enable end,
         get = function() return C.db.keepSummonedPets end,
@@ -80,6 +79,48 @@ local function CreateCard(parent, petID)
     Panel:CreateBackdrop()
     Panel:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
     Panel:SetBorderColor(colorData.r, colorData.g, colorData.b)
+
+    Panel.RemoveButton = C.CreateFrame("Button", nil, Panel)
+    Panel.RemoveButton:SetSize(14, 14)
+    Panel.RemoveButton:SetPoint("TOPRIGHT", -6, -6)
+
+    Panel.RemoveButton.Texture = Panel.RemoveButton:CreateTexture(nil, "OVERLAY")
+    Panel.RemoveButton.Texture:SetTexture(Media.Textures.Close)
+    Panel.RemoveButton.Texture:SetInside()
+
+    Panel.RemoveButton:SetScript("OnClick", function()
+        PlaySoundFile(567481)
+
+        for i, id in ipairs(C.db.pets) do
+            if id == petID then
+                tremove(C.db.pets, i)
+                break
+            end
+        end
+
+        if not C.db.pets or #C.db.pets == 0 then
+            T.Disable()
+        end
+
+        if #C.db.pets < 2 then
+            C.db.autoSwitch = false
+            PetLeashOptionsDialog.General:NotifyChange()
+        end
+
+        if PetJournal:IsVisible() then
+            C_PetJournal.SetDefaultFilters()
+        end
+
+        C.UpdatePetCards()
+    end)
+
+    Panel.RemoveButton:SetScript("OnEnter", function(self)
+        self.Texture:SetVertexColor(colorData.r, colorData.g, colorData.b)
+    end)
+
+    Panel.RemoveButton:SetScript("OnLeave", function(self)
+        self.Texture:SetVertexColor(1, 1, 1)
+    end)
 
     -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
     local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(speciesID))
@@ -135,6 +176,16 @@ do
             end
 
             Panels[i] = panel
+        end
+
+        if #T.db.pets > MaxDisplay then
+            local Remaining = #C.db.pets - MaxDisplay
+            local MoreText = PetLeashOptionsDialog:CreateFontString(nil, "OVERLAY")
+
+            MoreText:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
+            MoreText:SetPoint("BOTTOMRIGHT", PetLeashOptionsDialog.PetCards, "BOTTOMRIGHT", -20, 5)
+            MoreText:SetText(string.format(L.OPTIONS_MORE_PETS, Remaining))
+            MoreText:SetTextColor(1, 1, 1)
         end
     end
 end

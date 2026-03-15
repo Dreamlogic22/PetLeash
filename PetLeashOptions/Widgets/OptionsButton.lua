@@ -26,5 +26,9 @@ do
         GameTooltip:Hide()
     end)
 
+    Button:SetScript("OnHide", function()
+        GameTooltip:Hide()
+    end)
+
     PetLeashOptionsButton = Button
 end

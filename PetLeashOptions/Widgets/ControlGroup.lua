@@ -39,7 +39,6 @@ local function CreateControl(info)
         widget.set = info.set
 
         widget:SetChecked(info.get())
-        widget:HandleCheckedTexture()
 
         widget:HookScript("OnClick", function()
             local value = widget:GetChecked()

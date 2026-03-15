@@ -67,10 +67,8 @@ local function LoadDevTools()
 end
 
 local function OnInitialize()
-    T.IsDebugBuild = T.db.isDebugBuild
-    if T.IsDebugBuild then
-        LoadDevTools()
-    end
+    -- TODO: remove
+    LoadDevTools()
 
     if T.db.enable and (T.db.pets and #T.db.pets > 0) then
         T.Enable()

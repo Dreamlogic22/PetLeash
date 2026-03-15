@@ -73,7 +73,6 @@ function EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...) 
 function GenerateClosure(f, ...) end
 
 PetJournal = CreateFrame("Frame")
-PetJournalFindBattle = CreateFrame("Button")
 
 ---[Documentation](https://github.com/Gethe/wow-ui-source/blob/d6dffb48b2c0d7a7ab5d37dad2817ccee710e0ef/Interface/AddOns/Blizzard_RestrictedAddOnEnvironment/SecureStateDriver.lua#L8)
 ---@param frame Frame
@@ -85,3 +84,17 @@ function RegisterAttributeDriver(frame, state, values) end
 ---@param frame Frame
 ---@param state string
 function UnregisterAttributeDriver(frame, state) end
+
+---[Documentation](https://github.com/Gethe/wow-ui-source/blob/edcb2f2059f13873f91e6e9adb567de94bdbd69c/Interface/AddOns/Blizzard_Colors/Mainline/ColorManager.lua#L1)
+---@class ColorManager
+ColorManager = {}
+
+---@class ColorData: table
+---@field r number
+---@field g number
+---@field b number
+
+---[Documentation](https://github.com/Gethe/wow-ui-source/blob/edcb2f2059f13873f91e6e9adb567de94bdbd69c/Interface/AddOns/Blizzard_Colors/Mainline/ColorManager.lua#L52)
+---@param quality number
+---@return ColorData
+function ColorManager.GetColorDataForItemQuality(quality) end

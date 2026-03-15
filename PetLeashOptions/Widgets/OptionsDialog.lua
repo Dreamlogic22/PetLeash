@@ -7,17 +7,9 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
+local L, Media = T.Locale, C.Media
 
 local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
-local GetPetStats = C_PetJournal.GetPetStats
-
----@param petID string
-local function GetPetCardInfo(petID)
-    local speciesID = PetUtil.GetSpecies(petID)
-    local health, _, _, _, rarity = GetPetStats(petID)
-    local customName, name = PetUtil.GetName(petID)
-end
 
 local ControlDefinitions = {
     AutoSwitch = {
@@ -73,11 +65,7 @@ local ControlDefinitions = {
 ---@param petID string
 ---@return PetCard
 local function CreateCard(parent, petID)
-    local health, _, _, _, rarity = GetPetStats(petID)
-    local speciesID = PetUtil.GetSpecies(petID)
-    local customName, name = PetUtil.GetName(petID)
-
-    local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
+    local cardInfo = C.GetPetCardInfo(petID)
 
     ---@class PetCard: TherapyFrame
     local Panel = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
@@ -85,7 +73,7 @@ local function CreateCard(parent, petID)
     Panel:SetFrameLevel(parent:GetFrameLevel() + 1)
     Panel:CreateBackdrop()
     Panel:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
-    Panel:SetBorderColor(colorData.r, colorData.g, colorData.b)
+    Panel:SetBorderColor(cardInfo:GetRGB())
 
     Panel.RemoveButton = C.CreateFrame("Button", nil, Panel)
     Panel.RemoveButton:SetSize(14, 14)
@@ -122,7 +110,7 @@ local function CreateCard(parent, petID)
     end)
 
     Panel.RemoveButton:SetScript("OnEnter", function(self)
-        self.Texture:SetVertexColor(colorData.r, colorData.g, colorData.b)
+        self.Texture:SetVertexColor(cardInfo:GetRGB())
     end)
 
     Panel.RemoveButton:SetScript("OnLeave", function(self)
@@ -130,7 +118,7 @@ local function CreateCard(parent, petID)
     end)
 
     -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
-    local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(speciesID))
+    local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.speciesID))
 
     Panel.ModelScene = CreateFrame("ModelScene", nil, Panel, "ModelSceneMixinTemplate")
     Panel.ModelScene:SetUsingParentLevel(true)
@@ -141,10 +129,10 @@ local function CreateCard(parent, petID)
 
     local PetActor = Panel.ModelScene:GetActorByTag("pet")
     if PetActor then
-        PetActor:SetModelByCreatureDisplayID(displayID, true)
+        PetActor:SetModelByCreatureDisplayID(cardInfo.displayID, true)
         PetActor:SetAnimationBlendOperation(Enum.ModelBlendOperation.None)
 
-        if health <= 0 then
+        if cardInfo.isDead then
             PetActor:SetAnimation(6, 1)
         else
             PetActor:SetAnimation(0, -1)
@@ -154,7 +142,7 @@ local function CreateCard(parent, petID)
     local Name = Panel:CreateFontString(nil, "OVERLAY")
     Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
     Name:SetPoint("BOTTOM", Panel, "BOTTOM", 0, 10)
-    Name:SetText(customName or name or UNKNOWN)
+    Name:SetText(cardInfo.customName or cardInfo.name or UNKNOWN)
     Name:SetTextColor(Media.Colors.Foreground:GetRGB())
 
     Panel.SlideAnimation = Panel:CreateAnimationGroup()

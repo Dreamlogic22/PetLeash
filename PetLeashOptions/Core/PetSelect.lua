@@ -7,9 +7,8 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media = T.Locale, C.Media
+local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 
-local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 local SetDefaultFilters = C_PetJournal.SetDefaultFilters
 
 local OptionsButton = PetLeashOptionsButton
@@ -180,7 +179,7 @@ local function OnPetJournalLoad()
             button.PetLeashCheckbox:SetShown(button.owned)
 
             if button.petID then
-                local _, error = GetPetSummonInfo(button.petID)
+                local _, error = PetUtil.CanSummon(button.petID)
                 local neverUsable = error == Enum.PetJournalError.InvalidFaction
 
                 if neverUsable then

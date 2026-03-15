@@ -7,11 +7,10 @@
 
 ---@class PetLeash
 local T = select(2, ...)
+local PetUtil = T.PetUtil
 
 local GetItemCount = C_Item.GetItemCount
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
-local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID -- never secret
-local GetSummonedPetGUID = C_PetJournal.GetSummonedPetGUID
 local IsEquippedItem = C_Item.IsEquippedItem
 local IsOnQuest = C_QuestLog.IsOnQuest
 
@@ -95,10 +94,10 @@ end
 local function CheckHoliday()
     if IsWinterVeil() then return false end
 
-    local currentPet = GetSummonedPetGUID()
+    local currentPet = PetUtil.GetCurrent()
     if not currentPet then return false end
 
-    local speciesID = GetSpeciesFromPetID(currentPet)
+    local speciesID = PetUtil.GetSpecies(currentPet)
     for _, holidayID in ipairs(Holidays) do
         if speciesID == holidayID then
             return true

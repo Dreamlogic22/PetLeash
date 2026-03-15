@@ -6,9 +6,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
-local L = T.Locale
-
-local GetSpeciesFromPetID = C_PetJournal.GetPetInfoByPetID
+local L, PetUtil = T.Locale, T.PetUtil
 
 local Exclusions = {
     280,  -- Guild Page (Alliance)
@@ -21,7 +19,7 @@ local Exclusions = {
 local function IsExcludedSpecies(petGuid)
     if not petGuid then return false end
 
-    local speciesID = GetSpeciesFromPetID(petGuid)
+    local speciesID = PetUtil.GetSpecies(petGuid)
     if not speciesID then return false end
 
     for _, id in ipairs(Exclusions) do
@@ -34,13 +32,8 @@ local function IsExcludedSpecies(petGuid)
 end
 
 do
-    local CanSummon = C_PetJournal.GetPetSummonInfo
-    local GetCurrentPet = C_PetJournal.GetSummonedPetGUID
     local HasControl = HasFullControl
     local IsMoving = IsPlayerMoving
-    local PlayerIsInCombat = PlayerIsInCombat
-    local SummonPet = C_PetJournal.SummonPetByGUID
-
 
     ---@return string?
     function T.GetRandomPet()
@@ -87,15 +80,11 @@ do
 
     ---@return boolean
     function T.TrySummon()
-        if PlayerIsInCombat() then
-            return false
-        end
-
         if not T.db.enable or not HasControl() or IsMoving() then
             return false
         end
 
-        local CurrentPet = GetCurrentPet()
+        local CurrentPet = PetUtil.GetCurrent()
 
         -- Always respect overrides
         if CurrentPet and T.HasOverride() then
@@ -117,8 +106,8 @@ do
             return false
         end
 
-        if CanSummon(NewPet) then
-            SummonPet(NewPet)
+        if PetUtil.CanSummon(NewPet) then
+            PetUtil.Summon(NewPet)
             return true
         end
 

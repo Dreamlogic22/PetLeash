@@ -1,16 +1,17 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.01 (March 14, 2026)
+    PetLeash 4.01 (March 15, 2026)
 
 ----------------------------------------------------------------------]]
 
----@type string
-local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
 
 ---@class Locale
 T.Locale = {}
+
+---@class PetUtil
+T.PetUtil = {}
 
 -- Load database
 do

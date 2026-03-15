@@ -7,11 +7,17 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media = T.Locale, C.Media
+local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 
-local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
 local GetPetStats = C_PetJournal.GetPetStats
+
+---@param petID string
+local function GetPetCardInfo(petID)
+    local speciesID = PetUtil.GetSpecies(petID)
+    local health, _, _, _, rarity = GetPetStats(petID)
+    local customName, name = PetUtil.GetName(petID)
+end
 
 local ControlDefinitions = {
     AutoSwitch = {
@@ -20,7 +26,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_AUTO_SWITCH,
         set = function(value)
             C.db.autoSwitch = value
-            T.RefreshVariables()
+            T.LoadVariables()
         end,
         type = "toggle"
     },
@@ -31,7 +37,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
         set = function(value)
             C.db.autoSwitchInterval = value * 60
-            T.RefreshVariables()
+            T.LoadVariables()
         end,
         type = "range"
     },
@@ -49,7 +55,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_SCAN_INTERVAL,
         set = function(value)
             C.db.scanInterval = value
-            T.RefreshVariables()
+            T.LoadVariables()
         end,
         type = "range"
     },
@@ -68,7 +74,8 @@ local ControlDefinitions = {
 ---@return PetCard
 local function CreateCard(parent, petID)
     local health, _, _, _, rarity = GetPetStats(petID)
-    local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
+    local speciesID = PetUtil.GetSpecies(petID)
+    local customName, name = PetUtil.GetName(petID)
 
     local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
 
@@ -212,14 +219,14 @@ do
         PetLeashOptionsDialog.LeftArrow:SetScript("OnClick", function(self)
             if CurrentIndex > 1 and CardsCurrentlyAnimating == 0 then
                 StartAnimation(-1)
-                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+                PlaySound(856)
             end
         end)
 
         PetLeashOptionsDialog.RightArrow:SetScript("OnClick", function()
             if CurrentIndex + MaxDisplay - 1 < #Panels and CardsCurrentlyAnimating == 0 then
                 StartAnimation(1)
-                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+                PlaySound(856)
             end
         end)
     end
@@ -317,7 +324,7 @@ do
     end
 
     Dialog:RegisterEvent("PLAYER_IN_COMBAT_CHANGED")
-    Dialog:SetScript("OnEvent", function(self, event, inCombat)
+    Dialog:SetScript("OnEvent", function(self, _, inCombat)
         if inCombat then
             if self:IsVisible() then
                 self.RestoreAfterCombat = true

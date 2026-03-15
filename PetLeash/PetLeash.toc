@@ -11,6 +11,7 @@
 
 Core\Settings.lua
 Core\Init.lua
+Core\Utils.lua
 
 Locale\enUS.lua
 

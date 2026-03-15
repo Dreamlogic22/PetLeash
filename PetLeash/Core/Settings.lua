@@ -40,5 +40,5 @@ T.db = {
     enable = true,
     keepSummonedPets = true,
     pets = {},
-    scanInterval = 5
+    scanInterval = 5,
 }

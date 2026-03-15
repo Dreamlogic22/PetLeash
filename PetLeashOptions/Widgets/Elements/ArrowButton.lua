@@ -51,6 +51,14 @@ do
         Arrow.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
         Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.5, 0.625)
 
+        Arrow:SetScript("OnDisable", function(self)
+            self.Texture:SetTexCoord(0.25, 0.5, 0.5, 0.625)
+        end)
+
+        Arrow:SetScript("OnEnable", function(self)
+            self.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
+        end)
+
         return Arrow
     end
 

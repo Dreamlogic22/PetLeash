@@ -153,40 +153,36 @@ local function CreateCard(parent, petID)
     return Panel
 end
 
-do
-    local MaxDisplay = 3
-    local Panels = {}
+local MaxDisplay = 3
+local Panels = {}
 
-    function C.UpdatePetCards()
-        for _, panel in ipairs(Panels) do
-            panel:Hide()
-            panel:SetParent(nil)
+function C.UpdatePetCards()
+    for _, panel in ipairs(Panels) do
+        panel:Hide()
+        panel:SetParent(nil)
+    end
+
+    wipe(Panels)
+
+    for i = 1, math.min(MaxDisplay, #C.db.pets) do
+        local petID = C.db.pets[i]
+        local panel = CreateCard(PetLeashOptionsDialog.PetCards, petID)
+
+        if i == 1 then
+            panel:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 20, 0)
+        else
+            panel:SetPoint("LEFT", Panels[i - 1], "RIGHT", 25, 0)
         end
 
-        wipe(Panels)
+        Panels[i] = panel
+    end
 
-        for i = 1, math.min(MaxDisplay, #C.db.pets) do
-            local petID = C.db.pets[i]
-            local panel = CreateCard(PetLeashOptionsDialog.PetCards, petID)
-
-            if i == 1 then
-                panel:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 20, 0)
-            else
-                panel:SetPoint("LEFT", Panels[i - 1], "RIGHT", 25, 0)
-            end
-
-            Panels[i] = panel
-        end
-
-        if #T.db.pets > MaxDisplay then
-            local Remaining = #C.db.pets - MaxDisplay
-            local MoreText = PetLeashOptionsDialog:CreateFontString(nil, "OVERLAY")
-
-            MoreText:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
-            MoreText:SetPoint("BOTTOMRIGHT", PetLeashOptionsDialog.PetCards, "BOTTOMRIGHT", -20, 5)
-            MoreText:SetText(string.format(L.OPTIONS_MORE_PETS, Remaining))
-            MoreText:SetTextColor(1, 1, 1)
-        end
+    if #C.db.pets > MaxDisplay then
+        local Remaining = #C.db.pets - MaxDisplay
+        PetLeashOptionsDialog.MoreText:SetText(string.format(L.OPTIONS_MORE_PETS, Remaining))
+        PetLeashOptionsDialog.MoreText:Show()
+    else
+        PetLeashOptionsDialog.MoreText:Hide()
     end
 end
 
@@ -244,7 +240,48 @@ do
     Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
     Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
+    Dialog.MoreText = Dialog:CreateFontString(nil, "OVERLAY")
+    Dialog.MoreText:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
+    Dialog.MoreText:SetPoint("BOTTOMRIGHT", Dialog.PetCards, "BOTTOMRIGHT", -20, 5)
+    Dialog.MoreText:SetTextColor(1, 1, 1)
+    Dialog.MoreText:EnableMouse(true)
+    Dialog.MoreText:Hide()
+
+    Dialog.Underline = Dialog:CreateTexture(nil, "ARTWORK")
+    Dialog.Underline:SetColorTexture(Media.Colors.Foreground:GetRGB())
+    Dialog.Underline:SetPoint("TOPLEFT", Dialog.MoreText, "BOTTOMLEFT", 0, -2)
+    Dialog.Underline:SetPoint("TOPRIGHT", Dialog.MoreText, "BOTTOMRIGHT", 0, -2)
+    Dialog.Underline:SetHeight(1)
+    Dialog.Underline:Hide()
+
     C.UpdatePetCards()
+
+    PetLeashOptionsDialog.MoreText:SetScript("OnEnter", function(self)
+        self:SetVertexColor(Media.Colors.Foreground:GetRGB())
+        PetLeashOptionsDialog.Underline:Show()
+
+        GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+        GameTooltip:AddLine(L.OPTIONS_MORE_PETS_TOOLTIP, Media.Colors.Foreground:GetRGB())
+        GameTooltip:AddLine(" ")
+
+        for i = MaxDisplay + 1, #C.db.pets do
+            local petID = C.db.pets[i]
+            local rarity = select(5, GetPetStats(petID))
+            local _, customName, _, _, _, _, _, name = GetPetInfoByPetID(petID)
+
+            local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
+
+            GameTooltip:AddLine(customName or name or UNKNOWN, colorData.r, colorData.g, colorData.b)
+        end
+
+        GameTooltip:Show()
+    end)
+
+    PetLeashOptionsDialog.MoreText:SetScript("OnLeave", function(self)
+        self:SetVertexColor(1, 1, 1)
+        PetLeashOptionsDialog.Underline:Hide()
+        GameTooltip:Hide()
+    end)
 
     function Dialog:Toggle()
         if PlayerIsInCombat() then

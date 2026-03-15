@@ -1,0 +1,69 @@
+--[[--------------------------------------------------------------------
+
+    Stylized arrow button.
+
+----------------------------------------------------------------------]]
+
+---@class PetLeashOptions
+local C = select(2, ...)
+local Media = C.Media
+
+local CreateBackArrowButton, CreateForwardArrowButton
+do
+    ---@param parent Frame
+    ---@return TherapyArrowButton
+    local function CreateArrowButton(parent)
+        ---@class TherapyArrowButton: TherapyFrame
+        local Arrow = CreateFrame("Button", nil, parent)
+        Arrow:SetSize(16, 24)
+
+        Arrow.Texture = Arrow:CreateTexture(nil, "ARTWORK")
+        Arrow.Texture:SetTexture(Media.Textures.Slider)
+        Arrow.Texture:SetSize(24, 24)
+        Arrow.Texture:SetPoint("CENTER", Arrow, "CENTER")
+
+        Arrow.Highlight = Arrow:CreateTexture(nil, "HIGHLIGHT")
+        Arrow.Highlight:SetTexture(Media.Textures.Slider)
+        Arrow.Highlight:SetSize(24, 24)
+        Arrow.Highlight:SetPoint("CENTER", Arrow, "CENTER")
+        Arrow.Highlight:SetBlendMode("ADD")
+        Arrow.Highlight:SetVertexColor(0.5, 0.5, 0.5)
+
+        Arrow:SetScript("OnClick", function()
+            PlaySound(229883)
+        end)
+
+        Arrow:SetScript("OnEnter", function(self)
+            self.Texture:SetVertexColor(Media.Colors.Foreground:GetRGB())
+        end)
+
+        Arrow:SetScript("OnLeave", function(self)
+            self.Texture:SetVertexColor(1, 1, 1)
+        end)
+
+        return Arrow
+    end
+
+    ---@param parent Frame
+    ---@return TherapyArrowButton
+    CreateBackArrowButton = function(parent)
+        local Arrow = CreateArrowButton(parent)
+        Arrow.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
+        Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.5, 0.625)
+
+        return Arrow
+    end
+
+    ---@param parent Frame
+    ---@return TherapyArrowButton
+    CreateForwardArrowButton = function(parent)
+        local Arrow = CreateArrowButton(parent)
+        Arrow.Texture:SetTexCoord(0, 0.25, 0.625, 0.75)
+        Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.625, 0.75)
+
+        return Arrow
+    end
+
+    C.CreateBackArrowButton = CreateBackArrowButton
+    C.CreateForwardArrowButton = CreateForwardArrowButton
+end

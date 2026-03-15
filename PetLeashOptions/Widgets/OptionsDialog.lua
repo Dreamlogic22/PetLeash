@@ -118,7 +118,7 @@ local function CreateCard(parent, petID)
     end)
 
     -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
-    local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.speciesID))
+    local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))
 
     Panel.ModelScene = CreateFrame("ModelScene", nil, Panel, "ModelSceneMixinTemplate")
     Panel.ModelScene:SetUsingParentLevel(true)
@@ -129,10 +129,10 @@ local function CreateCard(parent, petID)
 
     local PetActor = Panel.ModelScene:GetActorByTag("pet")
     if PetActor then
-        PetActor:SetModelByCreatureDisplayID(cardInfo.displayID, true)
+        PetActor:SetModelByCreatureDisplayID(cardInfo.DisplayID, true)
         PetActor:SetAnimationBlendOperation(Enum.ModelBlendOperation.None)
 
-        if cardInfo.isDead then
+        if cardInfo.IsDead then
             PetActor:SetAnimation(6, 1)
         else
             PetActor:SetAnimation(0, -1)
@@ -142,7 +142,7 @@ local function CreateCard(parent, petID)
     local Name = Panel:CreateFontString(nil, "OVERLAY")
     Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
     Name:SetPoint("BOTTOM", Panel, "BOTTOM", 0, 10)
-    Name:SetText(cardInfo.customName or cardInfo.name or UNKNOWN)
+    Name:SetText(cardInfo.CustomName or cardInfo.Name or UNKNOWN)
     Name:SetTextColor(Media.Colors.Foreground:GetRGB())
 
     Panel.SlideAnimation = Panel:CreateAnimationGroup()
@@ -173,7 +173,7 @@ do
                 Panels[panelIndex]:Show()
 
                 if i == 1 then
-                    Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 20, 0)
+                    Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 25, 0)
                 else
                     Panels[panelIndex]:SetPoint("LEFT", Panels[CurrentIndex + i - 2], "RIGHT", 25, 0)
                 end
@@ -275,20 +275,12 @@ do
     Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
     -- Left arrow
-    Dialog.LeftArrow = CreateFrame("Button", nil, Dialog.PetCards)
-    Dialog.LeftArrow:SetSize(32, 32)
+    Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
     Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
-    Dialog.LeftArrow:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up")
-    Dialog.LeftArrow:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down")
-    Dialog.LeftArrow:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled")
 
     -- Right arrow
-    Dialog.RightArrow = CreateFrame("Button", nil, Dialog.PetCards)
-    Dialog.RightArrow:SetSize(32, 32)
+    Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
     Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
-    Dialog.RightArrow:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
-    Dialog.RightArrow:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down")
-    Dialog.RightArrow:SetDisabledTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled")
 
     C.UpdatePetCards()
 

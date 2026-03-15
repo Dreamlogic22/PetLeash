@@ -12,6 +12,7 @@ C.Media = {
         Normal = [[Interface\AddOns\PetLeash\Media\Fonts\PTSansNarrow.ttf]]
     },
     Textures = {
+        Arrow = [[Interface\AddOns\PetLeash\Media\Textures\Arrow]],
         Background = [[Interface\AddOns\PetLeash\Media\Textures\Background]],
         Blank = [[Interface\AddOns\PetLeash\Media\Textures\Blank]],
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]],

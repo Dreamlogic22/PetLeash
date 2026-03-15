@@ -8,15 +8,17 @@
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Core\Init.lua
+Core\Main.lua
 Core\Media.lua
 
+Widgets\Elements\ArrowButton.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Group.lua
 Widgets\Elements\Slider.lua
+Widgets\Elements\ControlGroup.lua
 
-Widgets\ControlGroup.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 
-Core\PetSelect.lua
+Modules\PetSelect.lua

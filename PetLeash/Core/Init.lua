@@ -8,6 +8,8 @@
 local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
+T.IsEnabled = false
+
 
 function T.Print(...)
     print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))

@@ -18,6 +18,5 @@ Core\Init.lua
 
 Core\Main.lua
 
-# Modules\SummonPet.lua
 # Modules\Overrides.lua
 Modules\OptionsLoader.lua

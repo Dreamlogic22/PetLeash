@@ -54,6 +54,8 @@ do
         if reason then
             T.Print(reason)
         end
+
+        T.IsEnabled = false
     end
 
     function T.Enable()
@@ -61,6 +63,8 @@ do
 
         WatchFrame:SetScript("OnUpdate", CheckPets)
         RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")
+
+        T.IsEnabled = true
     end
 
     function T.UpdateSettings()

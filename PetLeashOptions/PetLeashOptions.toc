@@ -15,12 +15,12 @@ Widgets\Elements\ArrowButton.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Group.lua
-Widgets\Elements\PanelButton.lua
 Widgets\Elements\RemoveButton.lua
 Widgets\Elements\Slider.lua
 
 Widgets\Elements\ControlGroup.lua
 
+Widgets\PetCard.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

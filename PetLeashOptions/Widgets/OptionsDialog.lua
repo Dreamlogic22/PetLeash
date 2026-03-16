@@ -9,8 +9,6 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, C.Media
 
-local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
-
 local ControlDefinitions = {
     AutoSwitch = {
         disable = function() if #C.db.pets < 2 then C.db.autoSwitch = false; return true else return not C.db.enable end end,
@@ -61,83 +59,6 @@ local ControlDefinitions = {
     }
 }
 
----@param parent TherapyGroup
----@param petID string
----@return PetCard
-local function CreateCard(parent, petID)
-    local cardInfo = C.GetPetCardInfo(petID)
-
-    ---@class PetCard: TherapyFrame
-    local Card = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
-    Card:SetSize(180, 230)
-    Card:SetFrameLevel(parent:GetFrameLevel() + 1)
-    Card:CreateBackdrop()
-    Card:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
-    Card:SetBorderColor(cardInfo:GetRGB())
-
-    Card.RemoveButton = C.CreateRemoveButton(Card)
-    Card.RemoveButton:SetPoint("TOPRIGHT", -2, -1)
-
-    Card.RemoveButton:HookScript("OnClick", function()
-        for i, id in ipairs(C.db.pets) do
-            if id == petID then
-                tremove(C.db.pets, i)
-                break
-            end
-        end
-
-        if not C.db.pets or #C.db.pets == 0 then
-            T.Disable()
-        end
-
-        if #C.db.pets < 2 then
-            C.db.autoSwitch = false
-            PetLeashOptionsDialog.General:NotifyChange()
-        end
-
-        if PetJournal:IsVisible() then
-            C_PetJournal.SetDefaultFilters()
-        end
-
-        C.UpdatePetCards()
-    end)
-
-    -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
-    local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))
-
-    Card.ModelScene = CreateFrame("ModelScene", nil, Card, "ModelSceneMixinTemplate")
-    Card.ModelScene:SetUsingParentLevel(true)
-    Card.ModelScene:SetSize(160, 180)
-    Card.ModelScene:SetPoint("TOP", 0, -10)
-
-    Card.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_DISCARD, true)
-
-    local PetActor = Card.ModelScene:GetActorByTag("pet")
-    if PetActor then
-        PetActor:SetModelByCreatureDisplayID(cardInfo.DisplayID, true)
-        PetActor:SetAnimationBlendOperation(Enum.ModelBlendOperation.None)
-
-        if cardInfo.IsDead then
-            PetActor:SetAnimation(6, 1)
-        else
-            PetActor:SetAnimation(0, -1)
-        end
-    end
-
-    local Name = Card:CreateFontString(nil, "OVERLAY")
-    Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
-    Name:SetPoint("BOTTOM", Card, "BOTTOM", 0, 10)
-    Name:SetText(cardInfo.CustomName or cardInfo.Name or UNKNOWN)
-    Name:SetTextColor(Media.Colors.Foreground:GetRGB())
-
-    Card.SlideAnimation = Card:CreateAnimationGroup()
-    Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
-    Card.SlideTranslation:SetDuration(0.4)
-    Card.SlideTranslation:SetSmoothing("IN_OUT")
-
-    return Card
-end
-
 -- Animation block
 do
     local MaxDisplay = 3
@@ -180,7 +101,7 @@ do
 
         for i = 1, #C.db.pets do  -- Create ALL cards
             local petID = C.db.pets[i]
-            local panel = CreateCard(PetLeashOptionsDialog.PetCards, petID)
+            local panel = C.CreatePetCard(PetLeashOptionsDialog.PetCards, petID)
             Panels[i] = panel
         end
 

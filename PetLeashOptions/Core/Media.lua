@@ -15,10 +15,10 @@ C.Media = {
         Background = [[Interface\AddOns\PetLeash\Media\Textures\Background]],
         Blank = [[Interface\AddOns\PetLeash\Media\Textures\Blank]],
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]],
-        Close = [[Interface\AddOns\PetLeash\Media\Textures\Close]],
         CloseButton = [[Interface\AddOns\PetLeash\Media\Textures\CloseButton]],
         Glow = [[Interface\AddOns\PetLeash\Media\Textures\Glow]],
         PetJournalWidget = [[Interface\AddOns\PetLeash\Media\Textures\PetJournalWidget.png]],
+        Settings = [[Interface\AddOns\PetLeash\Media\Textures\Settings.png]],
         Slider = [[Interface\AddOns\PetLeash\Media\Textures\Slider.png]]
     }
 }

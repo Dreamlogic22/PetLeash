@@ -68,24 +68,17 @@ local function CreateCard(parent, petID)
     local cardInfo = C.GetPetCardInfo(petID)
 
     ---@class PetCard: TherapyFrame
-    local Panel = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
-    Panel:SetSize(180, 230)
-    Panel:SetFrameLevel(parent:GetFrameLevel() + 1)
-    Panel:CreateBackdrop()
-    Panel:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
-    Panel:SetBorderColor(cardInfo:GetRGB())
+    local Card = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
+    Card:SetSize(180, 230)
+    Card:SetFrameLevel(parent:GetFrameLevel() + 1)
+    Card:CreateBackdrop()
+    Card:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
+    Card:SetBorderColor(cardInfo:GetRGB())
 
-    Panel.RemoveButton = C.CreateFrame("Button", nil, Panel)
-    Panel.RemoveButton:SetSize(14, 14)
-    Panel.RemoveButton:SetPoint("TOPRIGHT", -6, -6)
+    Card.RemoveButton = C.CreateRemoveButton(Card)
+    Card.RemoveButton:SetPoint("TOPRIGHT", -2, -1)
 
-    Panel.RemoveButton.Texture = Panel.RemoveButton:CreateTexture(nil, "OVERLAY")
-    Panel.RemoveButton.Texture:SetTexture(Media.Textures.Close)
-    Panel.RemoveButton.Texture:SetInside()
-
-    Panel.RemoveButton:SetScript("OnClick", function()
-        PlaySoundFile(567481)
-
+    Card.RemoveButton:HookScript("OnClick", function()
         for i, id in ipairs(C.db.pets) do
             if id == petID then
                 tremove(C.db.pets, i)
@@ -109,25 +102,17 @@ local function CreateCard(parent, petID)
         C.UpdatePetCards()
     end)
 
-    Panel.RemoveButton:SetScript("OnEnter", function(self)
-        self.Texture:SetVertexColor(cardInfo:GetRGB())
-    end)
-
-    Panel.RemoveButton:SetScript("OnLeave", function(self)
-        self.Texture:SetVertexColor(1, 1, 1)
-    end)
-
     -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
     local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))
 
-    Panel.ModelScene = CreateFrame("ModelScene", nil, Panel, "ModelSceneMixinTemplate")
-    Panel.ModelScene:SetUsingParentLevel(true)
-    Panel.ModelScene:SetSize(160, 180)
-    Panel.ModelScene:SetPoint("TOP", 0, -10)
+    Card.ModelScene = CreateFrame("ModelScene", nil, Card, "ModelSceneMixinTemplate")
+    Card.ModelScene:SetUsingParentLevel(true)
+    Card.ModelScene:SetSize(160, 180)
+    Card.ModelScene:SetPoint("TOP", 0, -10)
 
-    Panel.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_DISCARD, true)
+    Card.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_DISCARD, true)
 
-    local PetActor = Panel.ModelScene:GetActorByTag("pet")
+    local PetActor = Card.ModelScene:GetActorByTag("pet")
     if PetActor then
         PetActor:SetModelByCreatureDisplayID(cardInfo.DisplayID, true)
         PetActor:SetAnimationBlendOperation(Enum.ModelBlendOperation.None)
@@ -139,18 +124,18 @@ local function CreateCard(parent, petID)
         end
     end
 
-    local Name = Panel:CreateFontString(nil, "OVERLAY")
+    local Name = Card:CreateFontString(nil, "OVERLAY")
     Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
-    Name:SetPoint("BOTTOM", Panel, "BOTTOM", 0, 10)
+    Name:SetPoint("BOTTOM", Card, "BOTTOM", 0, 10)
     Name:SetText(cardInfo.CustomName or cardInfo.Name or UNKNOWN)
     Name:SetTextColor(Media.Colors.Foreground:GetRGB())
 
-    Panel.SlideAnimation = Panel:CreateAnimationGroup()
-    Panel.SlideTranslation = Panel.SlideAnimation:CreateAnimation("Translation")
-    Panel.SlideTranslation:SetDuration(0.4)
-    Panel.SlideTranslation:SetSmoothing("IN_OUT")
+    Card.SlideAnimation = Card:CreateAnimationGroup()
+    Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
+    Card.SlideTranslation:SetDuration(0.4)
+    Card.SlideTranslation:SetSmoothing("IN_OUT")
 
-    return Panel
+    return Card
 end
 
 -- Animation block
@@ -274,11 +259,9 @@ do
     Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
     Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
 
-    -- Left arrow
     Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
     Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
 
-    -- Right arrow
     Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
     Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
 

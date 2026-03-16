@@ -1,11 +1,9 @@
 --[[--------------------------------------------------------------------
 
-    Utility functions & helpers
+    Interface for C_PetJournal methods.
 
 ----------------------------------------------------------------------]]
 
----@type string
-local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
 
@@ -13,13 +11,6 @@ local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 local GetSummonedPetGUID = C_PetJournal.GetSummonedPetGUID
 local SummonPetByGUID = C_PetJournal.SummonPetByGUID
-
--- General
-do
-    function T.Print(...)
-        print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
-    end
-end
 
 ---@class PetUtil
 local PetUtil = T.PetUtil
@@ -45,6 +36,7 @@ do
     function PetUtil.Summon(petID)
         if not PlayerIsInCombat() then
             SummonPetByGUID(petID)
+            T.TimeSinceSummon = 0
         end
     end
 end

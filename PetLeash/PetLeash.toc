@@ -11,12 +11,13 @@
 
 Core\Settings.lua
 Core\Init.lua
-Core\Utils.lua
 
 Locale\enUS.lua
 
 Core\Main.lua
 
+Modules\PetUtil.lua
+Modules\WatchFrame.lua
 Modules\SummonPet.lua
 Modules\Overrides.lua
 Modules\OptionsLoader.lua

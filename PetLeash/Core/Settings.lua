@@ -20,13 +20,17 @@
 
         Should we override pets summoned using the Pet Journal?
 
+    mostRecentPet:
+
+        GUID of the last pet summoned manually or automatically.
+
     pets:
 
         Array of pets placed in the pool PetLeash uses to pick companions.
 
     scanInterval:
 
-        Seconds between checks to see if we need to summon a pet.
+        Seconds between summoning checks.
 
 ----------------------------------------------------------------------]]
 
@@ -39,6 +43,7 @@ T.db = {
     autoSwitchInterval = 5 * 60,
     enable = true,
     keepSummonedPets = true,
+    mostRecentPet = {},
     pets = {},
     scanInterval = 5,
 }

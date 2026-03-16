@@ -3,19 +3,22 @@
     PetLeash 4.01 (March 16, 2026)
 
 ----------------------------------------------------------------------]]
+
 ---@type string
 local Name = ...
-
 ---@class PetLeash
 local T = select(2, ...)
-do
-    T.Name = Name
 
-    ---@class Locale
-    T.Locale = {}
+function T.Print(...)
+    print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
+end
 
-    ---@class PetUtil
-    T.PetUtil = {}
+local function OnInitialize()
+    if T.db.enable and (T.db.pets and #T.db.pets > 0) then
+        T.Enable()
+    else
+        T.Disable(T.Locale.NO_PETS)
+    end
 end
 
 -- Load database
@@ -48,5 +51,12 @@ do
 
     T.db = PetLeashDB
 end
+
+EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)
+
+-- TODO: remove
+EventUtil.ContinueOnAddOnLoaded("TherapyDevTools", function()
+    TherapyDevTools_Monitor(Name)
+end)
 
 PetLeash = T

@@ -1,5 +1,5 @@
 ## Interface: 120001
-## Title: |cffd6bfa3PetLeash|r
+## Title: |cff33ff99PetLeash|r
 ## Version: 4.01
 ## SavedVariablesPerCharacter: PetLeashDB
 ## LoadSavedVariablesFirst: 1
@@ -9,15 +9,15 @@
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
+Locale\enUS.lua
+
+Utils\PetUtil.lua
+
 Core\Settings.lua
 Core\Init.lua
 
-Locale\enUS.lua
-
 Core\Main.lua
 
-Modules\PetUtil.lua
-Modules\WatchFrame.lua
-Modules\SummonPet.lua
-Modules\Overrides.lua
+# Modules\SummonPet.lua
+# Modules\Overrides.lua
 Modules\OptionsLoader.lua

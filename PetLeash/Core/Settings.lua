@@ -43,7 +43,7 @@ T.db = {
     autoSwitchInterval = 5 * 60,
     enable = true,
     keepSummonedPets = true,
-    mostRecentPet = {},
+    mostRecentPet = "",
     pets = {},
     scanInterval = 5,
 }

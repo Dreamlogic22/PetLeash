@@ -16,7 +16,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_AUTO_SWITCH,
         set = function(value)
             C.db.autoSwitch = value
-            T.LoadVariables()
+            T.UpdateSettings()
         end,
         type = "toggle"
     },
@@ -27,7 +27,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
         set = function(value)
             C.db.autoSwitchInterval = value * 60
-            T.LoadVariables()
+            T.UpdateSettings()
         end,
         type = "range"
     },
@@ -45,7 +45,7 @@ local ControlDefinitions = {
         name = L.OPTIONS_SCAN_INTERVAL,
         set = function(value)
             C.db.scanInterval = value
-            T.LoadVariables()
+            T.UpdateSettings()
         end,
         type = "range"
     },

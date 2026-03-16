@@ -12,8 +12,11 @@ local GetPetSummonInfo = C_PetJournal.GetPetSummonInfo
 local GetSummonedPetGUID = C_PetJournal.GetSummonedPetGUID
 local SummonPetByGUID = C_PetJournal.SummonPetByGUID
 
+local HasFullControl = HasFullControl
+local IsPlayerMoving = IsPlayerMoving
+
 ---@class PetUtil
-local PetUtil = T.PetUtil
+local PetUtil = {}
 do
     ---@param petID string
     ---@return boolean, number, string
@@ -26,6 +29,32 @@ do
         return GetSummonedPetGUID()
     end
 
+    ---@param pool table Array of pet GUIDs
+    ---@param exclude string? GUID to exclude from selection
+    ---@return string?
+    function PetUtil.GetRandom(pool, exclude)
+        if not pool or #pool == 0 then
+            return nil
+        end
+
+        if #pool == 1 then
+            return pool[1]
+        end
+
+        local candidates = {}
+        for _, guid in ipairs(pool) do
+            if guid ~= exclude then
+                table.insert(candidates, guid)
+            end
+        end
+
+        if #candidates == 0 then
+            return nil
+        end
+
+        return candidates[math.random(1, #candidates)]
+    end
+
     ---@param petID string
     ---@return number?
     function PetUtil.GetSpecies(petID)
@@ -34,9 +63,10 @@ do
 
     ---@param petID string
     function PetUtil.Summon(petID)
-        if not PlayerIsInCombat() then
+        if not PlayerIsInCombat() and (HasFullControl() and not IsPlayerMoving()) then
             SummonPetByGUID(petID)
-            T.TimeSinceSummon = 0
         end
     end
+
+    T.PetUtil = PetUtil
 end

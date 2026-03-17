@@ -21,7 +21,7 @@ do
         Group:SetSize(width, height)
         Group:SetFrameLevel(parent:GetFrameLevel() + 1)
         Group:CreateBackdrop()
-        Group:SetBackdropColor(0.11, 0.11, 0.11, 0.5)
+        Group:SetBackdropColor(0.5, 0.5, 0.5, 0.5)
 
         Group.Label = Group:CreateFontString(nil, "BACKGROUND")
         Group.Label:SetFont(Media.Fonts.Normal, 14, "OUTLINE")

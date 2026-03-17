@@ -84,7 +84,7 @@ do
 
         Card.SlideAnimation = Card:CreateAnimationGroup()
         Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
-        Card.SlideTranslation:SetDuration(0.4)
+        Card.SlideTranslation:SetDuration(1)
         Card.SlideTranslation:SetSmoothing("IN_OUT")
 
         return Card

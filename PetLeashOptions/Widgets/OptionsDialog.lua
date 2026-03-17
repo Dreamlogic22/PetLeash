@@ -9,126 +9,130 @@
 local C, T = select(2, ...), PetLeash
 local L, Media = T.Locale, C.Media
 
-local ControlDefinitions = {
-    AutoSwitch = {
-        disable = function() if #C.db.pets < 2 then C.db.autoSwitch = false; return true else return not C.db.enable end end,
-        get = function() return C.db.autoSwitch end,
-        name = L.OPTIONS_AUTO_SWITCH,
-        set = function(value)
-            C.db.autoSwitch = value
-            T.UpdateSettings()
-        end,
-        type = "toggle"
-    },
-    AutoSwitchInterval = {
-        disable = function() return (not C.db.autoSwitch or not C.db.enable) end,
-        get = function() return C.db.autoSwitchInterval / 60 end,
-        min = 1, max = 30, step = 1,
-        name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
-        set = function(value)
-            C.db.autoSwitchInterval = value * 60
-            T.UpdateSettings()
-        end,
-        type = "range"
-    },
-    Enable = {
-        desc = L.OPTIONS_SCAN_TOOLTIP,
-        get = function() return C.db.enable end,
-        name = ENABLE,
-        set = function(value) C.db.enable = value end,
-        type = "toggle",
-    },
-    ScanInterval = {
-        disable = function() return not C.db.enable end,
-        get = function() return C.db.scanInterval end,
-        min = 1, max = 120, step = 1,
-        name = L.OPTIONS_SCAN_INTERVAL,
-        set = function(value)
-            C.db.scanInterval = value
-            T.UpdateSettings()
-        end,
-        type = "range"
-    },
-    KeepSummonedPets = {
-        desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
-        disable = function() return not C.db.enable end,
-        get = function() return C.db.keepSummonedPets end,
-        name = L.OPTIONS_KEEP_SUMMONED,
-        set = function(value) C.db.keepSummonedPets = value end,
-        type = "toggle"
-    }
-}
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+local AceGUI = LibStub("AceGUI-3.0")
 
--- Animation block
-do
-    local MaxDisplay = 3
-    local Panels = {}
-    local CurrentIndex = 1
-    local CardsCurrentlyAnimating = 0
+-- local ControlDefinitions = {
+--     AutoSwitch = {
+--         disable = function() if #C.db.pets < 2 then C.db.autoSwitch = false; return true else return not C.db.enable end end,
+--         get = function() return C.db.autoSwitch end,
+--         name = L.OPTIONS_AUTO_SWITCH,
+--         set = function(value)
+--             C.db.autoSwitch = value
+--             T.UpdateSettings()
+--         end,
+--         type = "toggle"
+--     },
+--     AutoSwitchInterval = {
+--         disable = function() return (not C.db.autoSwitch or not C.db.enable) end,
+--         get = function() return C.db.autoSwitchInterval / 60 end,
+--         min = 1, max = 30, step = 1,
+--         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
+--         set = function(value)
+--             C.db.autoSwitchInterval = value * 60
+--             T.UpdateSettings()
+--         end,
+--         type = "range"
+--     },
+--     Enable = {
+--         desc = L.OPTIONS_SCAN_TOOLTIP,
+--         get = function() return C.db.enable end,
+--         name = ENABLE,
+--         set = function(value) C.db.enable = value end,
+--         type = "toggle",
+--     },
+--     ScanInterval = {
+--         disable = function() return not C.db.enable end,
+--         get = function() return C.db.scanInterval end,
+--         min = 1, max = 120, step = 1,
+--         name = L.OPTIONS_SCAN_INTERVAL,
+--         set = function(value)
+--             C.db.scanInterval = value
+--             T.UpdateSettings()
+--         end,
+--         type = "range"
+--     },
+--     KeepSummonedPets = {
+--         desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
+--         disable = function() return not C.db.enable end,
+--         get = function() return C.db.keepSummonedPets end,
+--         name = L.OPTIONS_KEEP_SUMMONED,
+--         set = function(value) C.db.keepSummonedPets = value end,
+--         type = "toggle"
+--     }
+-- }
 
-    local function UpdateVisibleCards()
-        for _, panel in ipairs(Panels) do
-            panel:Hide()
-        end
+-- -- Animation block
+-- do
+--     local MaxDisplay = 3
+--     local Panels = {}
+--     local CurrentIndex = 1
+--     local CardsCurrentlyAnimating = 0
 
-        -- Show and position the 3-card window starting at CurrentIndex
-        for i = 1, MaxDisplay do
-            local panelIndex = CurrentIndex + i - 1
-            if Panels[panelIndex] then
-                Panels[panelIndex]:ClearAllPoints()
-                Panels[panelIndex]:Show()
+--     local function UpdateVisibleCards()
+--         for _, panel in ipairs(Panels) do
+--             panel:Hide()
+--         end
 
-                if i == 1 then
-                    Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 25, 0)
-                else
-                    Panels[panelIndex]:SetPoint("LEFT", Panels[CurrentIndex + i - 2], "RIGHT", 25, 0)
-                end
-            end
-        end
+--         -- Show and position the 3-card window starting at CurrentIndex
+--         for i = 1, MaxDisplay do
+--             local panelIndex = CurrentIndex + i - 1
+--             if Panels[panelIndex] then
+--                 Panels[panelIndex]:ClearAllPoints()
+--                 Panels[panelIndex]:Show()
 
-        -- Update arrow states
-        PetLeashOptionsDialog.LeftArrow:SetEnabled(CurrentIndex > 1)
-        PetLeashOptionsDialog.RightArrow:SetEnabled(CurrentIndex + MaxDisplay - 1 < #Panels)
-    end
+--                 if i == 1 then
+--                     Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 25, 0)
+--                 else
+--                     Panels[panelIndex]:SetPoint("LEFT", Panels[CurrentIndex + i - 2], "RIGHT", 25, 0)
+--                 end
+--             end
+--         end
 
-    function C.UpdatePetCards()
-        for _, panel in ipairs(Panels) do
-            panel:Hide()
-            panel:SetParent(nil)
-        end
+--         -- Update arrow states
+--         PetLeashOptionsDialog.LeftArrow:SetEnabled(CurrentIndex > 1)
+--         PetLeashOptionsDialog.RightArrow:SetEnabled(CurrentIndex + MaxDisplay - 1 < #Panels)
+--     end
 
-        wipe(Panels)
+--     function C.UpdatePetCards()
+--         for _, panel in ipairs(Panels) do
+--             panel:Hide()
+--             panel:SetParent(nil)
+--         end
 
-        for i = 1, #C.db.pets do  -- Create ALL cards
-            local petID = C.db.pets[i]
-            local panel = C.CreatePetCard(PetLeashOptionsDialog.PetCards, petID)
-            Panels[i] = panel
-        end
+--         wipe(Panels)
 
-        CurrentIndex = 1  -- Reset to first card
-        UpdateVisibleCards()  -- Show and position first 3
-    end
+--         for i = 1, #C.db.pets do  -- Create ALL cards
+--             local petID = C.db.pets[i]
+--             local panel = C.CreatePetCard(PetLeashOptionsDialog.PetCards, petID)
+--             Panels[i] = panel
+--         end
 
-    function C.SetupArrowHandlers()
-        PetLeashOptionsDialog.LeftArrow:SetScript("OnClick", function(self)
-            if CurrentIndex > 1 and CardsCurrentlyAnimating == 0 then
-                StartAnimation(-1)
-                PlaySound(856)
-            end
-        end)
+--         CurrentIndex = 1  -- Reset to first card
+--         UpdateVisibleCards()  -- Show and position first 3
+--     end
 
-        PetLeashOptionsDialog.RightArrow:SetScript("OnClick", function()
-            if CurrentIndex + MaxDisplay - 1 < #Panels and CardsCurrentlyAnimating == 0 then
-                StartAnimation(1)
-                PlaySound(856)
-            end
-        end)
-    end
-end
+--     function C.SetupArrowHandlers()
+--         PetLeashOptionsDialog.LeftArrow:SetScript("OnClick", function(self)
+--             if CurrentIndex > 1 and CardsCurrentlyAnimating == 0 then
+--                 StartAnimation(-1)
+--                 PlaySound(856)
+--             end
+--         end)
+
+--         PetLeashOptionsDialog.RightArrow:SetScript("OnClick", function()
+--             if CurrentIndex + MaxDisplay - 1 < #Panels and CardsCurrentlyAnimating == 0 then
+--                 StartAnimation(1)
+--                 PlaySound(856)
+--             end
+--         end)
+--     end
+-- end
 
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
+    Dialog:CreateBackdrop()
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("CENTER")
     Dialog:SetClampedToScreen(true)
@@ -142,9 +146,6 @@ do
     Dialog:SetScript("OnDragStart", Dialog.StartMoving)
     Dialog:SetScript("OnDragStop", Dialog.StopMovingOrSizing)
 
-    Dialog:CreateBackdrop()
-    Dialog:SetBackdropTexture(Media.Textures.Background)
-
     local Title = Dialog:CreateFontString(nil, "OVERLAY")
     Title:SetFont(Media.Fonts.Bold, 20, "THICKOUTLINE")
     Title:SetText(C.Title)
@@ -157,36 +158,54 @@ do
     Version:SetPoint("BOTTOMRIGHT", -7, 7)
 
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
-    Dialog.CloseButton:SetPoint("CENTER", Dialog, "TOPRIGHT", -15, -12)
 
-    Dialog.General = C.CreateOptionsGroup(GENERAL, Dialog, 640, 200)
-    Dialog.General:SetPoint("TOPLEFT", 20, -50)
+    ---@class AceConfigDialogContainer: Frame
+	local Container = CreateFrame("Frame", nil, Dialog)
+	Container:SetSize(640, 200)
+    Container:SetPoint("TOPLEFT", 20, -20)
+	Dialog.Container = Container
 
-    Dialog.Enable = Dialog.General:RegisterControl(ControlDefinitions.Enable)
-    Dialog.Enable:SetPoint("TOPLEFT", 10, -30)
-    Dialog.ScanInterval = Dialog.General:RegisterControl(ControlDefinitions.ScanInterval)
-    Dialog.ScanInterval:SetPoint("LEFT", Dialog.Enable, "RIGHT", 230, 0)
+	---@class AceGUIContainer
+	---@field frame Frame
+	local Group = AceGUI:Create("TabGroup")
+	Group:SetLayout("Fill")
+	Group:SetFullWidth(true)
+	Group:SetFullHeight(true)
 
-    Dialog.AutoSwitch = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitch)
-    Dialog.AutoSwitch:SetPoint("TOP", Dialog.Enable, "BOTTOM", 0, 0)
-    Dialog.AutoSwitchInterval = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitchInterval)
-    Dialog.AutoSwitchInterval:SetPoint("LEFT", Dialog.AutoSwitch, "RIGHT", 230, 0)
+	Group.frame:SetParent(Container)
+	Group.frame:SetAllPoints()
+	Group.frame:Show()
 
-    Dialog.KeepSummonedPets = Dialog.General:RegisterControl(ControlDefinitions.KeepSummonedPets)
-    Dialog.KeepSummonedPets:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
+	Container.AcePanel = Group
 
-    Dialog.General:NotifyChange()
+    -- Dialog.General = C.CreateOptionsGroup(GENERAL, Dialog, 640, 200)
+    -- Dialog.General:SetPoint("TOPLEFT", 20, -50)
 
-    Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
-    Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
+    -- Dialog.Enable = Dialog.General:RegisterControl(ControlDefinitions.Enable)
+    -- Dialog.Enable:SetPoint("TOPLEFT", 10, -30)
+    -- Dialog.ScanInterval = Dialog.General:RegisterControl(ControlDefinitions.ScanInterval)
+    -- Dialog.ScanInterval:SetPoint("LEFT", Dialog.Enable, "RIGHT", 230, 0)
 
-    Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
-    Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
+    -- Dialog.AutoSwitch = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitch)
+    -- Dialog.AutoSwitch:SetPoint("TOP", Dialog.Enable, "BOTTOM", 0, 0)
+    -- Dialog.AutoSwitchInterval = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitchInterval)
+    -- Dialog.AutoSwitchInterval:SetPoint("LEFT", Dialog.AutoSwitch, "RIGHT", 230, 0)
 
-    Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
-    Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
+    -- Dialog.KeepSummonedPets = Dialog.General:RegisterControl(ControlDefinitions.KeepSummonedPets)
+    -- Dialog.KeepSummonedPets:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
 
-    C.UpdatePetCards()
+    -- Dialog.General:NotifyChange()
+
+    -- Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
+    -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
+
+    -- Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
+    -- Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
+
+    -- Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
+    -- Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
+
+    -- C.UpdatePetCards()
 
     function Dialog:Toggle()
         if PlayerIsInCombat() then
@@ -207,20 +226,30 @@ do
         self:SetShown(not self:IsVisible())
     end
 
-    Dialog:RegisterEvent("PLAYER_IN_COMBAT_CHANGED")
-    Dialog:SetScript("OnEvent", function(self, _, inCombat)
+    Dialog:SetScript("OnHide", function()
+        AceConfigDialog:Close(C.Name)
+    end)
+
+    Dialog:SetScript("OnShow", function()
+        AceConfigDialog:Open(C.Name, Dialog.Container.AcePanel)
+    end)
+
+    ---@param inCombat boolean
+    local function HandleCombat(_, inCombat)
         if inCombat then
-            if self:IsVisible() then
-                self.RestoreAfterCombat = true
-                self:Hide()
+            if Dialog:IsVisible() then
+                Dialog.RestoreAfterCombat = true
+                Dialog:Hide()
             end
         else
-            if self.RestoreAfterCombat then
-                self.RestoreAfterCombat = nil
-                self:Show()
+            if Dialog.RestoreAfterCombat then
+                Dialog.RestoreAfterCombat = nil
+                Dialog:Show()
             end
         end
-    end)
+    end
+
+    EventRegistry:RegisterFrameEventAndCallback("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
 
     PetLeashOptionsDialog = Dialog
     tinsert(UISpecialFrames, "PetLeashOptionsDialog")

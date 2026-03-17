@@ -1,26 +1,31 @@
 ## Interface: 120001
 ## Title: |cffd6bfa3PetLeash|r |cff947d66Options|r
 ## Version: 4.01
-## Author: January, Claude & River
+## Author: River
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash, TherapyUX
 ## LoadOnDemand: 1
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+
 Core\Init.lua
 Core\Main.lua
 Core\Media.lua
 
-Widgets\Elements\ArrowButton.lua
+# Widgets\Elements\ArrowButton.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
-Widgets\Elements\Group.lua
-Widgets\Elements\RemoveButton.lua
-Widgets\Elements\Slider.lua
+# Widgets\Elements\Group.lua
+# Widgets\Elements\RemoveButton.lua
+# Widgets\Elements\Slider.lua
 
-Widgets\Elements\ControlGroup.lua
+# Widgets\Elements\ControlGroup.lua
 
-Widgets\PetCard.lua
+# Widgets\PetCard.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

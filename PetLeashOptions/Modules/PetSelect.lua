@@ -41,8 +41,8 @@ local function AddPet(petID)
     end
 
     if PetLeashOptionsDialog:IsVisible() then
-        PetLeashOptionsDialog.General:NotifyChange()
-        C.UpdatePetCards()
+        -- PetLeashOptionsDialog.General:NotifyChange()
+        -- C.UpdatePetCards()
     end
 end
 
@@ -77,8 +77,8 @@ local function RemovePet(petID)
     end
 
     if PetLeashOptionsDialog:IsVisible() then
-        PetLeashOptionsDialog.General:NotifyChange()
-        C.UpdatePetCards()
+        -- PetLeashOptionsDialog.General:NotifyChange()
+        -- C.UpdatePetCards()
     end
 end
 

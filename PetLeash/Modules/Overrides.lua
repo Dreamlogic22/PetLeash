@@ -6,12 +6,6 @@
 
 --------------------------------------------------------------------]]
 
---[[
-
-    shoulder and backpack pets do not have any interaction with addon (daist, feathers, etc.)
-
-]]
-
 ---@class PetLeash
 local T = select(2, ...)
 local PetUtil = T.PetUtil
@@ -52,31 +46,18 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
-local DismissEvents = {
-    "UPDATE_STEALTH"
-}
-
-local function DismissSummonedPet(event)
+local function DismissSummonedPet()
     if PetUtil.HasPet() and IsStealthed() then
         PetUtil.Dismiss()
     end
 end
 
-for _, event in pairs(DismissEvents) do
-    EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet, event)
-end
+EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet)
 
 -- local GetItemCount = C_Item.GetItemCount
 -- local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
 -- local IsEquippedItem = C_Item.IsEquippedItem
 -- local IsOnQuest = C_QuestLog.IsOnQuest
-
--- local Holidays = {
---     1349, -- Rotten Little Helper
---     117,  -- Tiny Snowman
---     119,  -- Father Winter's Helper
---     120,  -- Winter's Little Helper
--- }
 
 -- local Zones = {
 --     46362,  -- Venomhide Hatchling
@@ -90,29 +71,6 @@ end
 -- local function CheckAuras()
 --     for _, id in pairs(Auras) do
 --         if not issecrettable(GetPlayerAuraBySpellID(id)) then
---             return true
---         end
---     end
-
---     return false
--- end
-
--- ---@return boolean
--- local function IsWinterVeil()
---     local month, day = tonumber(date("%m")), tonumber(date("%d"))
---     return (month == 12 and day >= 16) or (month == 1 and day <= 2)
--- end
-
--- ---@return boolean
--- local function CheckHoliday()
---     if IsWinterVeil() then return false end
-
---     local currentPet = PetUtil.GetCurrent()
---     if not currentPet then return false end
-
---     local speciesID = PetUtil.GetSpecies(currentPet)
---     for _, holidayID in ipairs(Holidays) do
---         if speciesID == holidayID then
 --             return true
 --         end
 --     end
@@ -174,16 +132,6 @@ end
 
 --     return false
 -- end
-
--- ---@type table<number, function>
--- local Functions = {
---     CheckAuras,
---     CheckEquipped,
---     CheckHoliday,
---     CheckInventory,
---     CheckQuests,
---     CheckZone
--- }
 
 -- ---@return boolean
 -- function T.HasOverride()

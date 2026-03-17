@@ -30,12 +30,13 @@ local function AddPet(petID)
 
     table.insert(C.db.pets, petID)
 
-    if #C.db.pets == 0 then
-        -- If this is our first pet on a fresh install, enable
+    -- If this is our first pet on a fresh install, enable
+    if not T.IsEnabled then
         T.Enable()
     end
 
     if #C.db.pets >= 2 then
+        -- TODO: change this to notifyupdate
         C.db.autoSwitch = true
     end
 
@@ -70,7 +71,9 @@ local function RemovePet(petID)
     end
 
     if not C.db.pets or #C.db.pets == 0 then
-        T.Disable()
+        if T.IsEnabled then
+            T.Disable()
+        end
     end
 
     if PetLeashOptionsDialog:IsVisible() then
@@ -130,66 +133,97 @@ do
     end)
 end
 
-local function OnPetJournalLoad()
-    PetLeashOptionsButton:SetParent(PetJournal)
-    PetLeashOptionsButton:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
+do
+    local Exclusions = {
+        [117] = true,   -- Tiny Snowman
+        [119] = true,   -- Father Winter's Helper
+        [120] = true,   -- Winter's Little Helper
+        [1349] = true   -- Rotten Little Helper
+    }
 
-    PetLeashOptionsDialog:ClearAllPoints()
-    PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
-    PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
+    -- Pets that have bugged GetPetSummonInfo
+    if UnitFactionGroup("player") == "Alliance" then
+        Exclusions[2777] = true -- Gillvanas
+        Exclusions[342] = true  -- Festival Lantern
+        Exclusions[332] = true  -- Horde Balloon
+    else
+        Exclusions[2778] = true -- Finduin
+        Exclusions[341] = true  -- Lunar Lantern
+        Exclusions[331] = true  -- Alliance Balloon
+    end
 
-    hooksecurefunc("PetJournal_InitPetButton", function(button)
-        if not button.PetLeashCheckbox then
-            ---@type TherapyCheckbox
-            local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
-            Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
-
-            Checkbox:HookScript("OnClick", function(self)
-                local id = button.petID
-                if self:GetChecked() then
-                    AddPet(id)
-                else
-                    RemovePet(id)
-                end
-            end)
-
-            button.PetLeashCheckbox = Checkbox
+    ---@param petID number
+    ---@return boolean
+    local function IsPetIneligible(petID)
+        local speciesID = PetUtil.GetSpecies(petID)
+        if Exclusions[speciesID] then
+            return true
         end
 
-        local IsChecked = IsSelected(button.petID)
-        button.PetLeashCheckbox:SetChecked(IsChecked)
-        if IsChecked then
-            button.PetLeashCheckbox.CheckedTexture:Show()
-        else
-            button.PetLeashCheckbox.CheckedTexture:Hide()
-        end
-    end)
+        return false
+    end
 
-    -- Hide checkbox for unowned & faction-locked pets
-    hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
-        frame:ForEachFrame(function(button)
-            if not SelectingPets then
-                if button.PetLeashCheckbox:IsVisible() then
-                    button.PetLeashCheckbox:Hide()
-                end
+    local function OnPetJournalLoad()
+        PetLeashOptionsButton:SetParent(PetJournal)
+        PetLeashOptionsButton:SetPoint("CENTER", PetJournal, "RIGHT", 0, 0)
 
-                return
+        PetLeashOptionsDialog:ClearAllPoints()
+        PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
+        PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
+
+        hooksecurefunc("PetJournal_InitPetButton", function(button)
+            if not button.PetLeashCheckbox then
+                ---@type TherapyCheckbox
+                local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
+                Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
+
+                Checkbox:HookScript("OnClick", function(self)
+                    local id = button.petID
+                    if self:GetChecked() then
+                        AddPet(id)
+                    else
+                        RemovePet(id)
+                    end
+                end)
+
+                button.PetLeashCheckbox = Checkbox
             end
 
-            button.PetLeashCheckbox:SetShown(button.owned)
-
-            if button.petID then
-                local _, error = PetUtil.CanSummon(button.petID)
-                local neverUsable = error == Enum.PetJournalError.InvalidFaction
-
-                if neverUsable then
-                    button.PetLeashCheckbox:Hide()
-                else
-                    button.PetLeashCheckbox:Show()
-                end
+            local IsChecked = IsSelected(button.petID)
+            button.PetLeashCheckbox:SetChecked(IsChecked)
+            if IsChecked then
+                button.PetLeashCheckbox.CheckedTexture:Show()
+            else
+                button.PetLeashCheckbox.CheckedTexture:Hide()
             end
         end)
-    end)
-end
 
-EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)
+        -- Hide checkbox for unowned & faction-locked pets
+        hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
+            frame:ForEachFrame(function(button)
+                if not SelectingPets then
+                    if button.PetLeashCheckbox:IsVisible() then
+                        button.PetLeashCheckbox:Hide()
+                    end
+
+                    return
+                end
+
+                button.PetLeashCheckbox:SetShown(button.owned)
+
+                if button.petID then
+                    local _, error = PetUtil.CanSummon(button.petID)
+                    local neverUsable = IsPetIneligible(button.petID) or (error == Enum.PetJournalError.InvalidFaction)
+
+                    if neverUsable then
+                        button.PetLeashCheckbox:Hide()
+                    else
+                        button.PetLeashCheckbox:Show()
+                    end
+                end
+            end)
+        end)
+    end
+
+    EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", OnPetJournalLoad)
+end

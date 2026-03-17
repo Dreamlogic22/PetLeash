@@ -1,42 +1,29 @@
 --[[------------------------------------------------------------------
 
-    Special flags, pets or items that should prevent automatic
-    summoning.
+    Special flags, pets or items that prevent automatic summoning and
+    can dismiss summoned pets under certain circumstances (such as
+    stealth).
 
 --------------------------------------------------------------------]]
+
+--[[
+
+    shoulder and backpack pets do not have any interaction with addon (daist, feathers, etc.)
+
+]]
 
 ---@class PetLeash
 local T = select(2, ...)
 local PetUtil = T.PetUtil
-
-local GetItemCount = C_Item.GetItemCount
-local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
-local IsEquippedItem = C_Item.IsEquippedItem
-local IsOnQuest = C_QuestLog.IsOnQuest
 
 local Auras = {
     1230155, -- Arathi Orphan
     1230185, -- Goblin Orphan
     1228497, -- Kobold Orphan
     1230183, -- Nerubian Orphan
-    311796,  -- Daisy
-    302954,  -- Feathers
-    232871,  -- Crackers
-    286268,  -- Cap'n Crackers
     312993,  -- Forbidden Tomes (Revendreth)
     43880,   -- Ramstein's Swift Work Ram
     43883    -- Rental Racing Ram
-}
-
-local Equipment = {
-    12185   -- Bloodsail Hat
-}
-
-local Holidays = {
-    1349, -- Rotten Little Helper
-    117,  -- Tiny Snowman
-    119,  -- Father Winter's Helper
-    120,  -- Winter's Little Helper
 }
 
 local Items = {
@@ -65,155 +52,181 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
-local Zones = {
-    46362,  -- Venomhide Hatchling
-    68646,  -- Winterspring Cub
-    3247,   -- Pocopoc
+local DismissEvents = {
+    "UPDATE_STEALTH"
 }
 
-local NeedsCheck = true
-local IsCached = false
-
-local function CheckAuras()
-    for _, id in pairs(Auras) do
-        if not issecrettable(GetPlayerAuraBySpellID(id)) then
-            return true
-        end
-    end
-
-    return false
-end
-
----@return boolean
-local function IsWinterVeil()
-    local month, day = tonumber(date("%m")), tonumber(date("%d"))
-    return (month == 12 and day >= 16) or (month == 1 and day <= 2)
-end
-
----@return boolean
-local function CheckHoliday()
-    if IsWinterVeil() then return false end
-
-    local currentPet = PetUtil.GetCurrent()
-    if not currentPet then return false end
-
-    local speciesID = PetUtil.GetSpecies(currentPet)
-    for _, holidayID in ipairs(Holidays) do
-        if speciesID == holidayID then
-            return true
-        end
-    end
-
-    return false
-end
-
----@return boolean
-local function CheckEquipped()
-    for _, id in pairs(Equipment) do
-        if IsEquippedItem(id) then
-            return true
-        end
-    end
-
-    return false
-end
-
----@return boolean
-local function CheckInventory()
-    for _, id in pairs(Items) do
-        if GetItemCount(id) > 0 then
-            return true
-        end
-    end
-
-    return false
-end
-
----@return boolean
-local function CheckZone()
-    local mapname = GetZoneText()
-
-    -- Venomhide Hatchling: Un'Goro or Tanaris, must have item
-    if GetItemCount(46362) > 0 and (mapname == "Un'Goro Crater" or mapname == "Tanaris") then
-        return true
-    end
-
-    -- Winterspring Cub: Winterspring, must have item
-    if GetItemCount(68646) > 0 and mapname == "Winterspring" then
-        return true
-    end
-
-    -- Pocopoc: Zereth Mortis, no item check
-    if mapname == "Zereth Mortis" then
-        return true
-    end
-
-    return false
-end
-
----@return boolean
-local function CheckQuests()
-    for _, id in pairs(Quests) do
-        if IsOnQuest(id) then
-            return true
-        end
-    end
-
-    return false
-end
-
----@type table<number, function>
-local Functions = {
-    CheckAuras,
-    CheckEquipped,
-    CheckHoliday,
-    CheckInventory,
-    CheckQuests,
-    CheckZone
-}
-
----@return boolean
-function T.HasOverride()
-    if not NeedsCheck then
-        return IsCached
-    end
-
-    NeedsCheck = false
-    IsCached = false
-
-    for _, f in pairs(Functions) do
-        if f() then
-            IsCached = true
-            break
-        end
-    end
-
-    return IsCached
-end
-
----@param event WowEvent
----@param unit UnitToken?
-local function MarkDirty(event, unit)
-    if event == "UNIT_AURA" and unit ~= "player" then
-        return
-    end
-
-    NeedsCheck = true
-    IsCached = false
-end
-
-do
-    local Events = {
-        "BAG_UPDATE",
-        "EQUIPMENT_SWAP_FINISHED",
-        "PLAYER_EQUIPMENT_CHANGED",
-        "QUEST_ACCEPTED",
-        "QUEST_FINISHED",
-        "UNIT_AURA",
-        "ZONE_CHANGED_NEW_AREA",
-    }
-
-    for _, event in pairs(Events) do
-        EventRegistry:RegisterFrameEventAndCallback(event, MarkDirty)
+local function DismissSummonedPet(event)
+    if PetUtil.HasPet() and IsStealthed() then
+        PetUtil.Dismiss()
     end
 end
+
+for _, event in pairs(DismissEvents) do
+    EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet, event)
+end
+
+-- local GetItemCount = C_Item.GetItemCount
+-- local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
+-- local IsEquippedItem = C_Item.IsEquippedItem
+-- local IsOnQuest = C_QuestLog.IsOnQuest
+
+-- local Holidays = {
+--     1349, -- Rotten Little Helper
+--     117,  -- Tiny Snowman
+--     119,  -- Father Winter's Helper
+--     120,  -- Winter's Little Helper
+-- }
+
+-- local Zones = {
+--     46362,  -- Venomhide Hatchling
+--     68646,  -- Winterspring Cub
+--     3247,   -- Pocopoc
+-- }
+
+-- local NeedsCheck = true
+-- local IsCached = false
+
+-- local function CheckAuras()
+--     for _, id in pairs(Auras) do
+--         if not issecrettable(GetPlayerAuraBySpellID(id)) then
+--             return true
+--         end
+--     end
+
+--     return false
+-- end
+
+-- ---@return boolean
+-- local function IsWinterVeil()
+--     local month, day = tonumber(date("%m")), tonumber(date("%d"))
+--     return (month == 12 and day >= 16) or (month == 1 and day <= 2)
+-- end
+
+-- ---@return boolean
+-- local function CheckHoliday()
+--     if IsWinterVeil() then return false end
+
+--     local currentPet = PetUtil.GetCurrent()
+--     if not currentPet then return false end
+
+--     local speciesID = PetUtil.GetSpecies(currentPet)
+--     for _, holidayID in ipairs(Holidays) do
+--         if speciesID == holidayID then
+--             return true
+--         end
+--     end
+
+--     return false
+-- end
+
+-- ---@return boolean
+-- local function CheckEquipped()
+--     for _, id in pairs(Equipment) do
+--         if IsEquippedItem(id) then
+--             return true
+--         end
+--     end
+
+--     return false
+-- end
+
+-- ---@return boolean
+-- local function CheckInventory()
+--     for _, id in pairs(Items) do
+--         if GetItemCount(id) > 0 then
+--             return true
+--         end
+--     end
+
+--     return false
+-- end
+
+-- ---@return boolean
+-- local function CheckZone()
+--     local mapname = GetZoneText()
+
+--     -- Venomhide Hatchling: Un'Goro or Tanaris, must have item
+--     if GetItemCount(46362) > 0 and (mapname == "Un'Goro Crater" or mapname == "Tanaris") then
+--         return true
+--     end
+
+--     -- Winterspring Cub: Winterspring, must have item
+--     if GetItemCount(68646) > 0 and mapname == "Winterspring" then
+--         return true
+--     end
+
+--     -- Pocopoc: Zereth Mortis, no item check
+--     if mapname == "Zereth Mortis" then
+--         return true
+--     end
+
+--     return false
+-- end
+
+-- ---@return boolean
+-- local function CheckQuests()
+--     for _, id in pairs(Quests) do
+--         if IsOnQuest(id) then
+--             return true
+--         end
+--     end
+
+--     return false
+-- end
+
+-- ---@type table<number, function>
+-- local Functions = {
+--     CheckAuras,
+--     CheckEquipped,
+--     CheckHoliday,
+--     CheckInventory,
+--     CheckQuests,
+--     CheckZone
+-- }
+
+-- ---@return boolean
+-- function T.HasOverride()
+--     if not NeedsCheck then
+--         return IsCached
+--     end
+
+--     NeedsCheck = false
+--     IsCached = false
+
+--     for _, f in pairs(Functions) do
+--         if f() then
+--             IsCached = true
+--             break
+--         end
+--     end
+
+--     return IsCached
+-- end
+
+-- ---@param event WowEvent
+-- ---@param unit UnitToken?
+-- local function MarkDirty(event, unit)
+--     if event == "UNIT_AURA" and unit ~= "player" then
+--         return
+--     end
+
+--     NeedsCheck = true
+--     IsCached = false
+-- end
+
+-- do
+--     local Events = {
+--         "BAG_UPDATE",
+--         "EQUIPMENT_SWAP_FINISHED",
+--         "PLAYER_EQUIPMENT_CHANGED",
+--         "QUEST_ACCEPTED",
+--         "QUEST_FINISHED",
+--         "UNIT_AURA",
+--         "ZONE_CHANGED_NEW_AREA",
+--     }
+
+--     for _, event in pairs(Events) do
+--         EventRegistry:RegisterFrameEventAndCallback(event, MarkDirty)
+--     end
+-- end

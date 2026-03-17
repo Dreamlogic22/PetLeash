@@ -24,6 +24,12 @@ do
         return GetPetSummonInfo(petID)
     end
 
+    function PetUtil.Dismiss()
+        if PetUtil.GetCurrent() then
+            C_PetJournal.SummonPetByGUID(PetUtil.GetCurrent())
+        end
+    end
+
     ---@return string
     function PetUtil.GetCurrent()
         return GetSummonedPetGUID()
@@ -59,6 +65,11 @@ do
     ---@return number?
     function PetUtil.GetSpecies(petID)
         return select(1, GetPetInfoByPetID(petID))
+    end
+
+    ---@return boolean
+    function PetUtil.HasPet()
+        return PetUtil.GetCurrent() ~= nil
     end
 
     ---@param petID string

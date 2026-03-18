@@ -12,56 +12,6 @@ local L, Media = T.Locale, C.Media
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
 
--- local ControlDefinitions = {
---     AutoSwitch = {
---         disable = function() if #C.db.pets < 2 then C.db.autoSwitch = false; return true else return not C.db.enable end end,
---         get = function() return C.db.autoSwitch end,
---         name = L.OPTIONS_AUTO_SWITCH,
---         set = function(value)
---             C.db.autoSwitch = value
---             T.UpdateSettings()
---         end,
---         type = "toggle"
---     },
---     AutoSwitchInterval = {
---         disable = function() return (not C.db.autoSwitch or not C.db.enable) end,
---         get = function() return C.db.autoSwitchInterval / 60 end,
---         min = 1, max = 30, step = 1,
---         name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
---         set = function(value)
---             C.db.autoSwitchInterval = value * 60
---             T.UpdateSettings()
---         end,
---         type = "range"
---     },
---     Enable = {
---         desc = L.OPTIONS_SCAN_TOOLTIP,
---         get = function() return C.db.enable end,
---         name = ENABLE,
---         set = function(value) C.db.enable = value end,
---         type = "toggle",
---     },
---     ScanInterval = {
---         disable = function() return not C.db.enable end,
---         get = function() return C.db.scanInterval end,
---         min = 1, max = 120, step = 1,
---         name = L.OPTIONS_SCAN_INTERVAL,
---         set = function(value)
---             C.db.scanInterval = value
---             T.UpdateSettings()
---         end,
---         type = "range"
---     },
---     KeepSummonedPets = {
---         desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
---         disable = function() return not C.db.enable end,
---         get = function() return C.db.keepSummonedPets end,
---         name = L.OPTIONS_KEEP_SUMMONED,
---         set = function(value) C.db.keepSummonedPets = value end,
---         type = "toggle"
---     }
--- }
-
 -- -- Animation block
 -- do
 --     local MaxDisplay = 3
@@ -159,42 +109,31 @@ do
 
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
 
-    ---@class AceConfigDialogContainer: Frame
-	local Container = CreateFrame("Frame", nil, Dialog)
-	Container:SetSize(640, 200)
-    Container:SetPoint("TOPLEFT", 20, -20)
-	Dialog.Container = Container
+	Dialog.AceContainer = CreateFrame("Frame", nil, Dialog)
+	Dialog.AceContainer:SetSize(640, 230)
+    Dialog.AceContainer:SetPoint("TOPLEFT", 20, -30)
 
 	---@class AceGUIContainer
 	---@field frame Frame
 	local Group = AceGUI:Create("InlineGroup")
 	Group:SetLayout("Fill")
-	Group:SetFullWidth(true)
-	Group:SetFullHeight(true)
-
-	Group.frame:SetParent(Container)
+	Group.frame:SetParent(Dialog.AceContainer)
 	Group.frame:SetAllPoints()
 	Group.frame:Show()
+	Dialog.AceContainer.AcePanel = Group
 
-	Container.AcePanel = Group
+    ---@class PetCardContainer: TherapyFrame
+	Dialog.PetCardContainer = C.CreateFrame("Frame", nil, Dialog)
+    Dialog.PetCardContainer:CreateBackdrop()
+    Dialog.PetCardContainer:SetBackdropColor(0.078, 0.078, 0.078)
+    Dialog.PetCardContainer:SetSize(640, 270)
+    Dialog.PetCardContainer:SetPoint("TOP", Dialog.AceContainer, "BOTTOM", 0, -10)
 
-    -- Dialog.General = C.CreateOptionsGroup(GENERAL, Dialog, 640, 200)
-    -- Dialog.General:SetPoint("TOPLEFT", 20, -50)
-
-    -- Dialog.Enable = Dialog.General:RegisterControl(ControlDefinitions.Enable)
-    -- Dialog.Enable:SetPoint("TOPLEFT", 10, -30)
-    -- Dialog.ScanInterval = Dialog.General:RegisterControl(ControlDefinitions.ScanInterval)
-    -- Dialog.ScanInterval:SetPoint("LEFT", Dialog.Enable, "RIGHT", 230, 0)
-
-    -- Dialog.AutoSwitch = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitch)
-    -- Dialog.AutoSwitch:SetPoint("TOP", Dialog.Enable, "BOTTOM", 0, 0)
-    -- Dialog.AutoSwitchInterval = Dialog.General:RegisterControl(ControlDefinitions.AutoSwitchInterval)
-    -- Dialog.AutoSwitchInterval:SetPoint("LEFT", Dialog.AutoSwitch, "RIGHT", 230, 0)
-
-    -- Dialog.KeepSummonedPets = Dialog.General:RegisterControl(ControlDefinitions.KeepSummonedPets)
-    -- Dialog.KeepSummonedPets:SetPoint("TOP", Dialog.AutoSwitch, "BOTTOM", 0, 0)
-
-    -- Dialog.General:NotifyChange()
+    Dialog.PetCardContainer.Title = Dialog.PetCardContainer:CreateFontString(nil, "ARTWORK")
+    Dialog.PetCardContainer.Title:SetFont(Media.Fonts.Normal, 12, "")
+    Dialog.PetCardContainer.Title:SetText(PETS)
+    Dialog.PetCardContainer.Title:SetTextColor(1.0, 0.82, 0)
+    Dialog.PetCardContainer.Title:SetPoint("TOPLEFT", 25, -20)
 
     -- Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
     -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
@@ -231,7 +170,7 @@ do
     end)
 
     Dialog:SetScript("OnShow", function()
-        AceConfigDialog:Open("PetLeash", Dialog.Container.AcePanel)
+        AceConfigDialog:Open("PetLeash", Dialog.AceContainer.AcePanel)
     end)
 
     ---@param inCombat boolean

@@ -13,7 +13,7 @@ local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeci
 
 local CreatePetCard
 do
-    ---@param parent TherapyGroup
+    ---@param parent Frame
     ---@param petID string
     ---@return PetCard
     CreatePetCard = function(parent, petID)

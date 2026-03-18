@@ -2,7 +2,6 @@
 local C = select(2, ...)
 
 local AceConfig = LibStub("AceConfig-3.0")
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetStats = C_PetJournal.GetPetStats
@@ -28,38 +27,7 @@ do
         return petCardInfo
     end
 
-    ---@return boolean
-    function C.IsEditModeActive()
-        return EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive()
-    end
-
 	function C.NotifyChange()
 		AceConfigRegistry:NotifyChange(C.Name)
 	end
-
-    function C.Print(...)
-        print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
-    end
 end
-
-C.Options = {
-    childGroups = "tab",
-    name = "",
-    order = 0,
-    type = "group",
-    args = {}
-}
-
-local function OnInitialize()
-	SlashCmdList.PETLEASH = function() PetLeashOptionsDialog:Toggle() end
-
-    AceConfig:RegisterOptionsTable(C.Name, C.Options)
-    C.AceRegistered = true
-
-    if not C.IsEditModeActive() then
-        -- Echo user's first slash command
-        PetLeashOptionsDialog:Toggle()
-	end
-end
-
-EventUtil.ContinueOnAddOnLoaded(C.Name, OnInitialize)

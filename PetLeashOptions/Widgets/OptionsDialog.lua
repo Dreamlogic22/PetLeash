@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 
     Primary settings panel opened by right-clicking the icon attached
-    to the PetJournal.
+    to the PetJournal or using slash commands (/petleash, /pl).
 
 ----------------------------------------------------------------------]]
 
@@ -227,11 +227,11 @@ do
     end
 
     Dialog:SetScript("OnHide", function()
-        AceConfigDialog:Close(C.Name)
+        AceConfigDialog:Close("PetLeash")
     end)
 
     Dialog:SetScript("OnShow", function()
-        AceConfigDialog:Open(C.Name, Dialog.Container.AcePanel)
+        AceConfigDialog:Open("PetLeash", Dialog.Container.AcePanel)
     end)
 
     ---@param inCombat boolean

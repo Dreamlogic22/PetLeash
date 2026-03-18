@@ -5,12 +5,13 @@
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash, TherapyUX
 ## LoadOnDemand: 1
+## LoadWith: Blizzard_Collections
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
 Libs\LibStub.lua
 Libs\CallbackHandler-1.0.lua
-Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
 
 Core\Init.lua
 Core\Main.lua

@@ -1,6 +1,8 @@
 --[[------------------------------------------------------------------
 
-    Loads options addon using a paw icon attached to the pet journal.
+    Loads options using slash commands.  If the Blizzard Collections
+    are loaded, options will automatically load due to a TOC
+    directive.
 
 --------------------------------------------------------------------]]
 
@@ -15,14 +17,14 @@ local function LoadOptions()
         return
     end
 
+    T.ShowDialog = true
+
     local loaded, reason = C_AddOns.LoadAddOn("PetLeashOptions")
     if not loaded then
         T.Print(L.OPTIONS_LOAD_ERROR, reason or UNKNOWN)
         return
     end
 end
-
-EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", LoadOptions)
 
 SLASH_PETLEASH1 = "/petleash"
 SLASH_PETLEASH2 = "/pl"

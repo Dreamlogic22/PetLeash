@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.01 (March 16, 2026)
+    PetLeash 4.01 (March 18, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -8,11 +8,12 @@
 local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
-T.IsEnabled = false
+do
+    T.IsEnabled = false
 
-
-function T.Print(...)
-    print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
+    function T.Print(...)
+        print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
+    end
 end
 
 local function OnInitialize()

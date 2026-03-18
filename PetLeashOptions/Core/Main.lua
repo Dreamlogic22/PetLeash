@@ -1,33 +1,99 @@
+--[[--------------------------------------------------------------------
+
+    AceConfig options table definitions.
+
+----------------------------------------------------------------------]]
+
 ---@class PetLeashOptions
-local C = select(2, ...)
+local C, T = select(2, ...), PetLeash
+local L = T.Locale
 
-local AceConfig = LibStub("AceConfig-3.0")
-
-local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
-local GetPetStats = C_PetJournal.GetPetStats
-
-do
-    ---@param petID string
-    ---@return PetCardInfo
-    function C.GetPetCardInfo(petID)
-        local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
-        local health, _, _, _, rarity = GetPetStats(petID)
-        local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
-
-        ---@class PetCardInfo
-        local petCardInfo = {
-            CustomName = customName,
-            DisplayID = displayID,
-            IsDead = health <= 0,
-            Name = name,
-            SpeciesID = speciesID,
-            GetRGB = function() return colorData.r, colorData.g, colorData.b end
+C.Options = {
+    name = "",
+    order = 0,
+    type = "group",
+    args = {
+        general = {
+            inline = true,
+            name = "General",
+            type = "group",
+            get = function(info) return C.db[info[#info]] end,
+            args = {
+                enable = {
+                    name = ENABLE,
+                    order = 0,
+                    type = "toggle",
+                    set = function(info, value)
+                        C.db[info[#info]] = value
+                        if value then
+                            T.Enable()
+                        else
+                            T.Disable()
+                        end
+                    end,
+                },
+                spacer = {
+                    name = "",
+                    order = 2,
+                    type = "description",
+                    width = 1
+                },
+                scanInterval = {
+                    desc = L.OPTIONS_SCAN_TOOLTIP,
+                    min = 1,
+                    max = 30,
+                    name = L.OPTIONS_SCAN_INTERVAL,
+                    step = 1,
+                    order = 3,
+                    type = "range",
+                    set = function(info, value) C.db[info[#info]] = value * 60; T.UpdateSettings() end,
+                    disabled = function() return not C.db.enable end
+                },
+                autoSwitch = {
+                    name = L.OPTIONS_AUTO_SWITCH,
+                    order = 4,
+                    type = "toggle",
+                    set = function(info, value)
+                        C.db[info[#info]] = value
+                        T.UpdateSettings()
+                    end,
+                    disabled = function()
+                        if #C.db.pets < 2 then
+                            C.db.autoSwitch = false
+                            return true
+                        else
+                            return not C.db.enable
+                        end
+                    end,
+                },
+                autoSwitchSpacer = {
+                    name = "",
+                    order = 5,
+                    type = "description",
+                    width = 1
+                },
+                autoSwitchInterval = {
+                    name = L.OPTIONS_AUTO_SWITCH_INTERVAL,
+                    min = 1,
+                    max = 30,
+                    step = 1,
+                    order = 6,
+                    type = "range",
+                    get = function(info) return C.db[info[#info]] / 60 end,
+                    set = function(info, value)
+                        C.db[info[#info]] = value * 60
+                        T.UpdateSettings()
+                    end,
+                    disabled = function() return (not C.db.autoSwitch or not C.db.enable) end
+                },
+                keepSummonedPets = {
+                    desc = L.OPTIONS_KEEP_SUMMONED_TOOLTIP,
+                    name = L.OPTIONS_KEEP_SUMMONED,
+                    type = "toggle",
+                    set = function(info, value) C.db[info[#info]] = value; T.UpdateSettings() end,
+                    disabled = function() return not C.db.enable end,
+                }
+            }
         }
-
-        return petCardInfo
-    end
-
-	function C.NotifyChange()
-		AceConfigRegistry:NotifyChange(C.Name)
-	end
-end
+    }
+}

@@ -167,7 +167,7 @@ do
 
 	---@class AceGUIContainer
 	---@field frame Frame
-	local Group = AceGUI:Create("TabGroup")
+	local Group = AceGUI:Create("InlineGroup")
 	Group:SetLayout("Fill")
 	Group:SetFullWidth(true)
 	Group:SetFullHeight(true)

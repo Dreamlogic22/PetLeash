@@ -19,9 +19,10 @@ Core\Media.lua
 
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
+Widgets\Elements\Container.lua
+Widgets\Elements\PetCard.lua
 
-# Widgets\PetCard.lua
-
+Widgets\Carousel.lua
 Widgets\OptionsButton.lua
 Widgets\OptionsDialog.lua
 

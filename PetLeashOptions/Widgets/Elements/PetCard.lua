@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
+local C = select(2, ...)
 local Media = C.Media
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
@@ -15,7 +15,7 @@ local GetPetStats = C_PetJournal.GetPetStats
 
 ---@param petID string
 ---@return PetCardInfo
-local function GetPetCardInfo(petID)
+local function GetCardInfo(petID)
     local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
     local health, _, _, _, rarity = GetPetStats(petID)
     local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
@@ -39,7 +39,7 @@ do
     ---@param petID string
     ---@return PetCard
     CreatePetCard = function(parent, petID)
-        local cardInfo = GetPetCardInfo(petID)
+        local cardInfo = GetCardInfo(petID)
 
         ---@class PetCard: TherapyFrame
         local Card = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
@@ -49,32 +49,32 @@ do
         Card:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
         Card:SetBorderColor(cardInfo:GetRGB())
 
-        Card.RemoveButton = C.CreateRemoveButton(Card)
-        Card.RemoveButton:SetPoint("TOPRIGHT", -2, -1)
+        -- Card.RemoveButton = C.CreateRemoveButton(Card)
+        -- Card.RemoveButton:SetPoint("TOPRIGHT", -2, -1)
 
-        Card.RemoveButton:HookScript("OnClick", function()
-            for i, id in ipairs(C.db.pets) do
-                if id == petID then
-                    tremove(C.db.pets, i)
-                    break
-                end
-            end
+        -- Card.RemoveButton:HookScript("OnClick", function()
+        --     for i, id in ipairs(C.db.pets) do
+        --         if id == petID then
+        --             tremove(C.db.pets, i)
+        --             break
+        --         end
+        --     end
 
-            if not C.db.pets or #C.db.pets == 0 then
-                T.Disable()
-            end
+        --     if not C.db.pets or #C.db.pets == 0 then
+        --         T.Disable()
+        --     end
 
-            if #C.db.pets < 2 then
-                C.db.autoSwitch = false
-                C.NotifyChange()
-            end
+        --     if #C.db.pets < 2 then
+        --         C.db.autoSwitch = false
+        --         C.NotifyChange()
+        --     end
 
-            if PetJournal:IsVisible() then
-                C_PetJournal.SetDefaultFilters()
-            end
+        --     if PetJournal:IsVisible() then
+        --         C_PetJournal.SetDefaultFilters()
+        --     end
 
-            C.UpdatePetCards()
-        end)
+        --     C.UpdatePetCards()
+        -- end)
 
         -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
         local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))
@@ -103,11 +103,6 @@ do
         Name:SetPoint("BOTTOM", Card, "BOTTOM", 0, 10)
         Name:SetText(cardInfo.CustomName or cardInfo.Name or UNKNOWN)
         Name:SetTextColor(Media.Colors.Foreground:GetRGB())
-
-        Card.SlideAnimation = Card:CreateAnimationGroup()
-        Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
-        Card.SlideTranslation:SetDuration(1)
-        Card.SlideTranslation:SetSmoothing("IN_OUT")
 
         return Card
     end

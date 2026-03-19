@@ -11,8 +11,8 @@ local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 
 local SetDefaultFilters = C_PetJournal.SetDefaultFilters
 
-local OptionsButton = PetLeashOptionsButton
-local OptionsDialog = PetLeashOptionsDialog
+local Button = PetLeashOptionsButton
+local Dialog = PetLeashOptionsDialog
 
 local SelectingPets = false
 
@@ -40,9 +40,9 @@ local function AddPet(petID)
         C.db.autoSwitch = true
     end
 
-    if PetLeashOptionsDialog:IsVisible() then
+    if Dialog:IsVisible() then
         -- PetLeashOptionsDialog.General:NotifyChange()
-        -- C.UpdatePetCards()
+        Dialog:Update()
     end
 end
 
@@ -76,18 +76,18 @@ local function RemovePet(petID)
         end
     end
 
-    if PetLeashOptionsDialog:IsVisible() then
+    if Dialog:IsVisible() then
         -- PetLeashOptionsDialog.General:NotifyChange()
-        -- C.UpdatePetCards()
+        Dialog:Update()
     end
 end
 
 local function ToggleSelectionMode()
 	local active = SelectingPets
-	OptionsButton:DesaturateHierarchy(active and 1 or 0)
+	Button:DesaturateHierarchy(active and 1 or 0)
 
     if GameTooltip:IsShown() then
-        OptionsButton:GetScript("OnEnter")(OptionsButton)
+        Button:GetScript("OnEnter")(Button)
     end
 
     -- Hack to avoid PetJournal_UpdatePetList
@@ -95,7 +95,7 @@ local function ToggleSelectionMode()
 end
 
 do
-    OptionsButton:HookScript("OnClick", function(_, button)
+    Button:HookScript("OnClick", function(_, button)
 		if button == "LeftButton" then
 			SelectingPets = not SelectingPets
 			ToggleSelectionMode()
@@ -107,11 +107,11 @@ do
 				ToggleSelectionMode()
 			end
 
-			OptionsDialog:SetShown(not OptionsDialog:IsVisible())
+			Dialog:SetShown(not Dialog:IsVisible())
 		end
 	end)
 
-    OptionsButton:SetScript("OnEnter", function(self)
+    Button:SetScript("OnEnter", function(self)
         if not GameTooltip:IsForbidden() then
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
             GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
@@ -125,7 +125,7 @@ do
         end
     end)
 
-    OptionsButton:SetScript("OnHide", function()
+    Button:SetScript("OnHide", function()
         if SelectingPets then
             SelectingPets = false
 			ToggleSelectionMode()

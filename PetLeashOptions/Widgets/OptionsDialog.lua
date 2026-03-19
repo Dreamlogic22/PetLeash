@@ -79,20 +79,26 @@ local AceGUI = LibStub("AceGUI-3.0")
 --     end
 -- end
 
+        -- Card.SlideAnimation = Card:CreateAnimationGroup()
+        -- Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
+        -- Card.SlideTranslation:SetDuration(1)
+        -- Card.SlideTranslation:SetSmoothing("IN_OUT")
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
-    Dialog:CreateBackdrop()
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("CENTER")
     Dialog:SetClampedToScreen(true)
     Dialog:SetFrameLevel(500)
     Dialog:SetFrameStrata("DIALOG")
+
+    Dialog:CreateBackdrop()
+    Dialog:SetBackdropTexture(Media.Textures.Background)
+    Dialog:Hide()
+
     Dialog:SetMovable(true)
     Dialog:EnableMouse(true)
     Dialog:RegisterForDrag("LeftButton")
-    Dialog:Hide()
-
     Dialog:SetScript("OnDragStart", Dialog.StartMoving)
     Dialog:SetScript("OnDragStop", Dialog.StopMovingOrSizing)
 
@@ -102,7 +108,7 @@ do
     Title:SetPoint("TOPLEFT", 20, -15)
 
     local Version = Dialog:CreateFontString(nil, "OVERLAY")
-    Version:SetFont(Media.Fonts.Bold, 12, "OUTLINE")
+    Version:SetFont(Media.Fonts.Bold, 14, "OUTLINE")
     Version:SetTextColor(Media.Colors.Background:GetRGB())
     Version:SetText(format(L.VERSION, C.Version))
     Version:SetPoint("BOTTOMRIGHT", -7, 7)
@@ -122,38 +128,20 @@ do
 	Group.frame:Show()
 	Dialog.AceContainer.AcePanel = Group
 
-    ---@class PetCardContainer: TherapyFrame
-	Dialog.PetCardContainer = C.CreateFrame("Frame", nil, Dialog)
-    Dialog.PetCardContainer:CreateBackdrop()
-    Dialog.PetCardContainer:SetBackdropColor(0.078, 0.078, 0.078)
-    Dialog.PetCardContainer:SetSize(640, 270)
-    Dialog.PetCardContainer:SetPoint("TOP", Dialog.AceContainer, "BOTTOM", 0, -10)
-    Dialog.PetCardContainer:SetClipsChildren(true)
+	Dialog.CardContainer = C.CreateContainer(Dialog)
+    Dialog.CardContainer:SetSize(640, 290)
+    Dialog.CardContainer:SetPoint("BOTTOMLEFT", 20, 30)
+    Dialog.CardContainer.Title:SetText(PETS)
 
-    Dialog.PetCardContainer.Title = Dialog.PetCardContainer:CreateFontString(nil, "ARTWORK")
-    Dialog.PetCardContainer.Title:SetFont(Media.Fonts.Normal, 12, "")
-    Dialog.PetCardContainer.Title:SetText(PETS)
-    Dialog.PetCardContainer.Title:SetTextColor(1.0, 0.82, 0)
-    Dialog.PetCardContainer.Title:SetPoint("TOPLEFT", 25, -20)
-
-    Dialog.Caroseul = C.CreateFrame("Frame", nil, Dialog.PetCardContainer)
-    Dialog.Caroseul:CreateBackdrop()
-    Dialog.Caroseul:SetBorderColor(1, 0, 0)
-
-    -- Build a stable "strip" cards can attach to, then animate the strip
-
-    local baseHeight, baseWidth = 200, 250
-
-    Dialog.Caroseul:SetSize(baseWidth * #C.db.pets, baseHeight)
-    Dialog.Caroseul:SetPoint("CENTER", Dialog.PetCardContainer)
+    ---@class Carousel: TherapyFrame
+    Dialog.Carousel = C.CreateCarousel(Dialog.CardContainer)
+    Dialog.Carousel:Update()
 
     -- Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
     -- Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
 
     -- Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
     -- Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
-
-    -- C.UpdatePetCards()
 
     function Dialog:Toggle()
         if PlayerIsInCombat() then
@@ -172,6 +160,10 @@ do
         end
 
         self:SetShown(not self:IsVisible())
+    end
+
+    function Dialog:Update()
+        self.Carousel:Update()
     end
 
     Dialog:SetScript("OnHide", function()

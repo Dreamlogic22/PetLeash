@@ -12,13 +12,13 @@ C.Media = {
         Normal = [[Interface\AddOns\PetLeash\Media\Fonts\PTSansNarrow.ttf]]
     },
     Textures = {
+        Background = [[Interface\AddOns\PetLeash\Media\Textures\Background.png]],
         Blank = [[Interface\AddOns\PetLeash\Media\Textures\Blank]],
         Checkbox = [[Interface\AddOns\PetLeash\Media\Textures\Checkbox.png]],
         Close = [[Interface\AddOns\PetLeash\Media\Textures\Close]],
         Glow = [[Interface\AddOns\PetLeash\Media\Textures\Glow]],
         Panels = [[Interface\AddOns\PetLeash\Media\Textures\Panels]],
         PetJournalWidget = [[Interface\AddOns\PetLeash\Media\Textures\PetJournalWidget.png]],
-        Settings = [[Interface\AddOns\PetLeash\Media\Textures\Settings.png]],
         Slider = [[Interface\AddOns\PetLeash\Media\Textures\Slider.png]]
     }
 }

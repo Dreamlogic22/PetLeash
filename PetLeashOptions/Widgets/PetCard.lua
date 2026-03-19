@@ -9,7 +9,29 @@
 local C, T = select(2, ...), PetLeash
 local Media = C.Media
 
+local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
+local GetPetStats = C_PetJournal.GetPetStats
+
+---@param petID string
+---@return PetCardInfo
+local function GetPetCardInfo(petID)
+    local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
+    local health, _, _, _, rarity = GetPetStats(petID)
+    local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
+
+    ---@class PetCardInfo
+    local petCardInfo = {
+        CustomName = customName,
+        DisplayID = displayID,
+        IsDead = health <= 0,
+        Name = name,
+        SpeciesID = speciesID,
+        GetRGB = function() return colorData.r, colorData.g, colorData.b end
+    }
+
+    return petCardInfo
+end
 
 local CreatePetCard
 do
@@ -17,7 +39,7 @@ do
     ---@param petID string
     ---@return PetCard
     CreatePetCard = function(parent, petID)
-        local cardInfo = C.GetPetCardInfo(petID)
+        local cardInfo = GetPetCardInfo(petID)
 
         ---@class PetCard: TherapyFrame
         local Card = C.CreateFrame("Frame", nil, parent, "BackdropTemplate")
@@ -44,7 +66,7 @@ do
 
             if #C.db.pets < 2 then
                 C.db.autoSwitch = false
-                PetLeashOptionsDialog.General:NotifyChange()
+                C.NotifyChange()
             end
 
             if PetJournal:IsVisible() then

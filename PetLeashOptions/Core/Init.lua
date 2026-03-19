@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash Options 4.01 (March 18, 2026)
+    PetLeash Options 4.01 (March 19, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -10,8 +10,6 @@ local Name = ...
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
-local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
-local GetPetStats = C_PetJournal.GetPetStats
 
 ---@class PetLeashOptions: TherapyAPI
 local C = select(2, ...)
@@ -26,26 +24,6 @@ do
     ---@return boolean
     function C.IsEditModeActive()
         return EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive()
-    end
-
-    ---@param petID string
-    ---@return PetCardInfo
-    function C.GetPetCardInfo(petID)
-        local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
-        local health, _, _, _, rarity = GetPetStats(petID)
-        local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
-
-        ---@class PetCardInfo
-        local petCardInfo = {
-            CustomName = customName,
-            DisplayID = displayID,
-            IsDead = health <= 0,
-            Name = name,
-            SpeciesID = speciesID,
-            GetRGB = function() return colorData.r, colorData.g, colorData.b end
-        }
-
-        return petCardInfo
     end
 
 	function C.NotifyChange()
@@ -67,7 +45,6 @@ local function OnInitialize()
         PetLeashOptionsDialog:Toggle()
 	end
 
-    -- Always clear the dialog flag
     PetLeash.ShowDialog = nil
 end
 

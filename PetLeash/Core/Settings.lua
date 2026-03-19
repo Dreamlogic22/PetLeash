@@ -4,7 +4,9 @@
 
     autoSwitch:
 
-        Do we automatically summon a new pet every so often?
+        Do we automatically summon a new pet every so often?  Note that
+        pets will be summoned randomly from the pool (pets) if one is
+        despawned for whatever reason at this point.
 
     autoSwitchInterval:
 
@@ -39,7 +41,7 @@ local T = select(2, ...)
 
 ---@class Settings
 T.db = {
-    autoSwitch  = false,
+    autoSwitch = false,
     autoSwitchInterval = 5 * 60,
     enable = true,
     keepSummonedPets = true,

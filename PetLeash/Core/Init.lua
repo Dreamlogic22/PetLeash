@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.01 (March 18, 2026)
+    PetLeash 4.01 (March 19, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -13,14 +13,6 @@ do
 
     function T.Print(...)
         print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
-    end
-end
-
-local function OnInitialize()
-    if T.db.enable and (T.db.pets and #T.db.pets > 0) then
-        T.Enable()
-    else
-        T.Disable(T.Locale.NO_PETS)
     end
 end
 
@@ -53,6 +45,14 @@ do
     PetLeashDB = merge(PetLeashDB, T.db)
 
     T.db = PetLeashDB
+end
+
+local function OnInitialize()
+    if T.db.enable and (T.db.pets and #T.db.pets > 0) then
+        T.Enable()
+    else
+        T.Disable(T.Locale.NO_PETS)
+    end
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

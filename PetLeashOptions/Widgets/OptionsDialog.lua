@@ -128,6 +128,7 @@ do
     Dialog.PetCardContainer:SetBackdropColor(0.078, 0.078, 0.078)
     Dialog.PetCardContainer:SetSize(640, 270)
     Dialog.PetCardContainer:SetPoint("TOP", Dialog.AceContainer, "BOTTOM", 0, -10)
+    Dialog.PetCardContainer:SetClipsChildren(true)
 
     Dialog.PetCardContainer.Title = Dialog.PetCardContainer:CreateFontString(nil, "ARTWORK")
     Dialog.PetCardContainer.Title:SetFont(Media.Fonts.Normal, 12, "")
@@ -135,8 +136,16 @@ do
     Dialog.PetCardContainer.Title:SetTextColor(1.0, 0.82, 0)
     Dialog.PetCardContainer.Title:SetPoint("TOPLEFT", 25, -20)
 
-    -- Dialog.PetCards = C.CreateGroup(PETS, Dialog, 640, 290)
-    -- Dialog.PetCards:SetPoint("BOTTOMLEFT", 20, 30)
+    Dialog.Caroseul = C.CreateFrame("Frame", nil, Dialog.PetCardContainer)
+    Dialog.Caroseul:CreateBackdrop()
+    Dialog.Caroseul:SetBorderColor(1, 0, 0)
+
+    -- Build a stable "strip" cards can attach to, then animate the strip
+
+    local baseHeight, baseWidth = 200, 250
+
+    Dialog.Caroseul:SetSize(baseWidth * #C.db.pets, baseHeight)
+    Dialog.Caroseul:SetPoint("CENTER", Dialog.PetCardContainer)
 
     -- Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
     -- Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)

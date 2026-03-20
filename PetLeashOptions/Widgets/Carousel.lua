@@ -92,32 +92,51 @@ do
     CreateCarousel = function(parent)
         ---@class Carousel: TherapyFrame
         local Carousel = C.CreateFrame("Frame", nil, parent)
+        Carousel.AnimationDuration = 0.4
+        Carousel.AnimationStart = 0
+        Carousel.AnimationStartShift = 0
+        Carousel.AnimationTargetShift = 0
         Carousel.CurrentIndex = 1
         Carousel.CurrentShift = 0
+        Carousel.IsAnimating = false
         Carousel.Cards = {}
 
-        Carousel.SlideAnimation = Carousel:CreateAnimationGroup()
-        Carousel.SlideTranslation = Carousel.SlideAnimation:CreateAnimation("Translation")
-        Carousel.SlideTranslation:SetDuration(0.2)
-        Carousel.SlideTranslation:SetSmoothing("IN_OUT")
+        Carousel:SetScript("OnUpdate", function(self)
+            if not self.IsAnimating then return end
 
-        Carousel.SlideAnimation:SetScript("OnFinished", function()
-            Carousel:ClearAllPoints()
-            Carousel:SetPoint("LEFT", Carousel.CurrentShift, 0)
+            local now = GetTime()
+            local elapsedTime = now - self.AnimationStart
+            local progress = elapsedTime / self.AnimationDuration
 
-            Carousel.StepBack:SetEnabled(Carousel.CurrentIndex > 1)
-            Carousel.StepForward:SetEnabled(Carousel.CurrentIndex + MaxDisplay - 1 < #Carousel.Cards)
+            if progress >= 1 then
+                progress = 1
+                self.IsAnimating = false
+            end
+
+            local currentShift = self.AnimationStartShift + (self.AnimationTargetShift - self.AnimationStartShift) * progress
+
+            self:ClearAllPoints()
+            self:SetPoint("LEFT", currentShift, 0)
+
+            if not self.IsAnimating then
+                self.CurrentShift = self.AnimationTargetShift
+                self.StepBack:SetEnabled(self.CurrentIndex > 1)
+                self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
+            end
         end)
 
-        ---@param direction  number
+        ---@param direction number
         function Carousel:StartAnimation(direction)
+            if self.IsAnimating then return end
+
             local offset = -205 * direction
 
             self.CurrentIndex = self.CurrentIndex + direction
-            self.CurrentShift = self.CurrentShift + offset  -- Track total shift
 
-            self.SlideTranslation:SetOffset(offset, 0)
-            self.SlideAnimation:Play()
+            self.IsAnimating = true
+            self.AnimationStart = GetTime()
+            self.AnimationStartShift = self.CurrentShift
+            self.AnimationTargetShift = self.CurrentShift + offset
         end
 
         function Carousel:Update()
@@ -172,13 +191,13 @@ do
 
         Carousel.StepBack = CreateBackStepper(parent)
         Carousel.StepBack:SetPoint("LEFT")
-        Carousel.StepBack:HookScript("OnClick", function(self)
+        Carousel.StepBack:HookScript("OnClick", function()
             Carousel:StartAnimation(-1)
         end)
 
         Carousel.StepForward = CreateForwardStepper(parent)
         Carousel.StepForward:SetPoint("RIGHT")
-        Carousel.StepForward:HookScript("OnClick", function(self)
+        Carousel.StepForward:HookScript("OnClick", function()
             Carousel:StartAnimation(1)
         end)
 

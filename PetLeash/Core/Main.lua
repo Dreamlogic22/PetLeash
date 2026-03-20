@@ -9,9 +9,6 @@
 local T = select(2, ...)
 local PetUtil = T.PetUtil
 
-local AutoSwitch = T.db.autoSwitch
-local AutoSwitchInterval = T.db.autoSwitchInterval
-
 local KeepSummonedPets = T.db.keepSummonedPets
 local LastPetSummoned = T.db.mostRecentPet
 
@@ -30,11 +27,11 @@ do
         if ScanCountdown <= 0 then
             ScanCountdown = ScanInterval
 
-            if (not AutoSwitch and KeepSummonedPets) and (PetUtil.GetCurrent() == LastPetSummoned) then
+            if KeepSummonedPets and (PetUtil.GetCurrent() == LastPetSummoned) then
                 return
             end
 
-            if not PetUtil.GetCurrent() or (AutoSwitch and TimeSinceSummon >= AutoSwitchInterval) then
+            if not PetUtil.GetCurrent() then
                 local pending = PetUtil.GetRandom(T.db.pets, T.db.mostRecentPet)
 
                 if pending and PetUtil.CanSummon(pending) then
@@ -68,9 +65,6 @@ do
     end
 
     function T.UpdateSettings()
-        AutoSwitch = T.db.autoSwitch
-        AutoSwitchInterval = T.db.autoSwitchInterval
-
         KeepSummonedPets = T.db.keepSummonedPets
 
         ScanInterval = T.db.scanInterval

@@ -9,73 +9,6 @@
 local C, T = select(2, ...), PetLeash
 local L, Media, Options = T.Locale, C.Media, C.Options
 
--- -- Animation block
--- do
---     local MaxDisplay = 3
---     local Panels = {}
---     local CurrentIndex = 1
---     local CardsCurrentlyAnimating = 0
-
---     local function UpdateVisibleCards()
---         for _, panel in ipairs(Panels) do
---             panel:Hide()
---         end
-
---         -- Show and position the 3-card window starting at CurrentIndex
---         for i = 1, MaxDisplay do
---             local panelIndex = CurrentIndex + i - 1
---             if Panels[panelIndex] then
---                 Panels[panelIndex]:ClearAllPoints()
---                 Panels[panelIndex]:Show()
-
---                 if i == 1 then
---                     Panels[panelIndex]:SetPoint("LEFT", PetLeashOptionsDialog.PetCards, "LEFT", 25, 0)
---                 else
---                     Panels[panelIndex]:SetPoint("LEFT", Panels[CurrentIndex + i - 2], "RIGHT", 25, 0)
---                 end
---             end
---         end
-
---         -- Update arrow states
---         PetLeashOptionsDialog.LeftArrow:SetEnabled(CurrentIndex > 1)
---         PetLeashOptionsDialog.RightArrow:SetEnabled(CurrentIndex + MaxDisplay - 1 < #Panels)
---     end
-
---     function C.UpdatePetCards()
---         for _, panel in ipairs(Panels) do
---             panel:Hide()
---             panel:SetParent(nil)
---         end
-
---         wipe(Panels)
-
---         for i = 1, #C.db.pets do  -- Create ALL cards
---             local petID = C.db.pets[i]
---             local panel = C.CreatePetCard(PetLeashOptionsDialog.PetCards, petID)
---             Panels[i] = panel
---         end
-
---         CurrentIndex = 1  -- Reset to first card
---         UpdateVisibleCards()  -- Show and position first 3
---     end
-
---     function C.SetupArrowHandlers()
---         PetLeashOptionsDialog.LeftArrow:SetScript("OnClick", function(self)
---             if CurrentIndex > 1 and CardsCurrentlyAnimating == 0 then
---                 StartAnimation(-1)
---                 PlaySound(856)
---             end
---         end)
-
---         PetLeashOptionsDialog.RightArrow:SetScript("OnClick", function()
---             if CurrentIndex + MaxDisplay - 1 < #Panels and CardsCurrentlyAnimating == 0 then
---                 StartAnimation(1)
---                 PlaySound(856)
---             end
---         end)
---     end
--- end
-
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -120,14 +53,8 @@ do
     local ScanInterval = Dialog.General:RegisterControl(Options.ScanInterval)
     ScanInterval:SetPoint("LEFT", Enable, "RIGHT", 230, 0)
 
-    local AutoSwitch = Dialog.General:RegisterControl(Options.AutoSwitch)
-    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
-
-    local AutoSwitchInterval = Dialog.General:RegisterControl(Options.AutoSwitchInterval)
-    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
-
     local KeepSummonedPets = Dialog.General:RegisterControl(Options.KeepSummonedPets)
-    KeepSummonedPets:SetPoint("TOP", AutoSwitch, "BOTTOM", 0, 0)
+    KeepSummonedPets:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
 
     Dialog.General:NotifyChange()
 

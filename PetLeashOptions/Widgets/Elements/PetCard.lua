@@ -61,10 +61,6 @@ do
                 end
             end
 
-            if #C.db.pets < 2 and C.db.autoSwitch then
-                C.db.autoSwitch = false
-            end
-
             if PetJournal:IsVisible() then
                 C.RefreshPetJournal()
             end

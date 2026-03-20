@@ -1,18 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Default settings.
-
-    autoSwitch:
-
-        Do we automatically summon a new pet every so often?  Note that
-        pets will be summoned randomly from the pool (pets) if one is
-        despawned for whatever reason at this point.
-
-    autoSwitchInterval:
-
-        If we're rotating pets, how long does a given pet stay summoned?
-        This value is expressed in seconds for compatibility with frame
-        updates, but is presented to the user in minutes.
+    Default settings:
 
     enable:
 
@@ -41,8 +29,6 @@ local T = select(2, ...)
 
 ---@class Settings
 T.db = {
-    autoSwitch = false,
-    autoSwitchInterval = 5 * 60,
     enable = true,
     keepSummonedPets = true,
     mostRecentPet = "",

@@ -14,7 +14,7 @@ local CreateBackStepper, CreateForwardStepper
 do
     ---@param parent Frame
     ---@return TherapyArrowButton
-    local function CreateArrowButton(parent)
+    local function CreateStepper(parent)
         ---@class TherapyArrowButton: TherapyFrame
         local Arrow = CreateFrame("Button", nil, parent)
         Arrow:SetSize(16, 24)
@@ -49,7 +49,7 @@ do
     ---@param parent Frame
     ---@return TherapyArrowButton
     CreateBackStepper = function(parent)
-        local Arrow = CreateArrowButton(parent)
+        local Arrow = CreateStepper(parent)
         Arrow.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
         Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.5, 0.625)
 
@@ -67,7 +67,7 @@ do
     ---@param parent Frame
     ---@return TherapyArrowButton
     CreateForwardStepper = function(parent)
-        local Arrow = CreateArrowButton(parent)
+        local Arrow = CreateStepper(parent)
         Arrow.Texture:SetTexCoord(0, 0.25, 0.625, 0.75)
         Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.625, 0.75)
 

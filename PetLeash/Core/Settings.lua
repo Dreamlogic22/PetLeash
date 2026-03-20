@@ -20,7 +20,8 @@
 
     scanInterval:
 
-        Seconds between summoning checks.
+        How many seconds we wait in between checks to determine if a pet
+        is out.
 
 ----------------------------------------------------------------------]]
 

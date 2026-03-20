@@ -4,6 +4,10 @@
     can dismiss summoned pets under certain circumstances (such as
     stealth).
 
+    This is currently a stub except for stealth.  Neither Children's
+    Week nor Brewfest are running at the moment, and I am not leveling an
+    alt, so we cannot test the other conditions.
+
 --------------------------------------------------------------------]]
 
 ---@class PetLeash

@@ -102,7 +102,7 @@ do
         Carousel.Cards = {}
 
         Carousel:SetScript("OnUpdate", function(self)
-            if not self.IsAnimating then return end
+            if #C.db.pets < 4 or not self.IsAnimating then return end
 
             local now = GetTime()
             local elapsedTime = now - self.AnimationStart
@@ -118,11 +118,9 @@ do
             self:ClearAllPoints()
             self:SetPoint("LEFT", currentShift, 0)
 
-            if not self.IsAnimating then
-                self.CurrentShift = self.AnimationTargetShift
-                self.StepBack:SetEnabled(self.CurrentIndex > 1)
-                self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
-            end
+            self.CurrentShift = self.AnimationTargetShift
+            self.StepBack:SetEnabled(self.CurrentIndex > 1)
+            self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
         end)
 
         ---@param direction number

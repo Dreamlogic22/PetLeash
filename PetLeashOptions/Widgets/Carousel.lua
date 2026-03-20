@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Frame that acts as a strip that hosts Pet Cards. Using attached
+    Frame that acts as a "conveyor belt" for Pet Cards. Using attached
     arrow buttons to create a smooth slide when the buttons are pressed
     if more than three pets are currently selected.
 

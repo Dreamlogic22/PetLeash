@@ -8,20 +8,17 @@
 ## LoadWith: Blizzard_Collections
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
-Libs\LibStub.lua
-Libs\CallbackHandler-1.0.lua
-Libs\AceConfig-3.0\AceConfig-3.0.xml
-Libs\AceGUI-3.0\AceGUI-3.0.xml
-
 Core\Init.lua
 Core\Main.lua
 Core\Media.lua
 
-Widgets\Elements\CarouselStepper.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Container.lua
+Widgets\Elements\Controls.lua
 Widgets\Elements\PetCard.lua
+Widgets\Elements\Slider.lua
+Widgets\Elements\Stepper.lua
 
 Widgets\Carousel.lua
 Widgets\OptionsButton.lua

@@ -7,8 +7,6 @@
 ---@type string
 local Name = ...
 
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
-
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 
 ---@class PetLeashOptions: TherapyAPI
@@ -26,18 +24,12 @@ do
         return EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive()
     end
 
-	function C.NotifyChange()
-		AceConfigRegistry:NotifyChange(C.Name)
-	end
-
     function C.Print(...)
         print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
     end
 end
 
 local function OnInitialize()
-    AceConfigRegistry:RegisterOptionsTable("PetLeash", C.Options)
-
     SlashCmdList.PETLEASH = function() PetLeashOptionsDialog:Toggle() end
 
     if not C.IsEditModeActive() and PetLeash.ShowDialog then

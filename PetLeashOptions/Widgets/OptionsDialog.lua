@@ -7,10 +7,7 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media = T.Locale, C.Media
-
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-local AceGUI = LibStub("AceGUI-3.0")
+local L, Media, Options = T.Locale, C.Media, C.Options
 
 -- -- Animation block
 -- do
@@ -79,10 +76,11 @@ local AceGUI = LibStub("AceGUI-3.0")
 --     end
 -- end
 
-        -- Card.SlideAnimation = Card:CreateAnimationGroup()
-        -- Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
-        -- Card.SlideTranslation:SetDuration(1)
-        -- Card.SlideTranslation:SetSmoothing("IN_OUT")
+-- Card.SlideAnimation = Card:CreateAnimationGroup()
+-- Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
+-- Card.SlideTranslation:SetDuration(1)
+-- Card.SlideTranslation:SetSmoothing("IN_OUT")
+
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -115,19 +113,30 @@ do
 
     Dialog.CloseButton = C.CreateCloseButton(Dialog)
 
-	Dialog.AceContainer = CreateFrame("Frame", nil, Dialog)
-	Dialog.AceContainer:SetSize(640, 230)
-    Dialog.AceContainer:SetPoint("TOPLEFT", 20, -30)
+    Dialog.General = C.CreateConfigGroup(Dialog)
+    Dialog.General:SetSize(640, 200)
+    Dialog.General:SetPoint("TOPLEFT", 20, -50)
+    Dialog.General.Title:SetText(GENERAL)
 
-	---@class AceGUIContainer
-	---@field frame Frame
-	local Group = AceGUI:Create("InlineGroup")
-	Group:SetLayout("Fill")
-	Group.frame:SetParent(Dialog.AceContainer)
-	Group.frame:SetAllPoints()
-	Group.frame:Show()
-	Dialog.AceContainer.AcePanel = Group
+    -- Controls
+    local Enable = Dialog.General:RegisterControl(Options.Enable)
+    Enable:SetPoint("TOPLEFT", 10, -30)
 
+    local ScanInterval = Dialog.General:RegisterControl(Options.ScanInterval)
+    ScanInterval:SetPoint("LEFT", Enable, "RIGHT", 230, 0)
+
+    local AutoSwitch = Dialog.General:RegisterControl(Options.AutoSwitch)
+    AutoSwitch:SetPoint("TOP", Enable, "BOTTOM", 0, 0)
+
+    local AutoSwitchInterval = Dialog.General:RegisterControl(Options.AutoSwitchInterval)
+    AutoSwitchInterval:SetPoint("LEFT", AutoSwitch, "RIGHT", 230, 0)
+
+    local KeepSummonedPets = Dialog.General:RegisterControl(Options.KeepSummonedPets)
+    KeepSummonedPets:SetPoint("TOP", AutoSwitch, "BOTTOM", 0, 0)
+
+    Dialog.General:NotifyChange()
+
+    -- Carousel
 	Dialog.CardContainer = C.CreateContainer(Dialog)
     Dialog.CardContainer:SetSize(640, 290)
     Dialog.CardContainer:SetPoint("BOTTOMLEFT", 20, 30)
@@ -159,14 +168,6 @@ do
     function Dialog:Update()
         self.Carousel:Update()
     end
-
-    Dialog:SetScript("OnHide", function()
-        AceConfigDialog:Close("PetLeash")
-    end)
-
-    Dialog:SetScript("OnShow", function()
-        AceConfigDialog:Open("PetLeash", Dialog.AceContainer.AcePanel)
-    end)
 
     ---@param inCombat boolean
     local function HandleCombat(_, inCombat)

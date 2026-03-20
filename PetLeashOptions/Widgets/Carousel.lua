@@ -85,7 +85,6 @@ end
 
 local CreateCarousel
 do
-    local CurrentIndex = 1
     local MaxDisplay = 3
 
     ---@param parent Frame
@@ -93,14 +92,38 @@ do
     CreateCarousel = function(parent)
         ---@class Carousel: TherapyFrame
         local Carousel = C.CreateFrame("Frame", nil, parent)
+        Carousel.CurrentIndex = 1
+        Carousel.CurrentShift = 0
         Carousel.Cards = {}
 
         Carousel.SlideAnimation = Carousel:CreateAnimationGroup()
         Carousel.SlideTranslation = Carousel.SlideAnimation:CreateAnimation("Translation")
-        Carousel.SlideTranslation:SetDuration(1)
+        Carousel.SlideTranslation:SetDuration(0.2)
         Carousel.SlideTranslation:SetSmoothing("IN_OUT")
 
+        Carousel.SlideAnimation:SetScript("OnFinished", function()
+            Carousel:ClearAllPoints()
+            Carousel:SetPoint("LEFT", Carousel.CurrentShift, 0)
+
+            Carousel.StepBack:SetEnabled(Carousel.CurrentIndex > 1)
+            Carousel.StepForward:SetEnabled(Carousel.CurrentIndex + MaxDisplay - 1 < #Carousel.Cards)
+        end)
+
+        ---@param direction  number
+        function Carousel:StartAnimation(direction)
+            local offset = -205 * direction
+
+            self.CurrentIndex = self.CurrentIndex + direction
+            self.CurrentShift = self.CurrentShift + offset  -- Track total shift
+
+            self.SlideTranslation:SetOffset(offset, 0)
+            self.SlideAnimation:Play()
+        end
+
         function Carousel:Update()
+            self.CurrentIndex = 1
+            self.CurrentShift = 0
+
             for _, card in ipairs(self.Cards) do
                 card:Hide()
                 card:SetParent(nil)
@@ -129,7 +152,7 @@ do
             end
 
             for i = 1, #self.Cards do
-                local cardIndex = CurrentIndex + i - 1
+                local cardIndex = self.CurrentIndex + i - 1
 
                 if #self.Cards == 1 then
                     self.Cards[cardIndex]:SetPoint("CENTER")
@@ -139,24 +162,24 @@ do
                 if i == 1 then
                     self.Cards[cardIndex]:SetPoint("LEFT", self, "LEFT", 25, 0)
                 else
-                    self.Cards[cardIndex]:SetPoint("LEFT", self.Cards[CurrentIndex + i - 2], "RIGHT", 25, 0)
+                    self.Cards[cardIndex]:SetPoint("LEFT", self.Cards[self.CurrentIndex + i - 2], "RIGHT", 25, 0)
                 end
             end
 
-            self.StepBack:SetEnabled(CurrentIndex > 1)
-            self.StepForward:SetEnabled(CurrentIndex + MaxDisplay - 1 < #self.Cards)
+            self.StepBack:SetEnabled(self.CurrentIndex > 1)
+            self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
         end
 
         Carousel.StepBack = CreateBackStepper(parent)
         Carousel.StepBack:SetPoint("LEFT")
         Carousel.StepBack:HookScript("OnClick", function(self)
-
+            Carousel:StartAnimation(-1)
         end)
 
         Carousel.StepForward = CreateForwardStepper(parent)
         Carousel.StepForward:SetPoint("RIGHT")
         Carousel.StepForward:HookScript("OnClick", function(self)
-
+            Carousel:StartAnimation(1)
         end)
 
         return Carousel

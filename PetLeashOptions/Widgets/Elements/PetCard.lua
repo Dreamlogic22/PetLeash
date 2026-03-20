@@ -61,13 +61,7 @@ do
                 end
             end
 
-            if not C.db.pets or #C.db.pets == 0 then
-                if T.IsEnabled then
-                    T.Disable()
-                end
-            end
-
-            if #C.db.pets < 2 then
+            if #C.db.pets < 2 and C.db.autoSwitch then
                 C.db.autoSwitch = false
             end
 
@@ -86,7 +80,7 @@ do
         Card.ModelScene:SetSize(160, 180)
         Card.ModelScene:SetPoint("TOP", 0, -10)
 
-        Card.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_DISCARD, true)
+        Card.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_MAINTAIN, true)
 
         local PetActor = Card.ModelScene:GetActorByTag("pet")
         if PetActor then

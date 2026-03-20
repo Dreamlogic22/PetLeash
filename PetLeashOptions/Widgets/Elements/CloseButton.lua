@@ -22,13 +22,22 @@ do
         CloseButton.Texture:SetTexture(Media.Textures.Close)
         CloseButton.Texture:SetInside()
 
+        CloseButton.HoverColor = { Media.Colors.Foreground:GetRGB() }
+
+        ---@param r number
+        ---@param g number
+        ---@param b number
+        function CloseButton:SetHoverColor(r, g, b)
+            self.HoverColor = { r, g, b }
+        end
+
         CloseButton:SetScript("OnClick", function(self)
             PlaySoundFile(567481)
             self:GetParent():Hide()
         end)
 
         CloseButton:SetScript("OnEnter", function(self)
-            self.Texture:SetVertexColor(Media.Colors.Foreground:GetRGB())
+            self.Texture:SetVertexColor(unpack(self.HoverColor))
         end)
 
         CloseButton:SetScript("OnLeave", function(self)

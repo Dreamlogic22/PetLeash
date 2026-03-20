@@ -76,11 +76,6 @@ local L, Media, Options = T.Locale, C.Media, C.Options
 --     end
 -- end
 
--- Card.SlideAnimation = Card:CreateAnimationGroup()
--- Card.SlideTranslation = Card.SlideAnimation:CreateAnimation("Translation")
--- Card.SlideTranslation:SetDuration(1)
--- Card.SlideTranslation:SetSmoothing("IN_OUT")
-
 do
     ---@class PetLeashOptionsDialog: TherapyFrame
     local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
@@ -163,10 +158,6 @@ do
         end
 
         self:SetShown(not self:IsVisible())
-    end
-
-    function Dialog:Update()
-        self.Carousel:Update()
     end
 
     ---@param inCombat boolean

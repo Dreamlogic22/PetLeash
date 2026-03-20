@@ -9,8 +9,6 @@
 local C, T = select(2, ...), PetLeash
 local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 
-local SetDefaultFilters = C_PetJournal.SetDefaultFilters
-
 local Button = PetLeashOptionsButton
 local Dialog = PetLeashOptionsDialog
 
@@ -35,15 +33,7 @@ local function AddPet(petID)
         T.Enable()
     end
 
-    if #C.db.pets >= 2 then
-        -- TODO: change this to notifyupdate
-        C.db.autoSwitch = true
-    end
-
-    if Dialog:IsVisible() then
-        -- PetLeashOptionsDialog.General:NotifyChange()
-        Dialog:Update()
-    end
+    C.NotifyChange()
 end
 
 ---@param petID number
@@ -76,10 +66,7 @@ local function RemovePet(petID)
         end
     end
 
-    if Dialog:IsVisible() then
-        -- PetLeashOptionsDialog.General:NotifyChange()
-        Dialog:Update()
-    end
+    C.NotifyChange()
 end
 
 local function ToggleSelectionMode()
@@ -90,8 +77,7 @@ local function ToggleSelectionMode()
         Button:GetScript("OnEnter")(Button)
     end
 
-    -- Hack to avoid PetJournal_UpdatePetList
-	SetDefaultFilters()
+	C.RefreshPetJournal()
 end
 
 do

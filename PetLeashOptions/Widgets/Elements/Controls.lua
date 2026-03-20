@@ -1,7 +1,7 @@
 --[[------------------------------------------------------------------
 
     Inspired by AceConfig-3.0.  Factories for creating
-    options-aware objects.  Info tables are documented below.
+    options-aware objects.  Info tables are annotated below.
 
 --------------------------------------------------------------------]]
 

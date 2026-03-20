@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C = select(2, ...)
+local C, T = select(2, ...), PetLeash
 local Media = C.Media
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
@@ -49,32 +49,34 @@ do
         Card:SetBackdropColor(0.58, 0.49, 0.4, 0.2)
         Card:SetBorderColor(cardInfo:GetRGB())
 
-        -- Card.RemoveButton = C.CreateRemoveButton(Card)
-        -- Card.RemoveButton:SetPoint("TOPRIGHT", -2, -1)
+        Card.RemoveButton = C.CreateCloseButton(Card)
+        Card.RemoveButton:SetPoint("TOPRIGHT", -6, -6)
+        Card.RemoveButton:SetHoverColor(cardInfo:GetRGB())
 
-        -- Card.RemoveButton:HookScript("OnClick", function()
-        --     for i, id in ipairs(C.db.pets) do
-        --         if id == petID then
-        --             tremove(C.db.pets, i)
-        --             break
-        --         end
-        --     end
+        Card.RemoveButton:HookScript("OnClick", function()
+            for i, id in ipairs(C.db.pets) do
+                if id == petID then
+                    tremove(C.db.pets, i)
+                    break
+                end
+            end
 
-        --     if not C.db.pets or #C.db.pets == 0 then
-        --         T.Disable()
-        --     end
+            if not C.db.pets or #C.db.pets == 0 then
+                if T.IsEnabled then
+                    T.Disable()
+                end
+            end
 
-        --     if #C.db.pets < 2 then
-        --         C.db.autoSwitch = false
-        --         C.NotifyChange()
-        --     end
+            if #C.db.pets < 2 then
+                C.db.autoSwitch = false
+            end
 
-        --     if PetJournal:IsVisible() then
-        --         C_PetJournal.SetDefaultFilters()
-        --     end
+            if PetJournal:IsVisible() then
+                C.RefreshPetJournal()
+            end
 
-        --     C.UpdatePetCards()
-        -- end)
+            C.NotifyChange()
+        end)
 
         -- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
         local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))

@@ -18,7 +18,6 @@ Widgets\Elements\Container.lua
 Widgets\Elements\Controls.lua
 Widgets\Elements\PetCard.lua
 Widgets\Elements\Slider.lua
-Widgets\Elements\Stepper.lua
 
 Widgets\Carousel.lua
 Widgets\OptionsButton.lua

@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Frame that acts as a "strip" that hosts Pet Cards. Using attached
+    Frame that acts as a strip that hosts Pet Cards. Using attached
     arrow buttons to create a smooth slide when the buttons are pressed
     if more than three pets are currently selected.
 
@@ -8,7 +8,6 @@
 
 ---@class PetLeashOptions
 local C = select(2, ...)
-local Media = C.Media
 
 local CreateCarousel
 do
@@ -38,11 +37,11 @@ do
                 self.Cards[i] = card
             end
 
-            -- Adjust width & card positions
-            local baseHeight, baseWidth = 250, 250
+            -- Adjust carousel width & card positions
+            local baseWidth = 250
 
             self:ClearAllPoints()
-            self:SetSize(baseWidth * #C.db.pets, baseHeight)
+            self:SetSize(baseWidth * #C.db.pets, 250)
 
             if #self.Cards >= MaxDisplay then
                 self:SetPoint("LEFT")
@@ -64,8 +63,12 @@ do
                     self.Cards[cardIndex]:SetPoint("LEFT", self.Cards[CurrentIndex + i - 2], "RIGHT", 25, 0)
                 end
             end
-
         end
+
+        Carousel.StepBack = C.CreateBackStepper(parent)
+        Carousel.StepBack:SetPoint("LEFT")
+        Carousel.StepForward = C.CreateForwardStepper(parent)
+        Carousel.StepForward:SetPoint("RIGHT")
 
         return Carousel
     end

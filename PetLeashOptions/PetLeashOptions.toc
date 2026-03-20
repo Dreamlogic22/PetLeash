@@ -17,6 +17,7 @@ Core\Init.lua
 Core\Main.lua
 Core\Media.lua
 
+Widgets\Elements\CarouselStepper.lua
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua
 Widgets\Elements\Container.lua

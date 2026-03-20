@@ -137,12 +137,6 @@ do
     Dialog.Carousel = C.CreateCarousel(Dialog.CardContainer)
     Dialog.Carousel:Update()
 
-    -- Dialog.LeftArrow = C.CreateBackArrowButton(Dialog.PetCards)
-    -- Dialog.LeftArrow:SetPoint("LEFT", Dialog.PetCards, "LEFT", 0, 0)
-
-    -- Dialog.RightArrow = C.CreateForwardArrowButton(Dialog.PetCards)
-    -- Dialog.RightArrow:SetPoint("RIGHT", Dialog.PetCards, "RIGHT", 0, 0)
-
     function Dialog:Toggle()
         if PlayerIsInCombat() then
             if self:IsVisible() then

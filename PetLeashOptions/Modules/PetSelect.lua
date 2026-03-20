@@ -28,7 +28,7 @@ local function AddPet(petID)
 
     table.insert(C.db.pets, petID)
 
-    -- If this is our first pet on a fresh install, enable
+    -- If this is our first pet, enable
     if not T.IsEnabled then
         T.Enable()
     end

@@ -149,8 +149,15 @@ do
 
         Carousel.StepBack = CreateBackStepper(parent)
         Carousel.StepBack:SetPoint("LEFT")
+        Carousel.StepBack:HookScript("OnClick", function(self)
+
+        end)
+
         Carousel.StepForward = CreateForwardStepper(parent)
         Carousel.StepForward:SetPoint("RIGHT")
+        Carousel.StepForward:HookScript("OnClick", function(self)
+
+        end)
 
         return Carousel
     end

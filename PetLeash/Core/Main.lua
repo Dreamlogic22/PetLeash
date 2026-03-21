@@ -10,6 +10,7 @@ local T = select(2, ...)
 local PetUtil = T.PetUtil
 
 local KeepSummonedPets = T.db.keepSummonedPets
+local MostRecentPet = T.db.mostRecentPet
 
 local ScanInterval = T.db.scanInterval
 local ScanCountdown = ScanInterval
@@ -31,11 +32,12 @@ do
             end
 
             if not PetUtil.GetCurrent() then
-                local pending = PetUtil.GetRandom(T.db.pets, T.db.mostRecentPet)
+                local pending = PetUtil.GetRandom(T.db.pets, MostRecentPet)
 
                 if pending and PetUtil.CanSummon(pending) then
                     PetUtil.Summon(pending)
-                    T.db.mostRecentPet = pending
+
+                    MostRecentPet = pending
                     TimeSinceSummon = 0
                 end
             end
@@ -55,7 +57,7 @@ do
     end
 
     function T.Enable()
-        T.db.mostRecentPet = PetUtil.GetCurrent()
+        MostRecentPet = PetUtil.GetCurrent()
 
         WatchFrame:SetScript("OnUpdate", CheckPets)
         RegisterAttributeDriver(WatchFrame, "state-visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][channeling][flying][mounted][pvpcombat][stealth][dead][combat] hide; show")

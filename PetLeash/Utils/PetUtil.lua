@@ -25,8 +25,9 @@ do
     end
 
     function PetUtil.Dismiss()
-        if PetUtil.GetCurrent() then
-            C_PetJournal.SummonPetByGUID(PetUtil.GetCurrent())
+        local current = PetUtil.GetCurrent()
+        if current then
+            C_PetJournal.SummonPetByGUID(current)
         end
     end
 
@@ -35,8 +36,8 @@ do
         return GetSummonedPetGUID()
     end
 
-    ---@param pool table Array of pet GUIDs
-    ---@param exclude string? GUID to exclude from selection
+    ---@param pool table
+    ---@param exclude string?
     ---@return string?
     function PetUtil.GetRandom(pool, exclude)
         if not pool or #pool == 0 then

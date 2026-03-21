@@ -10,6 +10,9 @@
 
         Should we override pets summoned using the Pet Journal?
 
+    mostRecentPet:
+        Most recent pet summoned.
+
     pets:
 
         Array of pets placed in the pool PetLeash uses to pick companions.
@@ -28,6 +31,7 @@ local T = select(2, ...)
 T.db = {
     enable = true,
     keepSummonedPets = true,
+    mostRecentPet = "",
     pets = {},
     scanInterval = 5,
 }

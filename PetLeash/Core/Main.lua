@@ -10,7 +10,6 @@ local T = select(2, ...)
 local PetUtil = T.PetUtil
 
 local KeepSummonedPets = T.db.keepSummonedPets
-local LastPetSummoned = T.db.mostRecentPet
 
 local ScanInterval = T.db.scanInterval
 local ScanCountdown = ScanInterval
@@ -27,7 +26,7 @@ do
         if ScanCountdown <= 0 then
             ScanCountdown = ScanInterval
 
-            if KeepSummonedPets and (PetUtil.GetCurrent() == LastPetSummoned) then
+            if KeepSummonedPets and PetUtil.GetCurrent() then
                 return
             end
 

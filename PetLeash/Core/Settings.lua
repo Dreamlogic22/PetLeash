@@ -10,10 +10,6 @@
 
         Should we override pets summoned using the Pet Journal?
 
-    mostRecentPet:
-
-        GUID of the last pet summoned manually or automatically.
-
     pets:
 
         Array of pets placed in the pool PetLeash uses to pick companions.
@@ -32,7 +28,6 @@ local T = select(2, ...)
 T.db = {
     enable = true,
     keepSummonedPets = true,
-    mostRecentPet = "",
     pets = {},
     scanInterval = 5,
 }

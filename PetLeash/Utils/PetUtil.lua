@@ -41,7 +41,7 @@ do
     ---@return string?
     function PetUtil.GetRandom(pool, exclude)
         if not pool or #pool == 0 then
-            return nil
+            return
         end
 
         if #pool == 1 then
@@ -56,7 +56,7 @@ do
         end
 
         if #candidates == 0 then
-            return nil
+            return
         end
 
         return candidates[math.random(1, #candidates)]

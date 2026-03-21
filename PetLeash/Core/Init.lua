@@ -12,7 +12,7 @@ do
     T.IsEnabled = false
 
     function T.Print(...)
-        print(strjoin("", "|cff33ff99", Name .. "|r: ", ...))
+        print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
     end
 end
 

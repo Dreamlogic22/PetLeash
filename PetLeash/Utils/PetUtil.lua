@@ -36,10 +36,9 @@ do
         return GetSummonedPetGUID()
     end
 
-    ---@param pool table
-    ---@param exclude string?
     ---@return string?
-    function PetUtil.GetRandom(pool, exclude)
+    function PetUtil.GetRandom()
+        local pool = T.db.pets
         if not pool or #pool == 0 then
             return
         end
@@ -50,7 +49,7 @@ do
 
         local candidates = {}
         for _, guid in ipairs(pool) do
-            if guid ~= exclude then
+            if guid ~= T.db.mostRecentPet then
                 table.insert(candidates, guid)
             end
         end
@@ -77,6 +76,7 @@ do
     function PetUtil.Summon(petID)
         if not PlayerIsInCombat() and (HasFullControl() and not IsPlayerMoving()) then
             SummonPetByGUID(petID)
+            MostRecentPet = petID
         end
     end
 

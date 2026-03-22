@@ -10,8 +10,6 @@ local T = select(2, ...)
 local PetUtil = T.PetUtil
 
 local KeepSummonedPets = T.db.keepSummonedPets
-local MostRecentPet = T.db.mostRecentPet
-
 local ScanInterval = T.db.scanInterval
 local ScanCountdown = ScanInterval
 local TimeSinceSummon = 0
@@ -32,12 +30,12 @@ do
             end
 
             if not PetUtil.GetCurrent() then
-                local pending = PetUtil.GetRandom(T.db.pets, MostRecentPet)
+                local pending = PetUtil.GetRandom()
 
                 if pending and PetUtil.CanSummon(pending) then
                     PetUtil.Summon(pending)
 
-                    MostRecentPet = pending
+                    T.db.mostRecentPet = pending
                     TimeSinceSummon = 0
                 end
             end

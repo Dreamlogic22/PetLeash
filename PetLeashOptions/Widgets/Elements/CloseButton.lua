@@ -18,7 +18,7 @@ do
         CloseButton:SetSize(14, 14)
         CloseButton:SetPoint("TOPRIGHT", -6, -6)
 
-        CloseButton.Texture = CloseButton:CreateTexture(nil, "OVERLAY", "TherapyTextureTemplate")
+        CloseButton.Texture = CloseButton:CreateTexture(nil, "OVERLAY")
         CloseButton.Texture:SetTexture(Media.Textures.Close)
         CloseButton.Texture:SetInside()
 

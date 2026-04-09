@@ -5,6 +5,7 @@
 ## LoadSavedVariablesFirst: 1
 ## Author: River
 ## Notes: Walks the Dog
+## RequiredDeps: Toolkit
 ## DefaultState: Enabled
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo

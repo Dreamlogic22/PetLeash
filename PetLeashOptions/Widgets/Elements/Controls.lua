@@ -23,7 +23,7 @@ local C = select(2, ...)
 ---@param info ConfigInfo
 ---@return Control
 local function CreateControl(info)
-    ---@class Control: TherapyFrame
+    ---@class Control: Frame, Button
     local widget
 
     if info.type == "range" then

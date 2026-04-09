@@ -10,8 +10,8 @@ local C, T = select(2, ...), PetLeash
 local L, Media, Options = T.Locale, C.Media, C.Options
 
 do
-    ---@class PetLeashOptionsDialog: TherapyFrame
-    local Dialog = C.CreateFrame("Frame", "PetLeashOptionsDialog", UIParent)
+    ---@class PetLeashOptionsDialog: ToolkitFrameTemplate
+    local Dialog = CreateFrame("Frame", "PetLeashOptionsDialog", UIParent, "ToolkitFrameTemplate")
     Dialog:SetSize(680, 580)
     Dialog:SetPoint("CENTER")
     Dialog:SetClampedToScreen(true)
@@ -64,7 +64,7 @@ do
     Dialog.CardContainer:SetPoint("BOTTOMLEFT", 20, 30)
     Dialog.CardContainer.Title:SetText(PETS)
 
-    ---@class Carousel: TherapyFrame
+    ---@class Carousel: ToolkitFrameTemplate
     Dialog.Carousel = C.CreateCarousel(Dialog.CardContainer)
     Dialog.Carousel:Update()
 

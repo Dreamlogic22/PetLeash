@@ -14,8 +14,8 @@ do
     ---@param parent Frame
     ---@return TherapyContainer
     CreateContainer = function(parent)
-        ---@class TherapyContainer: TherapyFrame
-        local Container = C.CreateFrame("Frame", nil, parent)
+        ---@class TherapyContainer: ToolkitFrameTemplate
+        local Container = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
         Container:SetFrameLevel(parent:GetFrameLevel() + 1)
         Container:CreateBackdrop()
         Container:SetBackdropColor(0.11, 0.11, 0.11, 0.4)

@@ -15,8 +15,8 @@ do
     ---@param tooltipText string?
     ---@return TherapyCheckbox
     CreateCheckbox = function(parent, label, tooltipText)
-        ---@class TherapyCheckbox: TherapyFrame, CheckButton
-        local Checkbox = C.CreateFrame("CheckButton", nil, parent)
+        ---@class TherapyCheckbox: ToolkitFrameTemplate, CheckButton
+        local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
         Checkbox:SetSize(24, 24)
         Checkbox.TooltipText = tooltipText and tooltipText or label
 

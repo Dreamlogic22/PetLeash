@@ -8,8 +8,6 @@
 ## LoadWith: Blizzard_Collections
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
-Libs\LibStub.lua
-
 Core\Init.lua
 Core\Main.lua
 Core\Media.lua

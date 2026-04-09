@@ -15,7 +15,7 @@ do
     ---@param parent Frame
     ---@return TherapyArrowButton
     local function CreateStepper(parent)
-        ---@class TherapyArrowButton: TherapyFrame
+        ---@class TherapyArrowButton: ToolkitButtonTemplate
         local Arrow = CreateFrame("Button", nil, parent)
         Arrow:SetSize(16, 24)
 
@@ -90,8 +90,8 @@ do
     ---@param parent Frame
     ---@return Carousel
     CreateCarousel = function(parent)
-        ---@class Carousel: TherapyFrame
-        local Carousel = C.CreateFrame("Frame", nil, parent)
+        ---@class Carousel: ToolkitFrameTemplate
+        local Carousel = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
         Carousel.AnimationDuration = 0.4
         Carousel.AnimationStart = 0
         Carousel.AnimationStartShift = 0

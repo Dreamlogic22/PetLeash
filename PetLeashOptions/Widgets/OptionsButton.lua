@@ -10,8 +10,8 @@ local C = select(2, ...)
 local Media = C.Media
 
 do
-    ---@class PetLeashOptionsButton: TherapyFrame
-    local Button = C.CreateFrame("Button", "PetLeashOptionsButton", UIParent)
+    ---@class PetLeashOptionsButton: ToolkitButtonTemplate
+    local Button = CreateFrame("Button", "PetLeashOptionsButton", UIParent, "ToolkitButtonTemplate")
     Button:SetSize(48, 48)
     Button:SetFrameStrata("HIGH")
     Button:SetFrameLevel(10)

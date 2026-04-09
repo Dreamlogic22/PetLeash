@@ -13,8 +13,8 @@ do
     ---@param parent Frame
     ---@return TherapyCloseButton
     CreateCloseButton = function(parent)
-        ---@class TherapyCloseButton: TherapyFrame
-        local CloseButton = C.CreateFrame("Button", nil, parent)
+        ---@class TherapyCloseButton: ToolkitButtonTemplate
+        local CloseButton = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
         CloseButton:SetSize(14, 14)
         CloseButton:SetPoint("TOPRIGHT", -6, -6)
 

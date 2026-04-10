@@ -3,7 +3,7 @@
 ## Version: 4.01
 ## Author: River
 ## Notes: Configuration for PetLeash
-## RequiredDeps: PetLeash, TherapyUX
+## RequiredDeps: PetLeash
 ## LoadOnDemand: 1
 ## LoadWith: Blizzard_Collections
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo

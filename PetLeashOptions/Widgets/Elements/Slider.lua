@@ -32,7 +32,7 @@ do
         local Container = CreateFrame("Frame", nil, parent)
         Container:SetSize(386, 24)
 
-        local Slider = C.CreateFrame("Slider", nil, parent)
+        local Slider = CreateFrame("Slider", nil, parent, "ToolkitFrameTemplate")
         Slider:SetOrientation("HORIZONTAL")
         Slider:SetSize(200, 24)
         Slider:SetPoint("LEFT", Container, "LEFT", 172, 0)

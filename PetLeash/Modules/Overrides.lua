@@ -79,12 +79,16 @@ local function DismissSummonedPet()
     end
 end
 
-if OverrideUtil.IsChildrensWeek() then
-    T.Print("Chilren's Week is now!  Yay!") -- temp
-    Toolkit.RegisterUnitEventCallback("UNIT_AURA", CheckAuras, "player")
+function T.SetupOverrides()
+    if OverrideUtil.IsChildrensWeek() then
+        T.Print("Chilren's Week is now!  Yay!") -- temp
+        Toolkit.RegisterUnitEventCallback("UNIT_AURA", CheckAuras, "player")
+    end
+
+    Toolkit.RegisterEventCallback("UPDATE_STEALTH", DismissSummonedPet)
 end
 
-Toolkit.RegisterEventCallback("UPDATE_STEALTH", DismissSummonedPet)
+
 
 -- local GetItemCount = C_Item.GetItemCount
 -- local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted

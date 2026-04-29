@@ -89,7 +89,6 @@ local function CheckInventory()
     end
 
     if not T.IsEnabled then
-        T.Print()
         T.Enable()
     end
 end
@@ -102,17 +101,13 @@ end
 
 local function SetupOverrides()
     if CalendarUtil.IsChildrensWeek() then
-        local function CheckEventConditions()
-            CheckAuras()
-            CheckInventory()
-        end
+        CheckAuras()
 
-        CheckEventConditions()
-
-        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckEventConditions)
-        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckEventConditions)
+        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckAuras)
+        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckAuras)
     end
 
+    Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", CheckInventory)
     Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
 end
 

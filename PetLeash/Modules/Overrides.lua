@@ -80,6 +80,7 @@ local function DismissSummonedPet()
 end
 
 if OverrideUtil.IsChildrensWeek() then
+    T.Print("Chilren's Week is now!  Yay!") -- temp
     Toolkit.RegisterUnitEventCallback("UNIT_AURA", CheckAuras, "player")
 end
 

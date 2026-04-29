@@ -7,6 +7,7 @@
 
 ---@class PetLeash
 local T = select(2, ...)
+
 local PetUtil = T.PetUtil
 
 local KeepSummonedPets = T.db.keepSummonedPets

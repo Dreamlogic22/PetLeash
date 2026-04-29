@@ -12,6 +12,7 @@
 
 Locale\enUS.lua
 
+Utils\OverrideUtil.lua
 Utils\PetUtil.lua
 
 Core\Settings.lua

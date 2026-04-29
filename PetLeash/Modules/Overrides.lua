@@ -12,7 +12,11 @@
 
 ---@class PetLeash
 local T = select(2, ...)
+
+local OverrideUtil = T.OverrideUtil
 local PetUtil = T.PetUtil
+
+local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 
 local Auras = {
     1230155, -- Arathi Orphan
@@ -50,13 +54,36 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
+local function CheckAuras()
+    if C_Secrets.ShouldAurasBeSecret() then
+        return
+    end
+
+    for _, id in pairs(Auras) do
+        if GetPlayerAuraBySpellID(id) then
+            if T.IsEnabled then
+                T.Disable("Disabling PetLeash: Khaz Algar orphan aura found.") -- temp
+            end
+        else
+            if not T.IsEnabled then
+                T.Enable()
+                Toolkit.UnregisterEventCallback("UNIT_AURA", CheckAuras)
+            end
+        end
+    end
+end
+
 local function DismissSummonedPet()
     if PetUtil.HasPet() and IsStealthed() then
         PetUtil.Dismiss()
     end
 end
 
-EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet)
+if OverrideUtil.IsChildrensWeek() then
+    Toolkit.RegisterUnitEventCallback("UNIT_AURA", CheckAuras, "player")
+end
+
+Toolkit.RegisterEventCallback("UPDATE_STEALTH", DismissSummonedPet)
 
 -- local GetItemCount = C_Item.GetItemCount
 -- local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
@@ -71,16 +98,6 @@ EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet
 
 -- local NeedsCheck = true
 -- local IsCached = false
-
--- local function CheckAuras()
---     for _, id in pairs(Auras) do
---         if not issecrettable(GetPlayerAuraBySpellID(id)) then
---             return true
---         end
---     end
-
---     return false
--- end
 
 -- ---@return boolean
 -- local function CheckEquipped()
@@ -174,7 +191,6 @@ EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", DismissSummonedPet
 --         "PLAYER_EQUIPMENT_CHANGED",
 --         "QUEST_ACCEPTED",
 --         "QUEST_FINISHED",
---         "UNIT_AURA",
 --         "ZONE_CHANGED_NEW_AREA",
 --     }
 

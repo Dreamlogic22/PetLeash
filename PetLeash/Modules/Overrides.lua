@@ -17,6 +17,7 @@ local OverrideUtil = T.OverrideUtil
 local PetUtil = T.PetUtil
 
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
+local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 
 local Auras = {
     1230155, -- Arathi Orphan
@@ -55,7 +56,7 @@ local Quests = {
 }
 
 local function CheckAuras()
-    if C_Secrets.ShouldAurasBeSecret() then
+    if ShouldAurasBeSecret() then
         return
     end
 

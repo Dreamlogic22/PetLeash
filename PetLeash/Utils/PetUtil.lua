@@ -74,7 +74,7 @@ do
 
     ---@param petID string
     function PetUtil.Summon(petID)
-        if not PlayerIsInCombat() and (HasFullControl() and not IsPlayerMoving() and not IsStealthed()) then
+        if not PlayerIsInCombat() and (HasFullControl() and not IsPlayerMoving()) then
             SummonPetByGUID(petID)
             MostRecentPet = petID
         end

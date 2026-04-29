@@ -13,9 +13,10 @@
 ---@class PetLeash
 local T = select(2, ...)
 
-local OverrideUtil = T.OverrideUtil
+local CalendarUtil = T.CalendarUtil
 local PetUtil = T.PetUtil
 
+local GetItemCount = C_Item.GetItemCount
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 
@@ -55,6 +56,7 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
+
 local function CheckAuras()
     if ShouldAurasBeSecret() then
         return
@@ -63,14 +65,31 @@ local function CheckAuras()
     for _, id in pairs(Auras) do
         if GetPlayerAuraBySpellID(id) then
             if T.IsEnabled then
-                T.Disable("Disabling PetLeash: Khaz Algar orphan aura found.") -- temp
+                T.Disable()
             end
-        else
-            if not T.IsEnabled then
-                T.Enable()
-                Toolkit.UnregisterEventCallback("UNIT_AURA", CheckAuras)
-            end
+
+            return
         end
+    end
+
+    if not T.IsEnabled then
+        T.Enable()
+    end
+end
+
+local function CheckInventory()
+    for _, id in pairs(Items) do
+        if GetItemCount(id) > 0 then
+            if T.IsEnabled then
+                T.Disable()
+            end
+
+            return
+        end
+    end
+
+    if not T.IsEnabled then
+        T.Enable()
     end
 end
 
@@ -80,19 +99,35 @@ local function DismissSummonedPet()
     end
 end
 
-function T.SetupOverrides()
-    if OverrideUtil.IsChildrensWeek() then
-        T.Print("Chilren's Week is now!  Yay!") -- temp
-        Toolkit.RegisterUnitEventCallback("UNIT_AURA", CheckAuras, "player")
+---@param hasOverride boolean
+local function HandleOverride(hasOverride)
+    if hasOverride then
+        if T.IsEnabled then
+            T.Disable()
+        end
+
+        return
+    end
+
+    if not T.IsEnabled then
+        T.Enable()
+    end
+end
+
+local function SetupOverrides()
+    if CalendarUtil.IsChildrensWeek() then
+        CheckAuras()
+
+        Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", CheckInventory)
+        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckAuras)
+        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckAuras)
     end
 
     Toolkit.RegisterEventCallback("UPDATE_STEALTH", DismissSummonedPet)
 end
 
+EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", SetupOverrides)
 
-
--- local GetItemCount = C_Item.GetItemCount
--- local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID -- secret unless whitelisted
 -- local IsEquippedItem = C_Item.IsEquippedItem
 -- local IsOnQuest = C_QuestLog.IsOnQuest
 
@@ -101,9 +136,6 @@ end
 --     68646,  -- Winterspring Cub
 --     3247,   -- Pocopoc
 -- }
-
--- local NeedsCheck = true
--- local IsCached = false
 
 -- ---@return boolean
 -- local function CheckEquipped()
@@ -160,43 +192,10 @@ end
 --     return false
 -- end
 
--- ---@return boolean
--- function T.HasOverride()
---     if not NeedsCheck then
---         return IsCached
---     end
-
---     NeedsCheck = false
---     IsCached = false
-
---     for _, f in pairs(Functions) do
---         if f() then
---             IsCached = true
---             break
---         end
---     end
-
---     return IsCached
--- end
-
--- ---@param event WowEvent
--- ---@param unit UnitToken?
--- local function MarkDirty(event, unit)
---     if event == "UNIT_AURA" and unit ~= "player" then
---         return
---     end
-
---     NeedsCheck = true
---     IsCached = false
--- end
-
 -- do
 --     local Events = {
---         "BAG_UPDATE",
 --         "EQUIPMENT_SWAP_FINISHED",
 --         "PLAYER_EQUIPMENT_CHANGED",
---         "QUEST_ACCEPTED",
---         "QUEST_FINISHED",
 --         "ZONE_CHANGED_NEW_AREA",
 --     }
 

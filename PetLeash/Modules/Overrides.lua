@@ -89,41 +89,31 @@ local function CheckInventory()
     end
 
     if not T.IsEnabled then
+        T.Print()
         T.Enable()
     end
 end
 
-local function DismissSummonedPet()
+local function CheckStealth()
     if PetUtil.HasPet() and IsStealthed() then
         PetUtil.Dismiss()
     end
 end
 
----@param hasOverride boolean
-local function HandleOverride(hasOverride)
-    if hasOverride then
-        if T.IsEnabled then
-            T.Disable()
-        end
-
-        return
-    end
-
-    if not T.IsEnabled then
-        T.Enable()
-    end
-end
-
 local function SetupOverrides()
     if CalendarUtil.IsChildrensWeek() then
-        CheckAuras()
+        local function CheckEventConditions()
+            CheckAuras()
+            CheckInventory()
+        end
 
-        Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", CheckInventory)
-        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckAuras)
-        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckAuras)
+        CheckEventConditions()
+
+        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckEventConditions)
+        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckEventConditions)
     end
 
-    Toolkit.RegisterEventCallback("UPDATE_STEALTH", DismissSummonedPet)
+    Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
 end
 
 EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", SetupOverrides)

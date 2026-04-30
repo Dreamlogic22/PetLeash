@@ -19,6 +19,6 @@ Core\Settings.lua
 Core\Init.lua
 
 Core\Main.lua
+Core\OptionsLoader.lua
 
-Modules\OptionsLoader.lua
 Modules\Overrides.lua

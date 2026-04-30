@@ -1,7 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    Interface for checking for active holidays and world events
-    that impact pet summoning.
+    Interface for checking for active holidays and world events.
 
 ----------------------------------------------------------------------]]
 

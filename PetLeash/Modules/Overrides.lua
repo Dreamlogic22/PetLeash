@@ -56,7 +56,6 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
-
 local function CheckAuras()
     if ShouldAurasBeSecret() then
         return
@@ -113,7 +112,6 @@ end
 
 EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", SetupOverrides)
 
--- local IsEquippedItem = C_Item.IsEquippedItem
 -- local IsOnQuest = C_QuestLog.IsOnQuest
 
 -- local Zones = {
@@ -121,28 +119,6 @@ EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", SetupOverri
 --     68646,  -- Winterspring Cub
 --     3247,   -- Pocopoc
 -- }
-
--- ---@return boolean
--- local function CheckEquipped()
---     for _, id in pairs(Equipment) do
---         if IsEquippedItem(id) then
---             return true
---         end
---     end
-
---     return false
--- end
-
--- ---@return boolean
--- local function CheckInventory()
---     for _, id in pairs(Items) do
---         if GetItemCount(id) > 0 then
---             return true
---         end
---     end
-
---     return false
--- end
 
 -- ---@return boolean
 -- local function CheckZone()

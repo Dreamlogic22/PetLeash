@@ -13,32 +13,28 @@
 ---@class PetLeash
 local T = select(2, ...)
 
-local CalendarUtil = T.CalendarUtil
+local ConditionsUtil = T.ConditionsUtil
 local PetUtil = T.PetUtil
 
 local GetItemCount = C_Item.GetItemCount
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 
+---@class Conditions
+local ActiveConditions = {
+    auras = {},
+    items = {},
+    quests = {},
+    zones = {}
+}
+
 local Auras = {
-    1230155, -- Arathi Orphan
-    1230185, -- Goblin Orphan
-    1228497, -- Kobold Orphan
-    1230183, -- Nerubian Orphan
     312993,  -- Forbidden Tomes (Revendreth)
     43880,   -- Ramstein's Swift Work Ram
     43883    -- Rental Racing Ram
 }
 
 local Items = {
-    31880,  -- Blood Elf Orphan Whistle
-    164965, -- Casteless Zandalari Orphan Whistle
-    31881,  -- Draenei Orphan Whistle
-    18598,  -- Human Orphan Whistle
-    164772, -- Kul Tiran Orphan Whistle
-    46397,  -- Oracle Orphan Whistle
-    18597,  -- Orcish Orphan Whistle
-    46396,  -- Wolvar Orphan Whistle
     30803,  -- Felhound Whistle,
     31815,  -- Zeppit's Crystal
     32834,  -- Nether Ray Cage
@@ -56,40 +52,41 @@ local Quests = {
     34965,  -- Called to the Throne (Horde)
 }
 
-local function CheckAuras()
-    if ShouldAurasBeSecret() then
-        return
-    end
-
-    for _, id in pairs(Auras) do
-        if GetPlayerAuraBySpellID(id) then
-            if T.IsEnabled then
-                T.Disable()
-            end
-
-            return
+---@param shouldDisable boolean
+local function HandleConditions(shouldDisable)
+    if shouldDisable then
+        if T.IsEnabled then
+            T.Disable()
         end
-    end
-
-    if not T.IsEnabled then
-        T.Enable()
+    else
+        if not T.IsEnabled then
+            T.Enable()
+        end
     end
 end
 
-local function CheckInventory()
-    for _, id in pairs(Items) do
-        if GetItemCount(id) > 0 then
-            if T.IsEnabled then
-                T.Disable()
-            end
+local function EvaluateConditions()
+    local shouldDisable = false
 
-            return
+    if #ActiveConditions.auras > 0 and not ShouldAurasBeSecret() then
+        for _, id in ipairs(ActiveConditions.auras) do
+            if GetPlayerAuraBySpellID(id) then
+                shouldDisable = true
+                break
+            end
         end
     end
 
-    if not T.IsEnabled then
-        T.Enable()
+    if not shouldDisable and #ActiveConditions.items > 0 then
+        for _, id in ipairs(ActiveConditions.items) do
+            if GetItemCount(id) > 0 then
+                shouldDisable = true
+                break
+            end
+        end
     end
+
+    HandleConditions(shouldDisable)
 end
 
 local function CheckStealth()
@@ -98,19 +95,22 @@ local function CheckStealth()
     end
 end
 
-local function SetupOverrides()
-    if CalendarUtil.IsChildrensWeek() then
-        CheckAuras()
+local function LoadConditions()
+    if ConditionsUtil.IsChildrensWeek() then
+        ConditionsUtil.UpdateChildrensWeek(ActiveConditions)
 
-        Toolkit.RegisterEventCallback("QUEST_ACCEPTED", CheckAuras)
-        Toolkit.RegisterEventCallback("QUEST_TURNED_IN", CheckAuras)
+        EvaluateConditions()
+
+        for _, event in pairs({ "QUEST_ACCEPTED", "QUEST_TURNED_IN" }) do
+            Toolkit.RegisterEventCallback(event, EvaluateConditions)
+        end
     end
 
-    Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", CheckInventory)
+    Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", EvaluateConditions)
     Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
 end
 
-EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", SetupOverrides)
+EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", LoadConditions)
 
 -- local IsOnQuest = C_QuestLog.IsOnQuest
 

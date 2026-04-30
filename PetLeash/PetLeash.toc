@@ -12,7 +12,7 @@
 
 Locale\enUS.lua
 
-Utils\CalendarUtil.lua
+Utils\ConditionsUtil.lua
 Utils\PetUtil.lua
 
 Core\Settings.lua
@@ -20,5 +20,4 @@ Core\Init.lua
 
 Core\Main.lua
 Core\OptionsLoader.lua
-
-Modules\Overrides.lua
+Core\Conditions.lua

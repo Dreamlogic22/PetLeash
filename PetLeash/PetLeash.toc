@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120007
 ## Title: |cffd6bfa3PetLeash|r
 ## Version: 4.01
 ## SavedVariablesPerCharacter: PetLeashDB

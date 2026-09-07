@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.01 (April 30, 2026)
+    PetLeash 4.01 (September 7, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -9,50 +9,50 @@ local Name = ...
 ---@class PetLeash
 local T = select(2, ...)
 do
-    T.IsEnabled = false
+	T.IsEnabled = false
 
-    function T.Print(...)
-        print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
-    end
+	function T.Print(...)
+		print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
+	end
 end
 
 -- Load database
 do
-    ---@param target table
-    ---@param defaults table
-    ---@return table
-    local function merge(target, defaults)
-        for k, v in next, defaults do
-            if type(v) == "table" then
-                if type(target[k]) ~= "table" then
-                    target[k] = {}
-                end
+	---@param target table
+	---@param defaults table
+	---@return table
+	local function merge(target, defaults)
+		for k, v in next, defaults do
+			if type(v) == "table" then
+				if target and type(target[k]) ~= "table" then
+					target[k] = {}
+				end
 
-                merge(target[k], v)
-            elseif target[k] == nil then
-                target[k] = v
-            end
-        end
+				merge(target[k], v)
+			elseif target[k] == nil then
+				target[k] = v
+			end
+		end
 
-        return target
-    end
+		return target
+	end
 
-    if not PetLeashDB or type(PetLeashDB) ~= "table" then
-        ---@class PetLeashDB: Settings
-        PetLeashDB = {}
-    end
+	if not PetLeashDB or type(PetLeashDB) ~= "table" then
+		---@class PetLeashDB: Settings
+		PetLeashDB = {}
+	end
 
-    PetLeashDB = merge(PetLeashDB, T.db)
+	PetLeashDB = merge(PetLeashDB, T.db)
 
-    T.db = PetLeashDB
+	T.db = PetLeashDB
 end
 
 local function OnInitialize()
-    if T.db.enable and (T.db.pets and #T.db.pets > 0) then
-        T.Enable()
-    else
-        T.Disable(T.Locale.NO_PETS)
-    end
+	if T.db.enable and (T.db.pets and #T.db.pets > 0) then
+		T.Enable()
+	else
+		T.Disable(T.Locale.NO_PETS)
+	end
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

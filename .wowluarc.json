@@ -2,21 +2,7 @@
     "codeLens": {
         "enable": false
     },
-    "diagnostics": {
-        "enable": [
-            "need-check-nil",
-            "unknown-field-type",
-            "unknown-local-type",
-            "unknown-param-type",
-            "unknown-return-type"
-        ]
-    },
-    "flavors": [ "retail" ],
-    "globals": {
-        "write": [ "PetLeash" ]
-    },
     "hint": {
         "enable": false
-    },
-    "library": [ "Libs/" ]
+    }
 }

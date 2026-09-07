@@ -22,92 +22,92 @@ local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 
 ---@class Conditions
 local ActiveConditions = {
-    auras = {},
-    items = {},
-    quests = {},
-    zones = {}
+	items = {},
+	quests = {},
+	spells = {},
+	zones = {},
 }
 
 local Auras = {
-    312993,  -- Forbidden Tomes (Revendreth)
-    43880,   -- Ramstein's Swift Work Ram
-    43883    -- Rental Racing Ram
+	312993, -- Forbidden Tomes (Revendreth)
+	43880, -- Ramstein's Swift Work Ram
+	43883, -- Rental Racing Ram
 }
 
 local Items = {
-    30803,  -- Felhound Whistle,
-    31815,  -- Zeppit's Crystal
-    32834,  -- Nether Ray Cage
-    34971,  -- Warsong Flare Gun
-    36936,  -- Golem Control Unit
+	30803, -- Felhound Whistle,
+	31815, -- Zeppit's Crystal
+	32834, -- Nether Ray Cage
+	34971, -- Warsong Flare Gun
+	36936, -- Golem Control Unit
 }
 
 local Quests = {
-    11878,  -- Orphaned Mammoth Calf
-    26831,  -- Twilight Flight
-    25371,  -- The Abyssal Ride
-    35396,  -- The Dark Heart of Oshu'gun (Alliance)
-    35317,  -- The Dark Heart of Oshu'gun (Horde)
-    35331,  -- Called to the Throne (Alliance)
-    34965,  -- Called to the Throne (Horde)
+	11878, -- Orphaned Mammoth Calf
+	26831, -- Twilight Flight
+	25371, -- The Abyssal Ride
+	35396, -- The Dark Heart of Oshu'gun (Alliance)
+	35317, -- The Dark Heart of Oshu'gun (Horde)
+	35331, -- Called to the Throne (Alliance)
+	34965, -- Called to the Throne (Horde)
 }
 
 ---@param shouldDisable boolean
 local function HandleConditions(shouldDisable)
-    if shouldDisable then
-        if T.IsEnabled then
-            T.Disable()
-        end
-    else
-        if not T.IsEnabled then
-            T.Enable()
-        end
-    end
+	if shouldDisable then
+		if T.IsEnabled then
+			T.Disable()
+		end
+	else
+		if not T.IsEnabled then
+			T.Enable()
+		end
+	end
 end
 
 local function EvaluateConditions()
-    local shouldDisable = false
+	local shouldDisable = false
 
-    if #ActiveConditions.auras > 0 and not ShouldAurasBeSecret() then
-        for _, id in ipairs(ActiveConditions.auras) do
-            if GetPlayerAuraBySpellID(id) then
-                shouldDisable = true
-                break
-            end
-        end
-    end
+	if #ActiveConditions.auras > 0 and not ShouldAurasBeSecret() then
+		for _, id in ipairs(ActiveConditions.auras) do
+			if GetPlayerAuraBySpellID(id) then
+				shouldDisable = true
+				break
+			end
+		end
+	end
 
-    if not shouldDisable and #ActiveConditions.items > 0 then
-        for _, id in ipairs(ActiveConditions.items) do
-            if GetItemCount(id) > 0 then
-                shouldDisable = true
-                break
-            end
-        end
-    end
+	if not shouldDisable and #ActiveConditions.items > 0 then
+		for _, id in ipairs(ActiveConditions.items) do
+			if GetItemCount(id) > 0 then
+				shouldDisable = true
+				break
+			end
+		end
+	end
 
-    HandleConditions(shouldDisable)
+	HandleConditions(shouldDisable)
 end
 
 local function CheckStealth()
-    if PetUtil.HasPet() and IsStealthed() then
-        PetUtil.Dismiss()
-    end
+	if PetUtil.HasPet() and IsStealthed() then
+		PetUtil.Dismiss()
+	end
 end
 
 local function LoadConditions()
-    if ConditionsUtil.IsChildrensWeek() then
-        ConditionsUtil.UpdateChildrensWeek(ActiveConditions)
+	if ConditionsUtil.IsChildrensWeek() then
+		ConditionsUtil.UpdateChildrensWeek(ActiveConditions)
 
-        EvaluateConditions()
+		EvaluateConditions()
 
-        for _, event in pairs({ "QUEST_ACCEPTED", "QUEST_TURNED_IN" }) do
-            Toolkit.RegisterEventCallback(event, EvaluateConditions)
-        end
-    end
+		for _, event in pairs({ "QUEST_ACCEPTED", "QUEST_TURNED_IN" }) do
+			Toolkit.RegisterEventCallback(event, EvaluateConditions)
+		end
+	end
 
-    Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", EvaluateConditions)
-    Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
+	Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", EvaluateConditions)
+	Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
 end
 
 EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", LoadConditions)

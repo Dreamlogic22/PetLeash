@@ -4,28 +4,26 @@
     can dismiss summoned pets under certain circumstances (such as
     stealth).
 
-    This is currently supports: stealth, Children's Week.
-
-    Brewfest is not active at this time, and I am not leveling an
-    alt, so I have not tested the other conditions.
+    This is currently a stub except for stealth.  Neither Children's
+    Week nor Brewfest are running at the moment, and I am not leveling an
+    alt, so we cannot test the other conditions.
 
 --------------------------------------------------------------------]]
 
 ---@class PetLeash
 local T = select(2, ...)
 
-local GetItemCount = C_Item.GetItemCount
-
 local ConditionsUtil = T.ConditionsUtil
 local PetUtil = T.PetUtil
 
-local ForceDisable = false
+local GetItemCount = C_Item.GetItemCount
+local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
+local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 
----@class Conditions
 local ActiveConditions = {
+	auras = {},
 	items = {},
 	quests = {},
-	spells = {},
 	zones = {},
 }
 
@@ -60,26 +58,25 @@ local function HandleConditions(shouldDisable)
 			T.Disable()
 		end
 	else
-		if not T.IsEnabled and not ForceDisable then
+		if not T.IsEnabled then
 			T.Enable()
 		end
 	end
 end
 
----@param spellId number
-local function CheckSpellcast(_, _, spellId)
-	if not ActiveConditions.spells[spellId] then
-		return
-	end
-
-	ForceDisable = true
-	HandleConditions(true)
-end
-
 local function EvaluateConditions()
 	local shouldDisable = false
 
-	if #ActiveConditions.items > 0 then
+	if #ActiveConditions.auras > 0 and not ShouldAurasBeSecret() then
+		for _, id in ipairs(ActiveConditions.auras) do
+			if GetPlayerAuraBySpellID(id) then
+				shouldDisable = true
+				break
+			end
+		end
+	end
+
+	if not shouldDisable and #ActiveConditions.items > 0 then
 		for _, id in ipairs(ActiveConditions.items) do
 			if GetItemCount(id) > 0 then
 				shouldDisable = true
@@ -100,7 +97,12 @@ end
 local function LoadConditions()
 	if ConditionsUtil.IsChildrensWeek() then
 		ConditionsUtil.UpdateChildrensWeek(ActiveConditions)
-		Toolkit.RegisterUnitCallback("UNIT_SPELLCAST_SUCCEEDED", CheckSpellcast, "player")
+
+		EvaluateConditions()
+
+		for _, event in pairs({ "QUEST_ACCEPTED", "QUEST_TURNED_IN" }) do
+			Toolkit.RegisterEventCallback(event, EvaluateConditions)
+		end
 	end
 
 	Toolkit.RegisterEventCallback("BAG_UPDATE_DELAYED", EvaluateConditions)

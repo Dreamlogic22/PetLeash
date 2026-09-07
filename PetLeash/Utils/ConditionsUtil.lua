@@ -33,26 +33,28 @@ local function IsEventActive(eventId)
 end
 
 local ChildrensWeek = {
-	spells = {
-		[1228496] = true, -- Kobold Orphan Skibbles
-		[1230149] = true, -- Arathi Orphan Destien
-		[1230182] = true, -- Nerubian Orphan Theadis
-		[1230184] = true, -- Goblin Orphan Kitzy
-		[23012] = true, -- Orc Orphan Grunth
-		[23013] = true, -- Human Orphan Randis
-		[282839] = true, -- Kul Tiran Orphan Liam
-		[283612] = true, -- Zandalari Orphan Azala
-		[39478] = true, -- Blood Elf Orphan Salandria
-		[39479] = true, -- Draenei Orphan Dornaa
-		[65352] = true, -- Oracle Orphan Roo
-		[65353] = true, -- Wolvar Orphan Kekek
+	auras = {
+		[1230155] = true, -- Arathi Orphan
+		[1230185] = true, -- Goblin Orphan
+		[1228497] = true, -- Kobold Orphan
+		[1230183] = true, -- Nerubian Orphan
+	},
+	items = {
+		[31880] = true, -- Blood Elf Orphan Whistle
+		[164965] = true, -- Casteless Zandalari Orphan Whistle
+		[31881] = true, -- Draenei Orphan Whistle
+		[18598] = true, -- Human Orphan Whistle
+		[164772] = true, -- Kul Tiran Orphan Whistle
+		[46397] = true, -- Oracle Orphan Whistle
+		[18597] = true, -- Orcish Orphan Whistle
+		[46396] = true, -- Wolvar Orphan Whistle
 	},
 }
 
 ---@class ConditionsUtil
 local ConditionsUtil = {}
 do
-	---@param activeConditions Conditions
+	---@param activeConditions table
 	function ConditionsUtil.UpdateChildrensWeek(activeConditions)
 		for cat, set in pairs(ChildrensWeek) do
 			for id in next, set do

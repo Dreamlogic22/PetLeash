@@ -38,7 +38,6 @@ do
 	end
 
 	if not PetLeashDB or type(PetLeashDB) ~= "table" then
-		---@class PetLeashDB: Settings
 		PetLeashDB = {}
 	end
 

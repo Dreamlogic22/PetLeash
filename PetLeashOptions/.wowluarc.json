@@ -1,4 +1,5 @@
 {
+    "addonRoot": true,
     "diagnostics": {
         "enable": [
             "need-check-nil",

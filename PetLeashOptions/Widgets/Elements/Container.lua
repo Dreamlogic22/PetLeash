@@ -11,10 +11,7 @@ local Media = C.Media
 
 local CreateContainer
 do
-	---@param parent Frame
-	---@return PetLeashContainer
 	CreateContainer = function(parent)
-		---@class PetLeashContainer: ToolkitFrameTemplate
 		local Container = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Container:SetFrameLevel(parent:GetFrameLevel() + 1)
 		Container:CreateBackdrop()

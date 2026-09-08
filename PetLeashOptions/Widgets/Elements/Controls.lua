@@ -20,14 +20,10 @@ local C = select(2, ...)
 ---@field step? number
 ---@field type string
 
----@param info ConfigInfo
----@return Control
 local function CreateControl(info)
-	---@class Control: Frame, Button
 	local widget
 
 	if info.type == "range" then
-		---@class Range: PetLeashSlider & Control
 		widget = C.CreateSlider(info.parent, info.name, info.min, info.max, info.step)
 
 		widget:SetValue(info.get())
@@ -41,7 +37,6 @@ local function CreateControl(info)
 	end
 
 	if info.type == "toggle" then
-		---@class Toggle: PetLeashCheckbox & Control
 		widget = C.CreateCheckbox(info.parent, info.name, info.desc)
 
 		widget:SetChecked(info.get())
@@ -63,13 +58,9 @@ end
 
 local CreateConfigGroup
 do
-	---@param parent Frame
-	---@return ConfigGroup
 	CreateConfigGroup = function(parent)
-		---@class ConfigGroup: PetLeashContainer
 		local ConfigGroup = C.CreateContainer(parent)
 
-		---@type table<Control, boolean>
 		ConfigGroup.Controls = {}
 
 		function ConfigGroup:NotifyChange()
@@ -85,7 +76,6 @@ do
 			end
 		end
 
-		---@param info ConfigInfo
 		function ConfigGroup:RegisterControl(info)
 			info.parent = self
 			local widget = CreateControl(info)

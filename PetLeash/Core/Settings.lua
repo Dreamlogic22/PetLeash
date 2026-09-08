@@ -24,14 +24,12 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
 local T = select(2, ...)
 
----@class Settings
 T.db = {
-    enable = true,
-    keepSummonedPets = true,
-    mostRecentPet = "",
-    pets = {},
-    scanInterval = 5,
+	enable = true,
+	keepSummonedPets = true,
+	mostRecentPet = "",
+	pets = {},
+	scanInterval = 5,
 }

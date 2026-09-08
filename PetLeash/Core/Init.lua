@@ -4,9 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
----@type string
 local Name = ...
----@class PetLeash
 local T = select(2, ...)
 do
 	T.IsEnabled = false
@@ -20,7 +18,6 @@ end
 do
 	---@param target table
 	---@param defaults table
-	---@return table
 	local function merge(target, defaults)
 		for k, v in next, defaults do
 			if type(v) == "table" then

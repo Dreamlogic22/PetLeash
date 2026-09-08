@@ -5,7 +5,6 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
 local T = select(2, ...)
 
 local GetDayEvent = C_Calendar.GetDayEvent
@@ -13,7 +12,6 @@ local GetDayEvent = C_Calendar.GetDayEvent
 local CHILDRENS_WEEK_ID = 201
 
 ---@param eventId number
----@return boolean
 local function IsEventActive(eventId)
 	local info = C_DateAndTime.GetCurrentCalendarTime()
 	C_Calendar.SetAbsMonth(info.month, info.year)
@@ -51,7 +49,6 @@ local ChildrensWeek = {
 	},
 }
 
----@class ConditionsUtil
 local ConditionsUtil = {}
 do
 	---@param activeConditions table
@@ -63,7 +60,6 @@ do
 		end
 	end
 
-	---@return boolean
 	function ConditionsUtil.IsChildrensWeek()
 		return IsEventActive(CHILDRENS_WEEK_ID)
 	end

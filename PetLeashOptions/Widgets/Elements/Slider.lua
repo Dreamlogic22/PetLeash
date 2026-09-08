@@ -10,25 +10,16 @@ local Media = C.Media
 
 local CreateSlider
 do
-	---@param self SliderStepper
 	local function StepOnClick(self)
 		PlaySound(229883)
 
 		if self.Delta then
-			---@type PetLeashSlider
 			local parent = self:GetParent()
 			parent:SetValueByDelta(self.Delta)
 		end
 	end
 
-	---@param parent Frame
-	---@param label string?
-	---@param min number?
-	---@param max number?
-	---@param step number?
-	---@return PetLeashSlider
 	CreateSlider = function(parent, label, min, max, step)
-		---@class PetLeashSlider: Frame
 		local Container = CreateFrame("Frame", nil, parent)
 		Container:SetSize(386, 24)
 
@@ -87,7 +78,6 @@ do
 
 		Container.Slider = Slider
 
-		---@class SliderStepper: Button
 		local Forward = CreateFrame("Button", nil, Container)
 		Forward:SetSize(16, 24)
 		Forward:SetPoint("LEFT", Container.Slider, "RIGHT", 4, 0)
@@ -109,7 +99,6 @@ do
 
 		Container.Forward = Forward
 
-		---@type SliderStepper
 		local Back = CreateFrame("Button", nil, Container)
 		Back:SetSize(16, 24)
 		Back:SetPoint("RIGHT", Container.Slider, "LEFT", -4, 0)
@@ -195,17 +184,14 @@ do
 			self.Slider.ValueText:SetTextColor(1, 0.82, 0)
 		end
 
-		---@return number
 		function Container:GetValue()
 			return self.Slider:GetValue()
 		end
 
-		---@param value number
 		function Container:SetValue(value)
 			self.Slider:SetValue(value, true)
 		end
 
-		---@param delta number
 		function Container:SetValueByDelta(delta)
 			local value = self.Slider:GetValue()
 			self.Slider:SetValue(value + delta)

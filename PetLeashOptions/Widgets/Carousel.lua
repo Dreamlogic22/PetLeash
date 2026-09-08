@@ -12,10 +12,7 @@ local Media = C.Media
 
 local CreateBackStepper, CreateForwardStepper
 do
-	---@param parent Frame
-	---@return PetLeashArrowButton
 	local function CreateStepper(parent)
-		---@class PetLeashArrowButton: ToolkitButtonTemplate
 		local Arrow = CreateFrame("Button", nil, parent)
 		Arrow:SetSize(16, 24)
 
@@ -46,8 +43,6 @@ do
 		return Arrow
 	end
 
-	---@param parent Frame
-	---@return PetLeashArrowButton
 	CreateBackStepper = function(parent)
 		local Arrow = CreateStepper(parent)
 		Arrow.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
@@ -64,8 +59,6 @@ do
 		return Arrow
 	end
 
-	---@param parent Frame
-	---@return PetLeashArrowButton
 	CreateForwardStepper = function(parent)
 		local Arrow = CreateStepper(parent)
 		Arrow.Texture:SetTexCoord(0, 0.25, 0.625, 0.75)
@@ -87,10 +80,7 @@ local CreateCarousel
 do
 	local MaxDisplay = 3
 
-	---@param parent Frame
-	---@return Carousel
 	CreateCarousel = function(parent)
-		---@class Carousel: ToolkitFrameTemplate
 		local Carousel = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Carousel.AnimationDuration = 0.4
 		Carousel.AnimationStart = 0
@@ -125,7 +115,6 @@ do
 			self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
 		end)
 
-		---@param direction number
 		function Carousel:StartAnimation(direction)
 			if self.IsAnimating then
 				return

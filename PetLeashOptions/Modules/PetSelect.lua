@@ -14,7 +14,6 @@ local Dialog = PetLeashOptionsDialog
 
 local SelectingPets = false
 
----@param petID number
 local function AddPet(petID)
 	if not petID then
 		return
@@ -38,7 +37,6 @@ local function AddPet(petID)
 	C.NotifyChange()
 end
 
----@param petID number
 local function IsSelected(petID)
 	if not petID or not C.db.pets then
 		return false
@@ -53,7 +51,6 @@ local function IsSelected(petID)
 	return false
 end
 
----@param petID number
 local function RemovePet(petID)
 	if not petID or not C.db.pets then
 		return
@@ -143,8 +140,6 @@ else
 	Exclusions[331] = true -- Alliance Balloon
 end
 
----@param petID number
----@return boolean
 local function IsPetIneligible(petID)
 	local speciesID = PetUtil.GetSpecies(petID)
 	if Exclusions[speciesID] then
@@ -164,7 +159,6 @@ local function OnPetJournalLoad()
 
 	hooksecurefunc("PetJournal_InitPetButton", function(button)
 		if not button.PetLeashCheckbox then
-			---@type PetLeashCheckbox
 			local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
 			Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 

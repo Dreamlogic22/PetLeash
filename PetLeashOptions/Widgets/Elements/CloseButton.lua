@@ -10,10 +10,7 @@ local Media = C.Media
 
 local CreateCloseButton
 do
-	---@param parent Frame
-	---@return PetLeashCloseButton
 	CreateCloseButton = function(parent)
-		---@class PetLeashCloseButton: ToolkitButtonTemplate
 		local CloseButton = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
 		CloseButton:SetSize(14, 14)
 		CloseButton:SetPoint("TOPRIGHT", -6, -6)
@@ -24,9 +21,6 @@ do
 
 		CloseButton.HoverColor = { Media.Colors.Foreground:GetRGB() }
 
-		---@param r number
-		---@param g number
-		---@param b number
 		function CloseButton:SetHoverColor(r, g, b)
 			self.HoverColor = { r, g, b }
 		end

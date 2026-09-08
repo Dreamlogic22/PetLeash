@@ -10,12 +10,7 @@ local Media = C.Media
 
 local CreateCheckbox
 do
-	---@param parent Frame
-	---@param label string?
-	---@param tooltipText string?
-	---@return PetLeashCheckbox
 	CreateCheckbox = function(parent, label, tooltipText)
-		---@class PetLeashCheckbox: ToolkitFrameTemplate & CheckButton
 		local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
 		Checkbox:SetSize(24, 24)
 		Checkbox.TooltipText = tooltipText and tooltipText or label

@@ -5,7 +5,6 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
 local T = select(2, ...)
 
 local PetUtil = T.PetUtil
@@ -18,7 +17,6 @@ local TimeSinceSummon = 0
 do
 	local WatchFrame = CreateFrame("Frame", nil, UIParent, "SecureHandlerShowHideTemplate")
 
-	---@param elapsed number
 	local function CheckPets(_, elapsed)
 		ScanCountdown = ScanCountdown - elapsed
 		TimeSinceSummon = TimeSinceSummon + elapsed

@@ -4,7 +4,6 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
 local T = select(2, ...)
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
@@ -15,11 +14,9 @@ local SummonPetByGUID = C_PetJournal.SummonPetByGUID
 local HasFullControl = HasFullControl
 local IsPlayerMoving = IsPlayerMoving
 
----@class PetUtil
 local PetUtil = {}
 do
 	---@param petID string
-	---@return boolean, number, string
 	function PetUtil.CanSummon(petID)
 		return GetPetSummonInfo(petID)
 	end
@@ -31,7 +28,6 @@ do
 		end
 	end
 
-	---@return string
 	function PetUtil.GetCurrent()
 		return GetSummonedPetGUID()
 	end
@@ -62,12 +58,10 @@ do
 	end
 
 	---@param petID string
-	---@return number?
 	function PetUtil.GetSpecies(petID)
 		return select(1, GetPetInfoByPetID(petID))
 	end
 
-	---@return boolean
 	function PetUtil.HasPet()
 		return PetUtil.GetCurrent() ~= nil
 	end

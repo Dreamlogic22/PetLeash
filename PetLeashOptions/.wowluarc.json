@@ -11,6 +11,10 @@
     },
     "flavors": [ "retail" ],
     "globals": {
-        "write": [ "PetLeash" ]
+        "write": [
+            "PetLeash",
+            "PetLeashOptionsDialog",
+            "PetLeashOptionsButton"
+        ]
     }
 }

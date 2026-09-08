@@ -1,0 +1,58 @@
+312993, -- Forbidden Tomes (Revendreth)
+43880, -- Ramstein's Swift Work Ram
+43883, -- Rental Racing Ram
+
+30803, -- Felhound Whistle,
+31815, -- Zeppit's Crystal
+32834, -- Nether Ray Cage
+34971, -- Warsong Flare Gun
+36936, -- Golem Control Unit
+
+11878, -- Orphaned Mammoth Calf
+26831, -- Twilight Flight
+25371, -- The Abyssal Ride
+35396, -- The Dark Heart of Oshu'gun (Alliance)
+35317, -- The Dark Heart of Oshu'gun (Horde)
+35331, -- Called to the Throne (Alliance)
+34965, -- Called to the Throne (Horde),
+
+46362, -- Venomhide Hatchling
+68646, -- Winterspring Cub
+
+local IsOnQuest = C_QuestLog.IsOnQuest
+local GetItemCount = C_Item.GetItemCount
+
+---@return boolean
+local function CheckZone()
+	local mapname = GetZoneText()
+
+	-- Venomhide Hatchling: Un'Goro or Tanaris, must have item
+	if GetItemCount(46362) > 0 and (mapname == "Un'Goro Crater" or mapname == "Tanaris") then
+		return true
+	end
+
+	-- Winterspring Cub: Winterspring, must have item
+	if GetItemCount(68646) > 0 and mapname == "Winterspring" then
+		return true
+	end
+
+	return false
+end
+
+if not shouldDisable then
+	for _, id in ipairs(ActiveConditions.items) do
+		if GetItemCount(id) > 0 then
+			shouldDisable = true
+			break
+		end
+	end
+end
+
+if not shouldDisable then
+	for _, id in ipairs(ActiveConditions.quests) do
+		if IsOnQuest(id) then
+			shouldDisable = true
+			break
+		end
+	end
+end

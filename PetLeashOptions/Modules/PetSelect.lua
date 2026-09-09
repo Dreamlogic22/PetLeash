@@ -5,7 +5,6 @@
 
 --------------------------------------------------------------------]]
 
----@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
 local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 
@@ -14,6 +13,7 @@ local Dialog = PetLeashOptionsDialog
 
 local SelectingPets = false
 
+---@param petID string
 local function AddPet(petID)
 	if not petID then
 		return
@@ -37,6 +37,7 @@ local function AddPet(petID)
 	C.NotifyChange()
 end
 
+---@param petID string
 local function IsSelected(petID)
 	if not petID or not C.db.pets then
 		return false
@@ -51,6 +52,7 @@ local function IsSelected(petID)
 	return false
 end
 
+---@param petID string
 local function RemovePet(petID)
 	if not petID or not C.db.pets then
 		return
@@ -84,6 +86,7 @@ local function ToggleSelectionMode()
 end
 
 do
+	---@param button string
 	Button:HookScript("OnClick", function(_, button)
 		if button == "LeftButton" then
 			SelectingPets = not SelectingPets
@@ -100,6 +103,7 @@ do
 		end
 	end)
 
+	---@param self ToolkitButtonTemplate
 	Button:SetScript("OnEnter", function(self)
 		if not GameTooltip:IsForbidden() then
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
@@ -163,6 +167,7 @@ local function OnPetJournalLoad()
 			Checkbox:SetPoint("RIGHT", button, "RIGHT", -15, 0)
 
 			Checkbox:HookScript("OnClick", function(self)
+				---@type string
 				local id = button.petID
 				if self:GetChecked() then
 					AddPet(id)

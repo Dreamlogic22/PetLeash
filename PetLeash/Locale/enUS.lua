@@ -1,5 +1,6 @@
 local T = select(2, ...)
 
+---@class Locale
 local L = {}
 do
 	L.ADD_OR_REMOVE_PET = "Add or remove this pet from PetLeash."

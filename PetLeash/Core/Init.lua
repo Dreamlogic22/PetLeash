@@ -4,8 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
-local Name = ...
-local T = select(2, ...)
+local Name, T = ...
 do
 	T.IsEnabled = false
 

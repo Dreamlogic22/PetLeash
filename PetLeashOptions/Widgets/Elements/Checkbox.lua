@@ -4,12 +4,14 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeashOptions
 local C = select(2, ...)
 local Media = C.Media
 
 local CreateCheckbox
 do
+	---@param parent Frame
+	---@param label string?
+	---@param tooltipText string?
 	CreateCheckbox = function(parent, label, tooltipText)
 		local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
 		Checkbox:SetSize(24, 24)
@@ -45,6 +47,7 @@ do
 		Checkbox.Label:SetText(label)
 		Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
+		---@param self CheckButton & ToolkitFrameTemplate
 		Checkbox:SetScript("OnClick", function(self)
 			if self:GetChecked() then
 				PlaySound(857)
@@ -53,6 +56,7 @@ do
 			end
 		end)
 
+		---@param self CheckButton & ToolkitFrameTemplate
 		Checkbox:SetScript("OnDisable", function(self)
 			self.CheckedTexture:SetDesaturated(true)
 			self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
@@ -60,12 +64,14 @@ do
 			self.Label:SetTextColor(0.5, 0.5, 0.5)
 		end)
 
+		---@param self CheckButton & ToolkitFrameTemplate
 		Checkbox:SetScript("OnEnable", function(self)
 			self.CheckedTexture:SetDesaturated(false)
 			self.CheckedTexture:SetVertexColor(1, 1, 1)
 			self.Label:SetTextColor(Media.Colors.Foreground:GetRGB())
 		end)
 
+		---@param self CheckButton & ToolkitFrameTemplate
 		Checkbox:SetScript("OnEnter", function(self)
 			if self.TooltipText then
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

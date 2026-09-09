@@ -20,7 +20,9 @@ local C = select(2, ...)
 ---@field step? number
 ---@field type string
 
+---@param info ConfigInfo
 local function CreateControl(info)
+	---@class Control
 	local widget
 
 	if info.type == "range" then
@@ -28,6 +30,7 @@ local function CreateControl(info)
 
 		widget:SetValue(info.get())
 
+		---@param self Slider
 		widget.Slider:HookScript("OnValueChanged", function(self)
 			local value = self:GetValue()
 			widget.set(value)
@@ -58,7 +61,9 @@ end
 
 local CreateConfigGroup
 do
+	---@param parent Frame
 	CreateConfigGroup = function(parent)
+		---@class ConfigGroup: Frame & ToolkitFrameTemplate
 		local ConfigGroup = C.CreateContainer(parent)
 
 		ConfigGroup.Controls = {}

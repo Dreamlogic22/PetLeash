@@ -5,6 +5,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeash
 local T = select(2, ...)
 
 local PetUtil = T.PetUtil

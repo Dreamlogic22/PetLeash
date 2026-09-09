@@ -16,6 +16,7 @@ do
 	C.Version = GetAddOnMetadata(Name, "Version")
 	C.db = PetLeashDB
 
+	---@return boolean
 	function C.IsEditModeActive()
 		return EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive()
 	end
@@ -27,6 +28,7 @@ do
 		end
 	end
 
+	---@param ... any
 	function C.Print(...)
 		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end

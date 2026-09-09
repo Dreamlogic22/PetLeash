@@ -20,6 +20,8 @@ do
 	end
 
 	CreateSlider = function(parent, label, min, max, step)
+		---@class SliderContainer: Frame
+		---@field Label FontString
 		local Container = CreateFrame("Frame", nil, parent)
 		Container:SetSize(386, 24)
 

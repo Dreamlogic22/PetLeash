@@ -5,6 +5,7 @@
 
 --------------------------------------------------------------------]]
 
+---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
 local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
 

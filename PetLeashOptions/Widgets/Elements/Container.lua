@@ -13,6 +13,7 @@ local CreateContainer
 do
 	---@param parent Frame
 	CreateContainer = function(parent)
+		---@class Container: Frame & ToolkitFrameTemplate
 		local Container = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Container:SetFrameLevel(parent:GetFrameLevel() + 1)
 		Container:CreateBackdrop()
@@ -21,7 +22,7 @@ do
 
 		Container.Title = Container:CreateFontString(nil, "ARTWORK")
 		Container.Title:SetFont(Media.Fonts.Normal, 14, "")
-		Container.Title:SetTextColor(Media.Colors.Foreground:GetRGB())
+		Container.Title:SetTextColor(unpack(Media.Colors.Foreground))
 		Container.Title:SetPoint("TOPLEFT", 6, -6)
 
 		return Container

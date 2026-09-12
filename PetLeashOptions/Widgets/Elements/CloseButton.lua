@@ -4,6 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeashOptions
 local C = select(2, ...)
 local Media = C.Media
 

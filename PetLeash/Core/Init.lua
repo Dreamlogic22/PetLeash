@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.02 (September 7, 2026)
+    PetLeash 4.02 (September 11, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -52,4 +52,5 @@ end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)
 
+---@class PetLeash
 PetLeash = T

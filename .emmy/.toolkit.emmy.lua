@@ -26,7 +26,7 @@ function Toolkit.UnregisterCallback(event, callback) end
 
 ---@param event FrameEvent
 ---@param callback function
-function Toolkit.RegisterEventCallback(event, callback) end
+function Toolkit.RegisterEvent(event, callback) end
 
 ---@param event FrameEvent
 ---@param callback function
@@ -35,16 +35,16 @@ function Toolkit.RegisterEventOnce(event, callback) end
 ---@param event FrameEvent
 ---@param callback function
 ---@param unit UnitToken
-function Toolkit.RegisterUnitCallback(event, callback, unit) end
+function Toolkit.RegisterUnitEvent(event, callback, unit) end
 
 ---@param event FrameEvent
 ---@param callback function
-function Toolkit.UnregisterEventCallback(event, callback) end
+function Toolkit.UnregisterEvent(event, callback) end
 
 ---@param event FrameEvent
 ---@param callback function
 ---@param unit UnitToken
-function Toolkit.UnregisterUnitCallback(event, callback, unit) end
+function Toolkit.UnregisterUnitEvent(event, callback, unit) end
 
 --[[--------------------------------------------------------------------
 
@@ -71,14 +71,14 @@ function ToolkitBackdrop:CreateShadow(shadowScale) end
 ---@param a number?
 function ToolkitBackdrop:SetBackdropColor(r, g, b, a) end
 
+---@param texture TextureAsset
+function ToolkitBackdrop:SetBackdropTexture(texture) end
+
 ---@param r number
 ---@param g number
 ---@param b number
 ---@param a number?
 function ToolkitBackdrop:SetBorderColor(r, g, b, a) end
-
----@param texture TextureAsset
-function ToolkitBackdrop:SetBackdropTexture(texture) end
 
 ---@param size number
 function ToolkitBackdrop:SetBorderSize(size) end
@@ -134,9 +134,15 @@ function ToolkitFrameTemplate:CreateTexture(name, drawLayer, templateName, subLe
 ---@class ToolkitButtonTemplate: ToolkitFrameTemplate & Button
 ToolkitButtonTemplate = {}
 
+---@param r number
+---@param g number
+---@param b number
+---@param a? number
+function ToolkitButtonTemplate:SetHoverColor(r, g, b, a) end
+
 ---@param texture TextureAssetDisk
 ---@param rotation number?
-function ToolkitButton:SetTexture(texture, rotation) end
+function ToolkitButtonTemplate:SetTexture(texture, rotation) end
 
 ---@param texture TextureAsset
-function ToolkitButton:SetupTextures(texture) end
+function ToolkitButtonTemplate:SetupTextures(texture) end

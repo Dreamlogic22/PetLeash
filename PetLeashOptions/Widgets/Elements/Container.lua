@@ -11,6 +11,7 @@ local Media = C.Media
 
 local CreateContainer
 do
+	---@param parent Frame
 	CreateContainer = function(parent)
 		local Container = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Container:SetFrameLevel(parent:GetFrameLevel() + 1)

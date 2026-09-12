@@ -21,7 +21,7 @@ do
 		CloseButton.Texture:SetTexture(Media.Textures.Close)
 		CloseButton.Texture:SetInside()
 
-		CloseButton.HoverColor = { Media.Colors.Foreground:GetRGB() }
+		CloseButton.HoverColor = Media.Colors.Foreground
 
 		---@param r number
 		---@param g number
@@ -33,8 +33,7 @@ do
 		---@param self CloseButton
 		CloseButton:SetScript("OnClick", function(self)
 			PlaySoundFile(567481)
-			---@diagnostic disable-next-line: need-check-nil
-			self:GetParent():Hide()
+			parent:Hide()
 		end)
 
 		---@param self CloseButton

@@ -4,6 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeash
 local C = select(2, ...)
 local Media = C.Media
 
@@ -13,6 +14,7 @@ do
 	---@param label string?
 	---@param tooltipText string?
 	CreateCheckbox = function(parent, label, tooltipText)
+		---@class Checkbox: CheckButton & ToolkitFrameTemplate
 		local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
 		Checkbox:SetSize(24, 24)
 		Checkbox.TooltipText = tooltipText and tooltipText or label
@@ -42,8 +44,8 @@ do
 		Checkbox.Highlight:DisableSharpening()
 
 		Checkbox.Label = Checkbox:CreateFontString(nil, "OVERLAY")
-		Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE")
-		Checkbox.Label:SetVertexColor(Media.Colors.Foreground:GetRGB())
+		Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE" --[[ @as "MONOCHROME" | "OUTLINE" ]])
+		Checkbox.Label:SetVertexColor(unpack(Media.Colors.Foreground))
 		Checkbox.Label:SetText(label)
 		Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
@@ -68,14 +70,14 @@ do
 		Checkbox:SetScript("OnEnable", function(self)
 			self.CheckedTexture:SetDesaturated(false)
 			self.CheckedTexture:SetVertexColor(1, 1, 1)
-			self.Label:SetTextColor(Media.Colors.Foreground:GetRGB())
+			self.Label:SetTextColor(unpack(Media.Colors.Foreground))
 		end)
 
 		---@param self CheckButton & ToolkitFrameTemplate
 		Checkbox:SetScript("OnEnter", function(self)
 			if self.TooltipText then
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-				GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", Media.Colors.Foreground:GetRGB())
+				GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", unpack(Media.Colors.Foreground))
 				GameTooltip:AddLine(self.TooltipText, 1, 1, 1, true)
 				GameTooltip:Show()
 			end

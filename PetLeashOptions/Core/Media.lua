@@ -1,10 +1,9 @@
 local C = select(2, ...)
 
----@class Media
 C.Media = {
 	Colors = {
-		Background = CreateColor(0.58, 0.49, 0.4),
-		Foreground = CreateColor(0.84, 0.75, 0.64),
+		Background = { 0.58, 0.49, 0.4 },
+		Foreground = { 0.84, 0.75, 0.64 },
 	},
 	Fonts = {
 		Bold = [[Interface\AddOns\PetLeash\Media\Fonts\Expressway.ttf]],

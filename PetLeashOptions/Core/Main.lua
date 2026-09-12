@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 
-    AceConfig options table definitions.
+    Options table definitions.
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
 local L = T.Locale
 

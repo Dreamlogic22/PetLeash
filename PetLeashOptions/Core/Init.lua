@@ -9,6 +9,7 @@ local Name = ...
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 local RefreshPetJournal = C_PetJournal.SetDefaultFilters
 
+---@class PetLeashOptions
 local C = select(2, ...)
 do
 	C.Name = Name

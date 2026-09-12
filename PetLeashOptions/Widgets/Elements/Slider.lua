@@ -10,21 +10,28 @@ local Media = C.Media
 
 local CreateSlider
 do
+	---@param self Button
 	local function StepOnClick(self)
 		PlaySound(229883)
 
 		if self.Delta then
+			---@type SliderContainer
 			local parent = self:GetParent()
 			parent:SetValueByDelta(self.Delta)
 		end
 	end
 
+	---@param parent Frame
+	---@param label string
+	---@param min number
+	---@param max number
+	---@param step number
 	CreateSlider = function(parent, label, min, max, step)
 		---@class SliderContainer: Frame
-		---@field Label FontString
 		local Container = CreateFrame("Frame", nil, parent)
 		Container:SetSize(386, 24)
 
+		---@class SliderControl: Slider & ToolkitFrameTemplate
 		local Slider = CreateFrame("Slider", nil, parent, "ToolkitFrameTemplate")
 		Slider:SetOrientation("HORIZONTAL")
 		Slider:SetSize(200, 24)
@@ -141,6 +148,7 @@ do
 
 		Slider.ValueText = ValueText
 
+		---@param value number
 		Slider:SetScript("OnValueChanged", function(self, value)
 			if value == self.PreviousValue then
 				return

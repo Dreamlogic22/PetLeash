@@ -4,9 +4,13 @@
 
 ----------------------------------------------------------------------]]
 
-local Name, T = ...
+local Name = ...
+
+---@class PetLeash
+local T = select(2, ...)
 do
 	T.IsEnabled = false
+	T.Locale = {}
 
 	function T.Print(...)
 		print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
@@ -48,9 +52,8 @@ local function OnInitialize()
 	else
 		T.Disable(T.Locale.NO_PETS)
 	end
+
+	PetLeash = T
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)
-
----@class PetLeash
-PetLeash = T

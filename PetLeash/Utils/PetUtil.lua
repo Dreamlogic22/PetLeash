@@ -4,6 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeash
 local T = select(2, ...)
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID

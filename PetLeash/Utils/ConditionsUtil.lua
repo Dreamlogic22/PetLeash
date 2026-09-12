@@ -5,6 +5,7 @@
 
 ----------------------------------------------------------------------]]
 
+---@class PetLeash
 local T = select(2, ...)
 
 local GetDayEvent = C_Calendar.GetDayEvent

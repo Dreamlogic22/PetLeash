@@ -38,7 +38,7 @@ local function AddPet(petID)
 	C.NotifyChange()
 end
 
----@param petID string
+---@param petID string?
 local function IsSelected(petID)
 	if not petID or not C.db.pets then
 		return false
@@ -162,6 +162,7 @@ local function OnPetJournalLoad()
 	PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
 	PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
 
+	---@param button CompanionListButtonTemplate
 	hooksecurefunc("PetJournal_InitPetButton", function(button)
 		if not button.PetLeashCheckbox then
 			local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)
@@ -190,6 +191,7 @@ local function OnPetJournalLoad()
 	end)
 
 	-- Hide checkbox for unowned & faction-locked pets
+	---@param frame PetJournal_ScrollBox
 	hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
 		frame:ForEachFrame(function(button)
 			if not SelectingPets then

@@ -1,7 +1,10 @@
 {
+    "addonRoot": true,
     "diagnostics": {
+        "disable": [
+            "inject-field"
+        ],
         "enable": [
-            "implicit-nil-return",
             "missing-param-annotation",
             "missing-return-annotation",
             "need-check-nil",
@@ -13,8 +16,6 @@
         "severity": {
             "code-after-break": "error",
             "empty-block": "warning",
-            "inject-field": "error",
-            "implicit-nil-return": "warning",
             "missing-param-annotation": "warning",
             "missing-return-annotation": "warning",
             "not-precedence": "error",

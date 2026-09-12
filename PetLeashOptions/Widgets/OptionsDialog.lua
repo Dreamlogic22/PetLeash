@@ -10,6 +10,7 @@ local C, T = select(2, ...), PetLeash
 local L, Media, Options = T.Locale, C.Media, C.Options
 
 do
+	---@class PetLeashOptionsDialog: ToolkitFrameTemplate
 	local Dialog = CreateFrame("Frame", "PetLeashOptionsDialog", UIParent, "ToolkitFrameTemplate")
 	Dialog:SetSize(680, 580)
 	Dialog:SetPoint("CENTER")
@@ -100,7 +101,7 @@ do
 		end
 	end
 
-	Toolkit.RegisterEventCallback("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
+	Toolkit.RegisterEvent("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
 
 	PetLeashOptionsDialog = Dialog
 	tinsert(UISpecialFrames, "PetLeashOptionsDialog")

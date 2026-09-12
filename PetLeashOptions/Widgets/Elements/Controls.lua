@@ -10,27 +10,25 @@ local C = select(2, ...)
 
 ---@class ConfigInfo: table
 ---@field desc string?
----@field disable function
+---@field disable fun(): boolean
 ---@field get function
----@field max number?
----@field min number?
----@field name string?
+---@field max number
+---@field min number
+---@field name string
 ---@field parent ConfigGroup
 ---@field set function
----@field step? number
+---@field step number
 ---@field type string
 
 ---@param info ConfigInfo
 local function CreateControl(info)
-	---@class Control
+	---@class Control: PetLeashSlider, Checkbox
 	local widget
 
 	if info.type == "range" then
 		widget = C.CreateSlider(info.parent, info.name, info.min, info.max, info.step)
-
 		widget:SetValue(info.get())
 
-		---@param self Slider
 		widget.Slider:HookScript("OnValueChanged", function(self)
 			local value = self:GetValue()
 			widget.set(value)
@@ -63,9 +61,10 @@ local CreateConfigGroup
 do
 	---@param parent Frame
 	CreateConfigGroup = function(parent)
-		---@class ConfigGroup: Frame & ToolkitFrameTemplate
+		---@class ConfigGroup: Container
 		local ConfigGroup = C.CreateContainer(parent)
 
+		---@type table<Control, boolean>
 		ConfigGroup.Controls = {}
 
 		function ConfigGroup:NotifyChange()

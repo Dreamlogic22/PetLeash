@@ -61,6 +61,7 @@ do
 		end
 	end
 
+	---@return boolean
 	function ConditionsUtil.IsChildrensWeek()
 		return IsEventActive(CHILDRENS_WEEK_ID)
 	end

@@ -12,6 +12,7 @@ local Media = C.Media
 
 local CreateBackStepper, CreateForwardStepper
 do
+	---@param parent Frame
 	local function CreateStepper(parent)
 		local Arrow = CreateFrame("Button", nil, parent)
 		Arrow:SetSize(16, 24)
@@ -80,6 +81,7 @@ local CreateCarousel
 do
 	local MaxDisplay = 3
 
+	---@param parent Frame
 	CreateCarousel = function(parent)
 		local Carousel = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Carousel.AnimationDuration = 0.4

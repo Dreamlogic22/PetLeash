@@ -6,26 +6,29 @@
 ----------------------------------------------------------------------]]
 
 ---@class PetLeashOptions
-local C, T = select(2, ...), PetLeash
+local C = select(2, ...)
 local Media = C.Media
 
 local GetPetInfoByPetID = C_PetJournal.GetPetInfoByPetID
 local GetPetModelSceneInfoBySpeciesID = C_PetJournal.GetPetModelSceneInfoBySpeciesID
 local GetPetStats = C_PetJournal.GetPetStats
 
+---@param petID string
 local function GetCardInfo(petID)
 	local speciesID, customName, _, _, _, displayID, _, name = GetPetInfoByPetID(petID)
 	local health, _, _, _, rarity = GetPetStats(petID)
 	local colorData = ColorManager.GetColorDataForItemQuality(rarity - 1)
 
+	---@class PetCardInfo
 	local petCardInfo = {
 		CustomName = customName,
 		DisplayID = displayID,
 		IsDead = health <= 0,
 		Name = name,
 		SpeciesID = speciesID,
+		---@return number, number, number
 		GetRGB = function()
-			return colorData.r, colorData.g, colorData.b
+			return colorData and colorData.r or 0, colorData and colorData.g or 0, colorData and colorData.b or 0
 		end,
 	}
 
@@ -34,9 +37,12 @@ end
 
 local CreatePetCard
 do
+	---@param parent Frame
+	---@param petID string
 	CreatePetCard = function(parent, petID)
 		local cardInfo = GetCardInfo(petID)
 
+		---@class PetCard: Frame & ToolkitFrameTemplate
 		local Card = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Card:SetSize(180, 230)
 		Card:SetFrameLevel(parent:GetFrameLevel() + 1)
@@ -64,6 +70,7 @@ do
 		end)
 
 		-- Sourced from Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.lua
+		---@type number
 		local loadoutModelSceneID = select(2, GetPetModelSceneInfoBySpeciesID(cardInfo.SpeciesID))
 
 		Card.ModelScene = CreateFrame("ModelScene", nil, Card, "ModelSceneMixinTemplate")
@@ -73,6 +80,7 @@ do
 
 		Card.ModelScene:TransitionToModelSceneID(loadoutModelSceneID, CAMERA_TRANSITION_TYPE_IMMEDIATE, CAMERA_MODIFICATION_TYPE_MAINTAIN, true)
 
+		---@type ModelSceneActor
 		local PetActor = Card.ModelScene:GetActorByTag("pet")
 		if PetActor then
 			PetActor:SetModelByCreatureDisplayID(cardInfo.DisplayID, true)
@@ -89,7 +97,7 @@ do
 		Name:SetFont(Media.Fonts.Normal, 14, "OUTLINE")
 		Name:SetPoint("BOTTOM", Card, "BOTTOM", 0, 10)
 		Name:SetText(cardInfo.CustomName or cardInfo.Name or UNKNOWN)
-		Name:SetTextColor(Media.Colors.Foreground:GetRGB())
+		Name:SetTextColor(unpack(Media.Colors.Foreground))
 
 		return Card
 	end

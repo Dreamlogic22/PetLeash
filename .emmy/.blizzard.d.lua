@@ -64,6 +64,8 @@ function EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...) 
 ----------------------------------------------------------------
 
 ENABLE = "Enable"
+GENERAL = "General"
+PETS = "Pets"
 UNKNOWN = "Unknown"
 
 ----------------------------------------------------------------

@@ -131,7 +131,7 @@ ToolkitFrameTemplate = {}
 ---@return ToolkitTexture
 function ToolkitFrameTemplate:CreateTexture(name, drawLayer, templateName, subLevel) end
 
----@class ToolkitButtonTemplate: ToolkitFrameTemplate & Button
+---@class ToolkitButtonTemplate: ToolkitFrameTemplate, Button
 ToolkitButtonTemplate = {}
 
 ---@param r number

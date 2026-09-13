@@ -13,7 +13,9 @@ local Media = C.Media
 local CreateBackStepper, CreateForwardStepper
 do
 	---@param parent Frame
+	---@return PetLeashArrowButton
 	local function CreateStepper(parent)
+		---@class PetLeashArrowButton: ToolkitButtonTemplate
 		local Arrow = CreateFrame("Button", nil, parent)
 		Arrow:SetSize(16, 24)
 
@@ -33,45 +35,59 @@ do
 			PlaySound(229883)
 		end)
 
-		Arrow:SetScript("OnEnter", function(self)
-			self.Texture:SetVertexColor(Media.Colors.Foreground:GetRGB())
-		end)
-
-		Arrow:SetScript("OnLeave", function(self)
-			self.Texture:SetVertexColor(1, 1, 1)
-		end)
+		Arrow:SetHoverColor(unpack(Media.Colors.Foreground))
 
 		return Arrow
 	end
 
+	---@param parent Frame
+	---@return PetLeashArrowButton
 	CreateBackStepper = function(parent)
 		local Arrow = CreateStepper(parent)
 		Arrow.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
 		Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.5, 0.625)
 
-		Arrow:SetScript("OnDisable", function(self)
-			self.Texture:SetTexCoord(0.25, 0.5, 0.5, 0.625)
-		end)
+		Arrow:SetScript(
+			"OnDisable",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Texture:SetTexCoord(0.25, 0.5, 0.5, 0.625)
+			end
+		)
 
-		Arrow:SetScript("OnEnable", function(self)
-			self.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
-		end)
+		Arrow:SetScript(
+			"OnEnable",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Texture:SetTexCoord(0, 0.25, 0.5, 0.625)
+			end
+		)
 
 		return Arrow
 	end
 
+	---@param parent Frame
+	---@return PetLeashArrowButton
 	CreateForwardStepper = function(parent)
 		local Arrow = CreateStepper(parent)
 		Arrow.Texture:SetTexCoord(0, 0.25, 0.625, 0.75)
 		Arrow.Highlight:SetTexCoord(0.5, 0.75, 0.625, 0.75)
 
-		Arrow:SetScript("OnDisable", function(self)
-			self.Texture:SetTexCoord(0.25, 0.5, 0.625, 0.75)
-		end)
+		Arrow:SetScript(
+			"OnDisable",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Texture:SetTexCoord(0.25, 0.5, 0.625, 0.75)
+			end
+		)
 
-		Arrow:SetScript("OnEnable", function(self)
-			self.Texture:SetTexCoord(0.5, 0.75, 0.625, 0.75)
-		end)
+		Arrow:SetScript(
+			"OnEnable",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Texture:SetTexCoord(0.5, 0.75, 0.625, 0.75)
+			end
+		)
 
 		return Arrow
 	end
@@ -82,7 +98,9 @@ do
 	local MaxDisplay = 3
 
 	---@param parent Frame
+	---@return PetLeashCarousel
 	CreateCarousel = function(parent)
+		---@class PetLeashCarousel: ToolkitFrameTemplate
 		local Carousel = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Carousel.AnimationDuration = 0.4
 		Carousel.AnimationStart = 0
@@ -93,29 +111,33 @@ do
 		Carousel.IsAnimating = false
 		Carousel.Cards = {}
 
-		Carousel:SetScript("OnUpdate", function(self)
-			if #C.db.pets < 4 or not self.IsAnimating then
-				return
+		Carousel:SetScript(
+			"OnUpdate",
+			---@param self PetLeashCarousel
+			function(self)
+				if #C.db.pets < 4 or not self.IsAnimating then
+					return
+				end
+
+				local now = GetTime()
+				local elapsedTime = now - self.AnimationStart
+				local progress = elapsedTime / self.AnimationDuration
+
+				if progress >= 1 then
+					progress = 1
+					self.IsAnimating = false
+				end
+
+				local currentShift = self.AnimationStartShift + (self.AnimationTargetShift - self.AnimationStartShift) * progress
+
+				self:ClearAllPoints()
+				self:SetPoint("LEFT", currentShift, 0)
+
+				self.CurrentShift = self.AnimationTargetShift
+				self.StepBack:SetEnabled(self.CurrentIndex > 1)
+				self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
 			end
-
-			local now = GetTime()
-			local elapsedTime = now - self.AnimationStart
-			local progress = elapsedTime / self.AnimationDuration
-
-			if progress >= 1 then
-				progress = 1
-				self.IsAnimating = false
-			end
-
-			local currentShift = self.AnimationStartShift + (self.AnimationTargetShift - self.AnimationStartShift) * progress
-
-			self:ClearAllPoints()
-			self:SetPoint("LEFT", currentShift, 0)
-
-			self.CurrentShift = self.AnimationTargetShift
-			self.StepBack:SetEnabled(self.CurrentIndex > 1)
-			self.StepForward:SetEnabled(self.CurrentIndex + MaxDisplay - 1 < #self.Cards)
-		end)
+		)
 
 		function Carousel:StartAnimation(direction)
 			if self.IsAnimating then

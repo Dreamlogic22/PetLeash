@@ -35,7 +35,7 @@ do
 
 	local Version = Dialog:CreateFontString(nil, "OVERLAY")
 	Version:SetFont(Media.Fonts.Bold, 14, "OUTLINE")
-	Version:SetTextColor(Media.Colors.Background:GetRGB())
+	Version:SetTextColor(unpack(Media.Colors.Background))
 	Version:SetText(format(L.VERSION, C.Version))
 	Version:SetPoint("BOTTOMRIGHT", -7, 7)
 

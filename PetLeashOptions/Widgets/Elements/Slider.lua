@@ -10,12 +10,12 @@ local Media = C.Media
 
 local CreateSlider
 do
-	---@param self Button
+	---@param self SliderStepper
 	local function StepOnClick(self)
 		PlaySound(229883)
 
 		if self.Delta then
-			---@type SliderContainer
+			---@type PetLeashSlider
 			local parent = self:GetParent()
 			parent:SetValueByDelta(self.Delta)
 		end
@@ -27,11 +27,11 @@ do
 	---@param max number
 	---@param step number
 	CreateSlider = function(parent, label, min, max, step)
-		---@class SliderContainer: Frame
+		---@class PetLeashSlider: Frame
 		local Container = CreateFrame("Frame", nil, parent)
 		Container:SetSize(386, 24)
 
-		---@class SliderControl: Slider & ToolkitFrameTemplate
+		---@class PetLeashSliderControl: ToolkitFrameTemplate, Slider
 		local Slider = CreateFrame("Slider", nil, parent, "ToolkitFrameTemplate")
 		Slider:SetOrientation("HORIZONTAL")
 		Slider:SetSize(200, 24)
@@ -87,6 +87,7 @@ do
 
 		Container.Slider = Slider
 
+		---@class SliderStepper: Button
 		local Forward = CreateFrame("Button", nil, Container)
 		Forward:SetSize(16, 24)
 		Forward:SetPoint("LEFT", Container.Slider, "RIGHT", 4, 0)
@@ -108,6 +109,7 @@ do
 
 		Container.Forward = Forward
 
+		---@type SliderStepper
 		local Back = CreateFrame("Button", nil, Container)
 		Back:SetSize(16, 24)
 		Back:SetPoint("RIGHT", Container.Slider, "LEFT", -4, 0)
@@ -148,17 +150,21 @@ do
 
 		Slider.ValueText = ValueText
 
-		---@param value number
-		Slider:SetScript("OnValueChanged", function(self, value)
-			if value == self.PreviousValue then
-				return
+		Slider:SetScript(
+			"OnValueChanged",
+			---@param self PetLeashSliderControl
+			---@param value number
+			function(self, value)
+				if value == self.PreviousValue then
+					return
+				end
+
+				self.PreviousValue = value
+				self.ThumbTexture:SetPoint("CENTER", self.Thumb, "CENTER", 0, 0)
+
+				self.ValueText:SetText(value)
 			end
-
-			self.PreviousValue = value
-			self.ThumbTexture:SetPoint("CENTER", self.Thumb, "CENTER", 0, 0)
-
-			self.ValueText:SetText(value)
-		end)
+		)
 
 		Back:SetScript("OnClick", StepOnClick)
 		Forward:SetScript("OnClick", StepOnClick)
@@ -194,14 +200,17 @@ do
 			self.Slider.ValueText:SetTextColor(1, 0.82, 0)
 		end
 
+		---@return number
 		function Container:GetValue()
 			return self.Slider:GetValue()
 		end
 
+		---@param value number
 		function Container:SetValue(value)
 			self.Slider:SetValue(value, true)
 		end
 
+		---@param delta number
 		function Container:SetValueByDelta(delta)
 			local value = self.Slider:GetValue()
 			self.Slider:SetValue(value + delta)

@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.02 (September 11, 2026)
+    PetLeash 4.0.2 (September 11, 2026)
 
 ----------------------------------------------------------------------]]
 
+---@type string
 local Name = ...
 
 ---@class PetLeash
@@ -55,7 +56,7 @@ local function OnInitialize()
 		T.Disable(T.Locale.NO_PETS)
 	end
 
-	_G.PetLeash = T
+	PetLeash = T
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

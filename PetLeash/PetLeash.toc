@@ -1,6 +1,6 @@
 ## Interface: 120100
 ## Title: |cffd6bfa3PetLeash|r
-## Version: 4.02
+## Version: 4.0.2
 ## SavedVariablesPerCharacter: PetLeashDB
 ## LoadSavedVariablesFirst: 1
 ## Author: River

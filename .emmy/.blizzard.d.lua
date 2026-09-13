@@ -1,6 +1,13 @@
 ---@meta _
 
 ----------------------------------------------------------------
+-- Chat
+----------------------------------------------------------------
+
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_ChatFrameBase/Shared/SlashCommandsRegistry.lua#L16)
+SlashCmdList = {}
+
+----------------------------------------------------------------
 -- EventUtil
 ----------------------------------------------------------------
 
@@ -21,6 +28,13 @@ function EventUtil.ContinueOnPlayerLogin(callback) end
 ---@param frameEvent FrameEvent
 ---@param callback function
 function EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...) end
+
+----------------------------------------------------------------
+-- Global Strings
+----------------------------------------------------------------
+
+ENABLE = "Enable"
+UNKNOWN = "Unknown"
 
 ----------------------------------------------------------------
 -- Restricted Environment
@@ -130,11 +144,6 @@ function SetRaidTargetIcon(unit, index) end
 ---@param texture Texture
 ---@param raidTargetIconIndex number
 function SetRaidTargetIconTexture(texture, raidTargetIconIndex) end
-
----[SharedXML](https://github.com/Gethe/wow-ui-source/blob/c94ce535a4fffc02d91b915af207941068b93eb4/Interface/AddOns/Blizzard_SharedXMLBase/MathUtil.lua#L79)
----@param value number
----@return number
-function Round(value) end
 
 ---[SharedXML](https://github.com/Gethe/wow-ui-source/blob/862165d6af6e15313db90424b9d04f22c70c3293/Interface/AddOns/Blizzard_SharedXMLBase/FunctionUtil.lua#L115)
 ---Syntactic sugar for `function(...) return f(a, b, c, ...); end`

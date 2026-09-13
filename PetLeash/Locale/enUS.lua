@@ -1,8 +1,5 @@
----@class PetLeash
-local T = select(2, ...)
-
 ---@class Locale
-local L = {}
+local L = select(2, ...).Locale
 
 L.ADD_OR_REMOVE_PET = "Add or remove this pet from PetLeash."
 L.NO_PETS = "You do not have any pets selected.  Open the Pet Journal and pick some companions using the checkboxes!"
@@ -18,5 +15,3 @@ L.PET_SELECTION_INSTRUCTIONS_OPTIONS_OPEN = "Click to toggle the options window.
 L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE = "Currently selecting pets! Left click again to close pet selection."
 L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN = "Right click to toggle options."
 L.VERSION = "Version %.2f"
-
-T.Locale = L

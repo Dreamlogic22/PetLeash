@@ -13,6 +13,7 @@ local GetDayEvent = C_Calendar.GetDayEvent
 local CHILDRENS_WEEK_ID = 201
 
 ---@param eventId number
+---@return boolean
 local function IsEventActive(eventId)
 	local info = C_DateAndTime.GetCurrentCalendarTime()
 	C_Calendar.SetAbsMonth(info.month, info.year)

@@ -14,7 +14,6 @@ do
 	---@class Locale
 	T.Locale = {}
 
-	---@param ... any
 	function T.Print(...)
 		print(strjoin("", "|cffd6bfa3", Name .. "|r: ", ...))
 	end

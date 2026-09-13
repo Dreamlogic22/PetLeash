@@ -10,13 +10,13 @@
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo
 
-Locale\[TextLocale].lua
-
 Utils\ConditionsUtil.lua
 Utils\PetUtil.lua
 
 Core\Settings.lua
 Core\Init.lua
+
+Locale\[TextLocale].lua
 
 Core\Main.lua
 Core\Conditions.lua

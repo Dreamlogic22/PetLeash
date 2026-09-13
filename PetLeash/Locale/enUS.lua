@@ -14,4 +14,4 @@ L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN = "Left click to toggle pet selecti
 L.PET_SELECTION_INSTRUCTIONS_OPTIONS_OPEN = "Click to toggle the options window."
 L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE = "Currently selecting pets! Left click again to close pet selection."
 L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN = "Right click to toggle options."
-L.VERSION = "Version %.2f"
+L.VERSION = "Version %s"

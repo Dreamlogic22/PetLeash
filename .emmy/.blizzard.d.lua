@@ -19,6 +19,9 @@ SlashCmdList = {}
 -- Collections
 ----------------------------------------------------------------
 
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_Collections/Mainline/Blizzard_Collections.xml#L14)
+CollectionsJournal = CreateFrame("Frame")
+
 ---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.xml#L794)
 PetJournal = CreateFrame("Frame")
 

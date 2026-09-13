@@ -16,7 +16,7 @@ do
 	---@return PetLeashArrowButton
 	local function CreateStepper(parent)
 		---@class PetLeashArrowButton: ToolkitButtonTemplate
-		local Arrow = CreateFrame("Button", nil, parent)
+		local Arrow = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
 		Arrow:SetSize(16, 24)
 
 		Arrow.Texture = Arrow:CreateTexture(nil, "ARTWORK")

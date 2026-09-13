@@ -7,7 +7,7 @@
 
 ---@class PetLeashOptions
 local C, T = select(2, ...), PetLeash
-local L, Media, PetUtil = T.Locale, C.Media, T.PetUtil
+local L, PetUtil = T.Locale, T.PetUtil
 
 local Button = PetLeashOptionsButton
 local Dialog = PetLeashOptionsDialog
@@ -87,37 +87,43 @@ local function ToggleSelectionMode()
 end
 
 do
-	---@param button string
-	Button:HookScript("OnClick", function(_, button)
-		if button == "LeftButton" then
-			SelectingPets = not SelectingPets
-			ToggleSelectionMode()
-		end
-
-		if button == "RightButton" then
-			if SelectingPets then
-				SelectingPets = false
+	Button:HookScript(
+		"OnClick",
+		---@param button string
+		function(_, button)
+			if button == "LeftButton" then
+				SelectingPets = not SelectingPets
 				ToggleSelectionMode()
 			end
 
-			Dialog:SetShown(not Dialog:IsVisible())
-		end
-	end)
+			if button == "RightButton" then
+				if SelectingPets then
+					SelectingPets = false
+					ToggleSelectionMode()
+				end
 
-	---@param self ToolkitButtonTemplate
-	Button:SetScript("OnEnter", function(self)
-		if not GameTooltip:IsForbidden() then
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
-			GameTooltip:AddLine(Media.Colors.Foreground:WrapTextInColorCode("PetLeash"))
-			GameTooltip:AddLine(SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
-
-			if not SelectingPets then
-				GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
+				Dialog:SetShown(not Dialog:IsVisible())
 			end
-
-			GameTooltip:Show()
 		end
-	end)
+	)
+
+	Button:SetScript(
+		"OnEnter",
+		---@param self ToolkitButtonTemplate
+		function(self)
+			if not GameTooltip:IsForbidden() then
+				GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)
+				GameTooltip:AddLine("|cffd6bfa3PetLeash|r")
+				GameTooltip:AddLine(SelectingPets and L.PET_SELECTION_INSTRUCTIONS_PET_SELECTION_ACTIVE or L.PET_SELECTION_INSTRUCTIONS_LEFT_CLICK_DOWN, 1, 1, 1, true)
+
+				if not SelectingPets then
+					GameTooltip:AddLine(L.PET_SELECTION_INSTRUCTIONS_RIGHT_CLICK_DOWN, 1, 1, 1, true)
+				end
+
+				GameTooltip:Show()
+			end
+		end
+	)
 
 	Button:SetScript("OnHide", function()
 		if SelectingPets then
@@ -190,7 +196,6 @@ local function OnPetJournalLoad()
 	end)
 
 	-- Hide checkbox for unowned & faction-locked pets
-	---@param frame PetJournal_ScrollBox
 	hooksecurefunc(PetJournal.ScrollBox, "Update", function(frame)
 		frame:ForEachFrame(function(button)
 			if not SelectingPets then

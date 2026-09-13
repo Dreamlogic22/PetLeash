@@ -10,7 +10,7 @@ local C = select(2, ...)
 
 ---@class ConfigInfo: table
 ---@field desc string?
----@field disable fun(): boolean
+---@field disable function
 ---@field get function
 ---@field max number
 ---@field min number

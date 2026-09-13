@@ -11,9 +11,9 @@ local Media = C.Media
 local CreateCloseButton
 do
 	---@param parent Frame
-	---@return CloseButton
+	---@return PetLeashCloseButton
 	CreateCloseButton = function(parent)
-		---@class CloseButton: ToolkitButtonTemplate & CheckButton
+		---@class PetLeashCloseButton: ToolkitButtonTemplate, CheckButton
 		local CloseButton = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
 		CloseButton:SetSize(14, 14)
 		CloseButton:SetPoint("TOPRIGHT", -6, -6)
@@ -31,21 +31,26 @@ do
 			self.HoverColor = { r, g, b }
 		end
 
-		---@param self CloseButton
-		CloseButton:SetScript("OnClick", function(self)
+		CloseButton:SetScript("OnClick", function()
 			PlaySoundFile(567481)
 			parent:Hide()
 		end)
 
-		---@param self CloseButton
-		CloseButton:SetScript("OnEnter", function(self)
-			self.Texture:SetVertexColor(unpack(self.HoverColor))
-		end)
+		CloseButton:SetScript(
+			"OnEnter",
+			---@param self PetLeashCloseButton
+			function(self)
+				self.Texture:SetVertexColor(unpack(self.HoverColor))
+			end
+		)
 
-		---@param self CloseButton
-		CloseButton:SetScript("OnLeave", function(self)
-			self.Texture:SetVertexColor(1, 1, 1)
-		end)
+		CloseButton:SetScript(
+			"OnLeave",
+			---@param self PetLeashCloseButton
+			function(self)
+				self.Texture:SetVertexColor(1, 1, 1)
+			end
+		)
 
 		return CloseButton
 	end

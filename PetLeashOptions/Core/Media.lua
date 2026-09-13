@@ -1,5 +1,7 @@
+---@class PetLeashOptions
 local C = select(2, ...)
 
+---@class Media
 C.Media = {
 	Colors = {
 		Background = { 0.58, 0.49, 0.4 },

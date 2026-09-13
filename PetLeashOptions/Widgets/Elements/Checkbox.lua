@@ -4,7 +4,7 @@
 
 ----------------------------------------------------------------------]]
 
----@class PetLeash
+---@class PetLeashOptions
 local C = select(2, ...)
 local Media = C.Media
 
@@ -13,8 +13,9 @@ do
 	---@param parent Frame
 	---@param label string?
 	---@param tooltipText string?
+	---@return PetLeashCheckbox
 	CreateCheckbox = function(parent, label, tooltipText)
-		---@class Checkbox: CheckButton & ToolkitFrameTemplate
+		---@class PetLeashCheckbox: ToolkitFrameTemplate, CheckButton
 		local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
 		Checkbox:SetSize(24, 24)
 		Checkbox.TooltipText = tooltipText and tooltipText or label
@@ -44,44 +45,56 @@ do
 		Checkbox.Highlight:DisableSharpening()
 
 		Checkbox.Label = Checkbox:CreateFontString(nil, "OVERLAY")
-		Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE" --[[ @as "MONOCHROME" | "OUTLINE" ]])
+		Checkbox.Label:SetFont(Media.Fonts.Normal, 12, "MONOCHROMEOUTLINE")
 		Checkbox.Label:SetVertexColor(unpack(Media.Colors.Foreground))
 		Checkbox.Label:SetText(label)
 		Checkbox.Label:SetPoint("LEFT", Checkbox, "RIGHT", 4, 0)
 
-		---@param self CheckButton & ToolkitFrameTemplate
-		Checkbox:SetScript("OnClick", function(self)
-			if self:GetChecked() then
-				PlaySound(857)
-			else
-				PlaySound(856)
+		Checkbox:SetScript(
+			"OnClick",
+			---@param self PetLeashCheckbox
+			function(self)
+				if self:GetChecked() then
+					PlaySound(857)
+				else
+					PlaySound(856)
+				end
 			end
-		end)
+		)
 
-		---@param self CheckButton & ToolkitFrameTemplate
-		Checkbox:SetScript("OnDisable", function(self)
-			self.CheckedTexture:SetDesaturated(true)
-			self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
+		Checkbox:SetScript(
+			"OnDisable",
+			---@param self PetLeashCheckbox
+			function(self)
+				self.CheckedTexture:SetDesaturated(true)
+				self.CheckedTexture:SetVertexColor(0.5, 0.5, 0.5)
 
-			self.Label:SetTextColor(0.5, 0.5, 0.5)
-		end)
-
-		---@param self CheckButton & ToolkitFrameTemplate
-		Checkbox:SetScript("OnEnable", function(self)
-			self.CheckedTexture:SetDesaturated(false)
-			self.CheckedTexture:SetVertexColor(1, 1, 1)
-			self.Label:SetTextColor(unpack(Media.Colors.Foreground))
-		end)
-
-		---@param self CheckButton & ToolkitFrameTemplate
-		Checkbox:SetScript("OnEnter", function(self)
-			if self.TooltipText then
-				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-				GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", unpack(Media.Colors.Foreground))
-				GameTooltip:AddLine(self.TooltipText, 1, 1, 1, true)
-				GameTooltip:Show()
+				self.Label:SetTextColor(0.5, 0.5, 0.5)
 			end
-		end)
+		)
+
+		Checkbox:SetScript(
+			"OnEnable",
+			---@param self PetLeashCheckbox
+			function(self)
+				self.CheckedTexture:SetDesaturated(false)
+				self.CheckedTexture:SetVertexColor(1, 1, 1)
+				self.Label:SetTextColor(unpack(Media.Colors.Foreground))
+			end
+		)
+
+		Checkbox:SetScript(
+			"OnEnter",
+			---@param self PetLeashCheckbox
+			function(self)
+				if self.TooltipText then
+					GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+					GameTooltip:AddLine(label and self.Label:GetText() or "PetLeash", unpack(Media.Colors.Foreground))
+					GameTooltip:AddLine(self.TooltipText, 1, 1, 1, true)
+					GameTooltip:Show()
+				end
+			end
+		)
 
 		Checkbox:SetScript("OnLeave", function()
 			GameTooltip:Hide()

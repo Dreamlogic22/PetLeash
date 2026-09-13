@@ -1,11 +1,38 @@
 ---@meta _
 
 ----------------------------------------------------------------
+-- Camera
+----------------------------------------------------------------
+
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_SharedXML/Shared/ModelSceneCameras/CameraBaseMixin.lua#L22)
+CAMERA_TRANSITION_TYPE_IMMEDIATE = 1
+CAMERA_MODIFICATION_TYPE_MAINTAIN = 2
+
+----------------------------------------------------------------
 -- Chat
 ----------------------------------------------------------------
 
 ---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_ChatFrameBase/Shared/SlashCommandsRegistry.lua#L16)
 SlashCmdList = {}
+
+----------------------------------------------------------------
+-- Collections
+----------------------------------------------------------------
+
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_Collections/Shared/Blizzard_PetCollection.xml#L794)
+PetJournal = CreateFrame("Frame")
+
+----------------------------------------------------------------
+-- Colors
+----------------------------------------------------------------
+
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_Colors/Mainline/ColorManager.lua#L1)
+ColorManager = {}
+
+---[Source](https://github.com/Gethe/wow-ui-source/blob/4e3cbb8c5609e4bfc332c0aebbfa4d79731fab59/Interface/AddOns/Blizzard_Colors/Mainline/ColorManager.lua#L52)
+---@param quality number
+---@return ColorRGBData?
+function ColorManager.GetColorDataForItemQuality(quality) end
 
 ----------------------------------------------------------------
 -- EventUtil

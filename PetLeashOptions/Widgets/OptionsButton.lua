@@ -29,5 +29,5 @@ do
 		GameTooltip:Hide()
 	end)
 
-	PetLeashOptionsButton = Button
+	_G.PetLeashOptionsButton = Button
 end

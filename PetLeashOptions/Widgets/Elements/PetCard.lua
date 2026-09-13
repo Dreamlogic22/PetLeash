@@ -42,7 +42,7 @@ do
 	CreatePetCard = function(parent, petID)
 		local cardInfo = GetCardInfo(petID)
 
-		---@class PetCard: Frame & ToolkitFrameTemplate
+		---@class PetCard: Frame, ToolkitFrameTemplate
 		local Card = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
 		Card:SetSize(180, 230)
 		Card:SetFrameLevel(parent:GetFrameLevel() + 1)

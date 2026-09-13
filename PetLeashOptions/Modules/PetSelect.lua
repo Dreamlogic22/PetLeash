@@ -162,7 +162,6 @@ local function OnPetJournalLoad()
 	PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
 	PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
 
-	---@param button CompanionListButtonTemplate
 	hooksecurefunc("PetJournal_InitPetButton", function(button)
 		if not button.PetLeashCheckbox then
 			local Checkbox = C.CreateCheckbox(button, nil, L.ADD_OR_REMOVE_PET)

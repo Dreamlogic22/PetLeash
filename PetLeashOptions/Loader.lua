@@ -17,6 +17,7 @@ local function LoadOptions()
 		return
 	end
 
+	---@type boolean
 	T.ShowDialog = true
 
 	local loaded, reason = C_AddOns.LoadAddOn("PetLeashOptions")

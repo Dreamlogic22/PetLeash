@@ -10,6 +10,8 @@ local Name = ...
 local T = select(2, ...)
 do
 	T.IsEnabled = false
+
+	---@class Locale
 	T.Locale = {}
 
 	---@param ... any
@@ -54,7 +56,7 @@ local function OnInitialize()
 		T.Disable(T.Locale.NO_PETS)
 	end
 
-	PetLeash = T
+	_G.PetLeash = T
 end
 
 EventUtil.ContinueOnAddOnLoaded(Name, OnInitialize)

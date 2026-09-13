@@ -110,7 +110,7 @@ function ToolkitRegion:SetOutside(anchor, xOffset, yOffset) end
 -- Texture
 ----------------------------------------------------------------
 
----@class ToolkitTexture: ToolkitRegion & Texture
+---@class ToolkitTexture: ToolkitRegion, Texture
 local ToolkitTexture = {}
 
 function ToolkitTexture:DisableSharpening() end
@@ -121,7 +121,7 @@ function ToolkitTexture:DisableSharpening() end
 
 ----------------------------------------------------------------------]]
 
----@class ToolkitFrameTemplate: ToolkitBackdrop & ToolkitRegion & Frame
+---@class ToolkitFrameTemplate: ToolkitBackdrop, ToolkitRegion, Frame
 ToolkitFrameTemplate = {}
 
 ---@param name? string

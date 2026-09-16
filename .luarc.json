@@ -17,7 +17,7 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "../wow-ls/annotations/ketho",
-        "../wow-ls/annotations/local"
+        "../annotations/ketho",
+        "../annotations/local"
     ]
 }

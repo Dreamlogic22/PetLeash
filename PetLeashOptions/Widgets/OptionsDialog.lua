@@ -103,6 +103,6 @@ do
 
 	Toolkit.RegisterEvent("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
 
-	_G.PetLeashOptionsDialog = Dialog
+	PetLeashOptionsDialog = Dialog
 	tinsert(UISpecialFrames, "PetLeashOptionsDialog")
 end

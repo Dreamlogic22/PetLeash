@@ -15,9 +15,5 @@
         "string": "disable",
         "table": "disable",
         "utf8": "disable"
-    },
-    "Lua.workspace.library": [
-        "../annotations/ketho",
-        "../annotations/local"
-    ]
+    }
 }

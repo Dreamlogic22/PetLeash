@@ -1,2 +1,9 @@
+# IDE
 .vscode
 *.code-workspace
+
+# annotations
+.emmy
+
+# notes
+scratch.lua

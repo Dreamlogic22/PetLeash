@@ -1,6 +1,4 @@
 312993, -- Forbidden Tomes (Revendreth)
-43880, -- Ramstein's Swift Work Ram
-43883, -- Rental Racing Ram
 
 30803, -- Felhound Whistle,
 31815, -- Zeppit's Crystal

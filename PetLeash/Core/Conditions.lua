@@ -6,7 +6,7 @@
 
     This module is not complete.
 
-	Stealth and Children's Week have been implemented
+	Children's Week, Brewfest, and stealth have been tested.
 
 --------------------------------------------------------------------]]
 

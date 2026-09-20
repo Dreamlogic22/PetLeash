@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash Options 4.0.2 (September 16, 2026)
+    PetLeash Options 4.0.2 (September 20, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -29,7 +29,6 @@ do
 		end
 	end
 
-	---@param ... any
 	function C.Print(...)
 		print(strjoin("", "|cffd6bfa3PetLeash|r |cff947d66Options|r: ", ...))
 	end

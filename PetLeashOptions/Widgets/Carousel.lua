@@ -35,7 +35,7 @@ do
 			PlaySound(229883)
 		end)
 
-		Arrow:SetHoverColor(unpack(Media.Colors.Foreground))
+		-- Arrow:SetHoverColor(unpack(Media.Colors.Foreground))
 
 		return Arrow
 	end

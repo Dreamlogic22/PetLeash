@@ -13,7 +13,7 @@ local L = T.Locale
 local function LoadOptions()
 	if PlayerIsInCombat() then
 		T.Print(L.OPTIONS_NOT_IN_COMBAT)
-		Toolkit.RegisterEventOnce("PLAYER_REGEN_ENABLED", LoadOptions)
+		Toolkit.RegisterEventCallbackOnce("PLAYER_REGEN_ENABLED", LoadOptions)
 		return
 	end
 

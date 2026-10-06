@@ -18,7 +18,7 @@ do
 	Dialog:SetFrameLevel(500)
 	Dialog:SetFrameStrata("DIALOG")
 
-	Dialog:CreateBackground(Media.Textures.Background)
+	Dialog:CreateBackdrop(nil, nil, Media.Textures.Background)
 	Dialog:Hide()
 
 	Dialog:SetMovable(true)

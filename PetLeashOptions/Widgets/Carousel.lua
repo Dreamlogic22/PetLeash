@@ -15,8 +15,8 @@ do
 	---@param parent Frame
 	---@return PetLeashArrowButton
 	local function CreateStepper(parent)
-		---@class PetLeashArrowButton: ToolkitButtonTemplate
-		local Arrow = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
+		---@class PetLeashArrowButton: PetLeashButtonTemplate
+		local Arrow = CreateFrame("Button", nil, parent, "PetLeashButtonTemplate")
 		Arrow:SetSize(16, 24)
 
 		Arrow.Texture = Arrow:CreateTexture(nil, "ARTWORK")
@@ -35,7 +35,21 @@ do
 			PlaySound(229883)
 		end)
 
-		-- Arrow:SetHoverColor(unpack(Media.Colors.Foreground))
+		Arrow:SetScript(
+			"OnEnter",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Highlight:SetVertexColor(unpack(Media.Colors.Foreground))
+			end
+		)
+
+		Arrow:SetScript(
+			"OnLeave",
+			---@param self PetLeashArrowButton
+			function(self)
+				self.Highlight:SetVertexColor(0.5, 0.5, 0.5)
+			end
+		)
 
 		return Arrow
 	end
@@ -100,8 +114,8 @@ do
 	---@param parent Frame
 	---@return PetLeashCarousel
 	CreateCarousel = function(parent)
-		---@class PetLeashCarousel: ToolkitFrameTemplate
-		local Carousel = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
+		---@class PetLeashCarousel: PetLeashFrameTemplate
+		local Carousel = CreateFrame("Frame", nil, parent, "PetLeashFrameTemplate")
 		Carousel.AnimationDuration = 0.4
 		Carousel.AnimationStart = 0
 		Carousel.AnimationStartShift = 0

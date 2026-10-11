@@ -1,6 +1,6 @@
 ## Interface: 120100
 ## Title: |cffd6bfa3PetLeash|r |cff947d66Options|r
-## Version: 4.0.2
+## Version: 4.0.3
 ## Author: River
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash
@@ -13,6 +13,10 @@ Loader.lua [Bootstrap]
 Core\Init.lua
 Core\Main.lua
 Core\Media.lua
+
+Templates\Mixins\Region.lua
+Templates\Mixins\Texture.lua
+Templates\Templates.xml
 
 Widgets\Elements\CheckBox.lua
 Widgets\Elements\CloseButton.lua

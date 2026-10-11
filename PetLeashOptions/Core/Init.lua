@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash Options 4.0.2 (September 25, 2026)
+    PetLeash Options 4.0.3 (October 10, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -16,6 +16,9 @@ do
 	C.Title = GetAddOnMetadata(Name, "Title")
 	C.Version = GetAddOnMetadata(Name, "Version")
 	C.db = PetLeashDB
+
+	---@class Mixins
+	C.Mixins = {}
 
 	---@return boolean
 	function C.IsEditModeActive()

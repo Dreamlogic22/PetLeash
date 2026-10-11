@@ -15,8 +15,8 @@ do
 	---@param tooltipText string?
 	---@return PetLeashCheckbox
 	CreateCheckbox = function(parent, label, tooltipText)
-		---@class PetLeashCheckbox: ToolkitFrameTemplate, CheckButton
-		local Checkbox = CreateFrame("CheckButton", nil, parent, "ToolkitFrameTemplate")
+		---@class PetLeashCheckbox: PetLeashFrameTemplate, CheckButton
+		local Checkbox = CreateFrame("CheckButton", nil, parent, "PetLeashFrameTemplate")
 		Checkbox:SetSize(24, 24)
 		Checkbox.TooltipText = tooltipText and tooltipText or label
 

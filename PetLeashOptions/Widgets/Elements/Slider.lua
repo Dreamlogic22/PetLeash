@@ -31,8 +31,8 @@ do
 		local Container = CreateFrame("Frame", nil, parent)
 		Container:SetSize(386, 24)
 
-		---@class PetLeashSliderControl: ToolkitFrameTemplate, Slider
-		local Slider = CreateFrame("Slider", nil, parent, "ToolkitFrameTemplate")
+		---@class PetLeashSliderControl: PetLeashFrameTemplate, Slider
+		local Slider = CreateFrame("Slider", nil, parent, "PetLeashFrameTemplate")
 		Slider:SetOrientation("HORIZONTAL")
 		Slider:SetSize(200, 24)
 		Slider:SetPoint("LEFT", Container, "LEFT", 172, 0)

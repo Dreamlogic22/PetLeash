@@ -10,8 +10,8 @@ local C, T = select(2, ...), PetLeash
 local L, Media, Options = T.Locale, C.Media, C.Options
 
 do
-	---@class PetLeashOptionsDialog: ToolkitFrameTemplate
-	local Dialog = CreateFrame("Frame", "PetLeashOptionsDialog", UIParent, "ToolkitFrameTemplate")
+	---@class PetLeashOptionsDialog: PetLeashFrameTemplate
+	local Dialog = CreateFrame("Frame", "PetLeashOptionsDialog", UIParent, "PetLeashFrameTemplate")
 	Dialog:SetSize(680, 580)
 	Dialog:SetPoint("CENTER")
 	Dialog:SetClampedToScreen(true)
@@ -87,7 +87,7 @@ do
 	end
 
 	---@param inCombat boolean
-	local function HandleCombat(inCombat)
+	local function HandleCombat(_, inCombat)
 		if inCombat then
 			if Dialog:IsVisible() then
 				Dialog.RestoreAfterCombat = true
@@ -101,7 +101,7 @@ do
 		end
 	end
 
-	Toolkit.RegisterEventCallback("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
+	EventRegistry:RegisterFrameEventAndCallback("PLAYER_IN_COMBAT_CHANGED", HandleCombat)
 
 	PetLeashOptionsDialog = Dialog
 	tinsert(UISpecialFrames, "PetLeashOptionsDialog")

@@ -13,8 +13,8 @@ do
 	---@param parent Frame
 	---@return PetLeashCloseButton
 	CreateCloseButton = function(parent)
-		---@class PetLeashCloseButton: ToolkitButtonTemplate, CheckButton
-		local CloseButton = CreateFrame("Button", nil, parent, "ToolkitButtonTemplate")
+		---@class PetLeashCloseButton:PetLeashButtonTemplate, CheckButton
+		local CloseButton = CreateFrame("Button", nil, parent, "PetLeashButtonTemplate")
 		CloseButton:SetSize(14, 14)
 		CloseButton:SetPoint("TOPRIGHT", -6, -6)
 

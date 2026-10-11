@@ -43,8 +43,8 @@ do
 	CreatePetCard = function(parent, petID)
 		local cardInfo = GetCardInfo(petID)
 
-		---@class PetLeashCard: ToolkitFrameTemplate, Frame
-		local Card = CreateFrame("Frame", nil, parent, "ToolkitFrameTemplate")
+		---@class PetLeashCard: PetLeashFrameTemplate, Frame
+		local Card = CreateFrame("Frame", nil, parent, "PetLeashFrameTemplate")
 		Card:SetSize(180, 230)
 		Card:SetFrameLevel(parent:GetFrameLevel() + 1)
 		Card:CreateBackdrop()

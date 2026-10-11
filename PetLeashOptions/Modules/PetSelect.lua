@@ -109,7 +109,7 @@ do
 
 	Button:SetScript(
 		"OnEnter",
-		---@param self ToolkitButtonTemplate
+		---@param self PetLeashButtonTemplate
 		function(self)
 			if not GameTooltip:IsForbidden() then
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -10, -10)

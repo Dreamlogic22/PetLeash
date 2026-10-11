@@ -67,11 +67,11 @@ local function LoadConditions()
 		EvaluateConditions()
 
 		for _, event in pairs({ "QUEST_ACCEPTED", "QUEST_TURNED_IN" }) do
-			Toolkit.RegisterEventCallback(event, EvaluateConditions)
+			EventRegistry:RegisterFrameEventAndCallback(event, EvaluateConditions)
 		end
 	end
 
-	Toolkit.RegisterEventCallback("UPDATE_STEALTH", CheckStealth)
+	EventRegistry:RegisterFrameEventAndCallback("UPDATE_STEALTH", CheckStealth)
 end
 
-Toolkit.RegisterEventCallbackOnce("PLAYER_ENTERING_WORLD", LoadConditions)
+EventUtil.RegisterOnceFrameEventAndCallback("PLAYER_ENTERING_WORLD", LoadConditions)

@@ -1,11 +1,10 @@
 ## Interface: 120100
 ## Title: |cffd6bfa3PetLeash|r
-## Version: 4.0.2
+## Version: 4.0.3
 ## SavedVariablesPerCharacter: PetLeashDB
 ## LoadSavedVariablesFirst: 1
 ## Author: River
 ## Notes: Walks the Dog
-## RequiredDeps: Toolkit
 ## DefaultState: Enabled
 ## Category: Pet Battles
 ## IconTexture: Interface\AddOns\PetLeash\Media\Textures\Logo

@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 
-    PetLeash 4.0.2 (September 25, 2026)
+    PetLeash 4.0.3 (October 10, 2026)
 
 ----------------------------------------------------------------------]]
 
@@ -27,7 +27,7 @@ do
 	local function merge(target, defaults)
 		for k, v in next, defaults do
 			if type(v) == "table" then
-				if target and type(target[k]) ~= "table" then
+				if type(target[k]) ~= "table" then
 					target[k] = {}
 				end
 

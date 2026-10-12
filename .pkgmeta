@@ -1,8 +1,8 @@
 package-as: PetLeash
 
 move-folders:
-    PetLeash/PetLeash: PetLeash
-    PetLeash/PetLeashOptions: PetLeashOptions
+  PetLeash/PetLeash: PetLeash
+  PetLeash/PetLeashOptions: PetLeashOptions
 
 ignore:
   - .emmy.lua

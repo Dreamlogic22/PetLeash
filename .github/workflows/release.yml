@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout addon
@@ -16,6 +16,6 @@ jobs:
           fetch-depth: 0
 
       - name: WoW Packager
-        uses: BigWigsMods/packager@master
+        uses: BigWigsMods/packager@v2.6.1
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

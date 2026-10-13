@@ -1,6 +1,6 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: |cffd6bfa3PetLeash|r |cff947d66Options|r
-## Version: 4.0.9
+## Version: 4.1.0
 ## Author: River
 ## Notes: Configuration for PetLeash
 ## RequiredDeps: PetLeash

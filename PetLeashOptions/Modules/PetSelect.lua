@@ -167,6 +167,8 @@ local function OnPetJournalLoad()
 	PetLeashOptionsDialog:ClearAllPoints()
 	PetLeashOptionsDialog:SetPoint("LEFT", CollectionsJournal, "RIGHT", 50, 0)
 	PetLeashOptionsDialog:SetPoint("TOP", CollectionsJournal, "TOP")
+	PetLeashOptionsButton:SetFrameStrata("DIALOG")
+	PetLeashOptionsButton:SetFrameLevel(10)
 
 	hooksecurefunc("PetJournal_InitPetButton", function(button)
 		if not button.PetLeashCheckbox then

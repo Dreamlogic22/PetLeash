@@ -13,8 +13,6 @@ do
 	---@class PetLeashOptionsButton: PetLeashButtonTemplate
 	local Button = CreateFrame("Button", "PetLeashOptionsButton", UIParent, "PetLeashButtonTemplate")
 	Button:SetSize(48, 48)
-	Button:SetFrameStrata("HIGH")
-	Button:SetFrameLevel(10)
 	Button:SetupTextures(Media.Textures.PetJournalWidget)
 	Button:RegisterForClicks("AnyDown")
 
